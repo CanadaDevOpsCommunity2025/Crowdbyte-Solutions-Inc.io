@@ -111,3 +111,45 @@
 
 /* Optional: ensure the site title/logo area feels like the screenshot */
 .site-title, .site-title a { font-weight: 800; color: #111; }
+
+/* Keep all top-level tabs visible on wider screens */
+@media (min-width: 960px) {
+  /* Slightly smaller font and tighter padding */
+  .greedy-nav a,
+  .masthead__menu-item a {
+    font-size: 15px;               /* ↓ from 16px */
+    padding: 6px 8px;              /* tighter left/right */
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  /* Reduce gaps between items */
+  .greedy-nav .visible-links > li {
+    margin: 0 6px !important;
+  }
+
+  /* Give the links more real estate by trimming the left side area */
+  .masthead__inner-wrap {
+    padding-left: 10px;
+    padding-right: 12px;
+  }
+
+  /* Ensure the nav uses the full header width */
+  .greedy-nav {
+    max-width: 100% !important;
+  }
+
+  /* Keep the toggle button but make it the LAST resort */
+  .greedy-nav__toggle {
+    padding: 4px 6px;
+  }
+}
+
+/* If it still collapses at your screen width, use a slightly stronger squeeze */
+@media (min-width: 1100px) {
+  .greedy-nav a,
+  .masthead__menu-item a { font-size: 14.5px; padding: 6px 7px; }
+  .greedy-nav .visible-links > li { margin: 0 5px !important; }
+  .site-logo img { height: 36px; }
+}
+
