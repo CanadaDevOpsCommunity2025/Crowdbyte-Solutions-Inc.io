@@ -223,4 +223,31 @@
     padding-right: clamp(16px, 3vw, 32px);
   }
 }
+/* Center everything on the Contact page */
+.page.contact-page .page__content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* <-- centers children horizontally */
+}
+
+/* Keep hero text area centered and not too wide */
+.page.contact-page .contact-hero{
+  width: min(980px, calc(100% - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Form card centered with a sensible max width */
+.page.contact-page .contact-card{
+  width: min(980px, calc(100% - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Success message centered the same way */
+.page.contact-page .contact-success{
+  width: min(720px, calc(100% - 48px));
+  margin-left: auto;
+  margin-right: auto;
+}
 
