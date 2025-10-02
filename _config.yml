@@ -1,7 +1,7 @@
 title: "CrowdByte Solutions Inc."
 description: "DevOps + AI Community of Practice in Canada"
-url: "https://canadadevopscommunityofpracticehackathonseries.io" # change if different
-baseurl: ""     # keep empty when using a user/org or custom domain
+url: "https://canadadevopscommunity2025.github.io" # change if different
+baseurl: "/Crowdbyte-Solutions-Inc.io"     # keep empty when using a user/org or custom domain
 remote_theme: "mmistakes/minimal-mistakes@4.24.0"
 
 plugins:
