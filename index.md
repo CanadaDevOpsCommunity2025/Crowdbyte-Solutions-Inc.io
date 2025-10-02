@@ -114,7 +114,7 @@ time.cal::before{
     <p class="section-title">Upcoming Hackathon</p>
     <ul>
       <li><strong>DevOps for Gen AI Hackathon — Toronto</strong><br><span class="cal">November 3, 2025</span></li>
-      <p><a href="https://lnkd.in/g-W2SEQw" target="_blank" rel="noopener noreferrer">Link to Register</a></p>
+      <p><a href="[https://lnkd.in/g-W2SEQw](https://www.eventbrite.ca/e/devops-for-genai-hackathon-tickets-1407877793379)" target="_blank" rel="noopener noreferrer">Link to Register</a></p>
       <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br><span class="cal">June 2, 2025</span></li>
     </ul>
     
