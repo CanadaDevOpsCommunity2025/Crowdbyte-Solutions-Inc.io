@@ -17,6 +17,7 @@ kramdown:
 # Minimal Mistakes settings
 logo: "/assets/logo.png"   # optional
 minimal_mistakes_skin: "default"
+masthead_title: ""
 permalink: /:title/
 
 # Navigation data file
