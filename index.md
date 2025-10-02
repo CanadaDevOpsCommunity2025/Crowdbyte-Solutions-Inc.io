@@ -64,6 +64,22 @@ classes: full-bleed
 
 /* Footer note */
 .footer-note{ text-align:center; font-size:.9rem; color:#666; margin:1.5rem 0 .75rem; }
+
+  /* Make "Crowdbyte  DevOps + AI" look like plain blue text (no pill) */
+.subhead .badge {
+  background: transparent !important;
+  color: #3b6bbd !important;   /* match the screenshot blue */
+  padding: 0 !important;
+  border-radius: 0 !important;
+  font-weight: 800;
+  text-decoration: none;       /* no underline */
+}
+
+/* Optional: make the section headers use the same blue as the screenshot */
+.page .page__inner-wrap .page__content .card h3 {
+  color: #3b6bbd;
+  font-weight: 800;
+}
 </style>
 
 
