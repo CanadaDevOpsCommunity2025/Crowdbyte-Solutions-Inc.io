@@ -2,7 +2,7 @@
 title: "Contact Us"
 permalink: /contact/
 layout: single
-classes: wide
+classes: wide contact-page
 ---
 
 <section class="contact-hero">
