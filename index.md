@@ -3,21 +3,78 @@ title: "Home"
 layout: single
 classes: full-bleed
 ---
-
 <!-- Inline fallback styles: guarantees hero + 4 columns now -->
 <style>
-.hero-band{background:#2a3e6e;color:#fff;text-align:center;padding:2.5rem 1rem}
-.subhead{ text-align:center;margin:1.25rem auto .25rem;font-weight:800;font-size:clamp(1.2rem,2.5vw,1.5rem);color:#2a3e6e}
-.tagline{ max-width:980px;margin:.5rem auto 1.25rem;text-align:center;font-size:1.05rem;color:#222}
-.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:1rem auto 2rem}
-@media (max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr)}}
-@media (max-width:640px){.grid4{grid-template-columns:1fr}}
-.card{background:#f3f6fb;border-radius:12px;padding:14px 14px 10px;border:1px solid #d7dfef;min-height:320px}
-.card h3{margin:0 0 8px;color:#2a3e6e;font-weight:800;font-size:1.05rem}
-.badge{display:inline-block;background:#2a3e6e;color:#fff;padding:2px 8px;border-radius:999px;font-size:.8rem;margin-right:6px}
-.section-title{font-size:1.05rem;margin-top:.5rem;font-weight:700}
-.footer-note{text-align:center;font-size:.9rem;color:#666;margin:1.5rem 0 .75rem}
+/* ===== FULL-BLEED OVERRIDES (home page only: classes: full-bleed) ===== */
+.initial-content .page.full-bleed,
+.page.full-bleed { width: 100% !important; }
+
+/* Remove the theme's centered max-width and side padding */
+.page.full-bleed .page__inner-wrap,
+.page.full-bleed .page__content,
+.page.full-bleed .archive {
+  max-width: 100% !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Make the hero span the entire viewport width */
+.page.full-bleed .page__content .hero-band {
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  width: 100vw !important;
+}
+
+/* ===== HERO ===== */
+.hero-band {
+  background:#2a3e6e; color:#fff; text-align:center; padding:2.5rem 1rem;
+}
+.hero-band h1 { margin:0; font-size:clamp(1.8rem,3.5vw,2.4rem); font-weight:800; }
+
+/* ===== SUBHEAD / TAGLINE ===== */
+.subhead{
+  text-align:center; margin:1.25rem auto .25rem; font-weight:800;
+  font-size:clamp(1.2rem,2.5vw,1.5rem); color:#2a3e6e;
+}
+.tagline{
+  /* Let tagline breathe on wide screens but not be constrained to 980px */
+  max-width:none; margin:.5rem auto 1.25rem; text-align:center; font-size:1.05rem; color:#222;
+  padding-left:clamp(16px,3vw,32px); padding-right:clamp(16px,3vw,32px);
+}
+
+/* ===== RESPONSIVE FULL-WIDTH GRID (auto-fit) ===== */
+.grid4{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); /* fluid by device */
+  gap:18px;
+  margin:1rem auto 2rem;
+  padding-left:clamp(16px,3vw,32px);
+  padding-right:clamp(16px,3vw,32px);
+}
+@media (max-width:360px){ .grid4{ grid-template-columns:1fr; } }
+
+/* ===== CARDS ===== */
+.card{
+  background:#f3f6fb; border-radius:12px; padding:14px 14px 10px;
+  border:1px solid #d7dfef; min-height:320px;
+}
+.card h3{ margin:0 0 8px; color:#2a3e6e; font-weight:800; font-size:1.05rem; }
+.card p, .card li{ font-size:.98rem; }
+.card ul{ margin:0 0 0 1.1rem; }
+
+/* ===== BADGES / SECTION TITLES ===== */
+.badge{
+  display:inline-block; background:#2a3e6e; color:#fff; padding:2px 8px;
+  border-radius:999px; font-size:.8rem; margin-right:6px;
+}
+.section-title{ font-size:1.05rem; margin-top:.5rem; font-weight:700; }
+
+/* ===== FOOTER NOTE ===== */
+.footer-note{ text-align:center; font-size:.9rem; color:#666; margin:1.5rem 0 .75rem; }
 </style>
+
 
 <div class="hero-band">
   <h1>Join our Github Community</h1>
