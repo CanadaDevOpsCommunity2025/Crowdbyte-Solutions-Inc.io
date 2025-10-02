@@ -114,9 +114,10 @@ time.cal::before{
     <p class="section-title">Upcoming Hackathon</p>
     <ul>
       <li><strong>DevOps for Gen AI Hackathon — Toronto</strong><br><span class="cal">November 3, 2025</span></li>
+      <p><a href="https://lnkd.in/g-W2SEQw" target="_blank" rel="noopener noreferrer">Link to Register</a></p>
       <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br><span class="cal">June 2, 2025</span></li>
     </ul>
-    <p><a href="https://forms.gle/" target="_blank">[ Google Form ]</a></p>
+    
   </div>
 
   <div class="card">
