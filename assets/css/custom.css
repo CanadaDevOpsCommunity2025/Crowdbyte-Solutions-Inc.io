@@ -153,40 +153,41 @@
   .site-logo img { height: 36px; }
 }
 
-/* --- Header / brand sizing --- */
-.site-title { display: none !important; }      /* keep text title hidden to save space */
-.site-logo img { height: 42px; width: auto; }  /* subtle bump from ~36–40 → 42px */
+/* --- Show & style the brand text (CrowdByte Solutions Inc.) --- */
+.site-title { display: block !important; margin-right: 12px; }
+.site-title a {
+  font-weight: 800;
+  color: #111;                /* same feel as screenshot */
+  text-decoration: none;
+  font-size: clamp(18px, 2vw, 22px);  /* bigger but responsive */
+  line-height: 1.1;
+}
 
-/* Make the masthead use space efficiently */
+/* If you also keep a logo, keep it compact so tabs don't overflow */
+.site-logo img { height: 32px; width: auto; }  /* try 32–38px; smaller leaves room */
+
+/* --- Make the masthead use space efficiently --- */
 .masthead__inner-wrap { padding-left: 10px; padding-right: 12px; }
 .greedy-nav { max-width: 100% !important; }
 
-/* --- Navigation typography & spacing (keeps all tabs visible) --- */
+/* --- Navigation: slightly larger text but compact spacing (avoid “…” collapse) --- */
 @media (min-width: 960px) {
-  /* Slightly larger, still compact */
   .greedy-nav a,
   .masthead__menu-item a {
-    font-size: 16.5px;   /* ↑ was ~15–16 */
+    font-size: 16.5px;        /* a touch larger */
     line-height: 1.25;
-    padding: 6px 9px;    /* compact horizontal padding keeps tabs on one line */
-    font-weight: 650;    /* a bit bolder without looking heavy */
+    padding: 6px 9px;         /* compact horizontal padding keeps all tabs visible */
+    font-weight: 650;
     white-space: nowrap;
   }
   .greedy-nav .visible-links > li { margin: 0 6px !important; }
   .greedy-nav__toggle { padding: 4px 6px; }
 }
 
-/* On mid-large screens, give it a touch more size */
-@media (min-width: 1200px) {
-  .greedy-nav a,
-  .masthead__menu-item a { font-size: 17px; padding: 6px 10px; }
-  .site-logo img { height: 44px; }
-}
-
-/* Safety squeeze so nothing wraps/collapses around 1024–1100px widths */
+/* Safety squeeze for the tight 1024–1140px window so nothing collapses */
 @media (min-width: 1024px) and (max-width: 1140px) {
   .greedy-nav a,
   .masthead__menu-item a { font-size: 16px; padding: 6px 8px; }
   .greedy-nav .visible-links > li { margin: 0 5px !important; }
-  .site-logo img { height: 40px; } /* trims just a bit of left width when tight */
+  .site-logo img { height: 30px; }   /* trims a bit more if a logo is present */
 }
