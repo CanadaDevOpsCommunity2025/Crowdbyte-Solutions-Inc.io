@@ -1,5 +1,6 @@
 /* ===== FULL-BLEED MODE FOR THIS PAGE (classes: full-bleed) ===== */
 /* Remove Minimal Mistakes' centered max-width on the article and inner wrappers */
+.site-logo img { height: 40px; width: auto; } 
 .page.full-bleed,
 .page.h-entry.full-bleed {
   width: 100% !important;
