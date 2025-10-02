@@ -1,7 +1,7 @@
 ---
 title: "Home"
 layout: single
-classes: wide
+classes: full-bleed
 ---
 
 <!-- Inline fallback styles: guarantees hero + 4 columns now -->
