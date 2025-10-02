@@ -102,3 +102,11 @@
   text-decoration:none !important;
   box-shadow:none !important;
 }
+/* Make nav items bolder and keep them on one line on wide screens */
+.masthead__menu-item a { font-weight: 600; }
+
+/* Slightly tighten vertical space under the masthead */
+.masthead { border-bottom: 1px solid #2a2a2a10; }
+
+/* Optional: ensure the site title/logo area feels like the screenshot */
+.site-title, .site-title a { font-weight: 800; color: #111; }
