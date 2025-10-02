@@ -2,10 +2,6 @@
 title: "Home"
 layout: single
 classes: wide
-header:
-  overlay_color: "#f0f4ff"
-  overlay_filter: 0
-  actions: []
 ---
 
 <div class="hero-band">
@@ -21,23 +17,18 @@ header:
 </p>
 
 <div class="grid4">
-
-  <!-- Column 1 -->
   <div class="card">
     <h3>Best-of-Breed Hackathons</h3>
-    <p>Start your open-ended or tightly-themed Hackathons with community support and build the required innovation engines for quickly bringing new products and features to market.</p>
+    <p>Start your open-ended or tightly themed Hackathons with community support and build the required innovation engines for quickly bringing new products and features to market.</p>
     <p>Connect with us to get a quote for organizing a local hackathon or start your own with our support.</p>
     <p class="section-title">Upcoming Hackathon</p>
     <ul>
-      <li><strong>DevOps for Gen AI Hackathon — Toronto</strong><br>
-          <em>November 3, 2025</em></li>
-      <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br>
-          <em>June 2, 2025</em></li>
+      <li><strong>DevOps for Gen AI Hackathon — Toronto</strong><br><em>November 3, 2025</em></li>
+      <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br><em>June 2, 2025</em></li>
     </ul>
     <p><a href="https://forms.gle/" target="_blank">[ Google Form ]</a></p>
   </div>
 
-  <!-- Column 2 -->
   <div class="card">
     <h3>Summits &amp; Events</h3>
     <p>The Community of Practice hosts major events throughout the year, including a summit in Canada and virtual sessions, gathering practitioners and leaders in DevOps, SRE, cloud, and AI-native practices.</p>
@@ -46,25 +37,22 @@ header:
     <p><a href="https://forms.gle/" target="_blank">[ Google Form ]</a></p>
   </div>
 
-  <!-- Column 3 -->
   <div class="card">
     <h3>Open-source Projects</h3>
     <p>Opportunities to co-create open-source tools such as centralized monitoring and observability solutions and taking winning projects to the next steps.</p>
     <p>Participating directly in repository yields connection with experts, peers, and industry legends.</p>
-    <p>Open a new issue describing what you want to contribute. Clearly explain your proposal, the problem it addresses.</p>
+    <p>Open a new issue describing what you want to contribute. Clearly explain your proposal and the problem it addresses.</p>
     <p><a href="https://github.com/CanadaDevOpsCommunity2025" target="_blank">[ GitHub Org ]</a></p>
   </div>
 
-  <!-- Column 4 -->
   <div class="card">
     <h3>Consulting Services</h3>
-    <p>Offering project management, research, marketing support for events, product launch and projects.</p>
+    <p>Offering project management, research, and marketing support for events, product launches, and projects.</p>
     <p>Consulting and Coaching Services including workshops, training, blogs, reports, and curated resources.</p>
-    <p>Organizing regular meetings or virtual gatherings for members to exchange ideas.</p>
+    <p>Organizing meetings or virtual gatherings for members to exchange ideas.</p>
     <p>Helping organizations implement CoP models for long-term cultural or operational change.</p>
     <p><a href="https://forms.gle/" target="_blank">[ Contact us | Google Form ]</a></p>
   </div>
-
 </div>
 
 <div class="footer-note">
