@@ -232,7 +232,7 @@
 
 /* Keep hero text area centered and not too wide */
 .page.contact-page .contact-hero{
-  width: min(980px, calc(100% - 48px));
+  width: min(1000px, calc(100% - 48px));
   margin-left: auto;
   margin-right: auto;
 }
