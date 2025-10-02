@@ -125,7 +125,7 @@ time.cal::before{
     <p>The Community of Practice hosts major events throughout the year, including a summit in Canada and virtual sessions, gathering practitioners and leaders in DevOps, SRE, cloud, and AI-native practices.</p>
     <p>Join local chapters <a href="https://www.meetup.com/" target="_blank">[ Link to meetup ]</a></p>
     <p>Connect with us to get a quote for organizing a local event or start your own with our support.</p>
-    <p><a href="https://forms.gle/" target="_blank">[ Google Form ]</a></p>
+    <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
   </div>
 
   <div class="card">
@@ -142,7 +142,7 @@ time.cal::before{
     <p>Consulting and Coaching Services including workshops, training, blogs, reports, and curated resources.</p>
     <p>Organizing meetings or virtual gatherings for members to exchange ideas.</p>
     <p>Helping organizations implement CoP models for long-term cultural or operational change.</p>
-    <p><a href="https://forms.gle/" target="_blank">[ Contact us | Google Form ]</a></p>
+    <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
   </div>
 </div>
 
