@@ -4,6 +4,21 @@ layout: single
 classes: wide
 ---
 
+<!-- Inline fallback styles: guarantees hero + 4 columns now -->
+<style>
+.hero-band{background:#2a3e6e;color:#fff;text-align:center;padding:2.5rem 1rem}
+.subhead{ text-align:center;margin:1.25rem auto .25rem;font-weight:800;font-size:clamp(1.2rem,2.5vw,1.5rem);color:#2a3e6e}
+.tagline{ max-width:980px;margin:.5rem auto 1.25rem;text-align:center;font-size:1.05rem;color:#222}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin:1rem auto 2rem}
+@media (max-width:1100px){.grid4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:640px){.grid4{grid-template-columns:1fr}}
+.card{background:#f3f6fb;border-radius:12px;padding:14px 14px 10px;border:1px solid #d7dfef;min-height:320px}
+.card h3{margin:0 0 8px;color:#2a3e6e;font-weight:800;font-size:1.05rem}
+.badge{display:inline-block;background:#2a3e6e;color:#fff;padding:2px 8px;border-radius:999px;font-size:.8rem;margin-right:6px}
+.section-title{font-size:1.05rem;margin-top:.5rem;font-weight:700}
+.footer-note{text-align:center;font-size:.9rem;color:#666;margin:1.5rem 0 .75rem}
+</style>
+
 <div class="hero-band">
   <h1>Join our Github Community</h1>
 </div>
