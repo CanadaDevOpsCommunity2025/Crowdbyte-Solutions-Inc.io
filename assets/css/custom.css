@@ -153,3 +153,40 @@
   .site-logo img { height: 36px; }
 }
 
+/* --- Header / brand sizing --- */
+.site-title { display: none !important; }      /* keep text title hidden to save space */
+.site-logo img { height: 42px; width: auto; }  /* subtle bump from ~36–40 → 42px */
+
+/* Make the masthead use space efficiently */
+.masthead__inner-wrap { padding-left: 10px; padding-right: 12px; }
+.greedy-nav { max-width: 100% !important; }
+
+/* --- Navigation typography & spacing (keeps all tabs visible) --- */
+@media (min-width: 960px) {
+  /* Slightly larger, still compact */
+  .greedy-nav a,
+  .masthead__menu-item a {
+    font-size: 16.5px;   /* ↑ was ~15–16 */
+    line-height: 1.25;
+    padding: 6px 9px;    /* compact horizontal padding keeps tabs on one line */
+    font-weight: 650;    /* a bit bolder without looking heavy */
+    white-space: nowrap;
+  }
+  .greedy-nav .visible-links > li { margin: 0 6px !important; }
+  .greedy-nav__toggle { padding: 4px 6px; }
+}
+
+/* On mid-large screens, give it a touch more size */
+@media (min-width: 1200px) {
+  .greedy-nav a,
+  .masthead__menu-item a { font-size: 17px; padding: 6px 10px; }
+  .site-logo img { height: 44px; }
+}
+
+/* Safety squeeze so nothing wraps/collapses around 1024–1100px widths */
+@media (min-width: 1024px) and (max-width: 1140px) {
+  .greedy-nav a,
+  .masthead__menu-item a { font-size: 16px; padding: 6px 8px; }
+  .greedy-nav .visible-links > li { margin: 0 5px !important; }
+  .site-logo img { height: 40px; } /* trims just a bit of left width when tight */
+}
