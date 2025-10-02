@@ -1,30 +1,26 @@
-/* Top bar spacing & link style */
-.masthead__menu-item a { font-weight: 600; }
-
-/* Hero banner */
-.hero-band {
-  background: #2a3e6e; /* deep blue similar to screenshot */
-  color: #fff;
+/* ===== Hero band ===== */
+.page .page__inner-wrap .page__content .hero-band {
+  background: #2a3e6e !important;  /* deep blue */
+  color: #fff !important;
   text-align: center;
   padding: 2.5rem 1rem;
+  border-radius: 0;
 }
-.hero-band h1 {
+.page .page__inner-wrap .page__content .hero-band h1 {
   margin: 0;
   font-size: clamp(1.8rem, 3.5vw, 2.4rem);
   font-weight: 800;
 }
 
-/* Subhead title */
-.subhead {
+/* ===== Subhead + tagline ===== */
+.page .page__inner-wrap .page__content .subhead {
   text-align: center;
   margin: 1.25rem auto 0.25rem;
   font-weight: 800;
   font-size: clamp(1.2rem, 2.5vw, 1.5rem);
   color: #2a3e6e;
 }
-
-/* Tagline paragraph */
-.tagline {
+.page .page__inner-wrap .page__content .tagline {
   max-width: 980px;
   margin: 0.5rem auto 1.25rem;
   text-align: center;
@@ -32,33 +28,41 @@
   color: #222;
 }
 
-/* Four-column cards */
-.grid4 {
+/* ===== 4-column grid ===== */
+.page .page__inner-wrap .page__content .grid4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 18px;
   margin: 1rem auto 2rem;
 }
-@media (max-width: 1100px){ .grid4{ grid-template-columns: repeat(2,1fr);} }
-@media (max-width: 640px){ .grid4{ grid-template-columns: 1fr; } }
+@media (max-width: 1100px){
+  .page .page__inner-wrap .page__content .grid4{ grid-template-columns: repeat(2,1fr); }
+}
+@media (max-width: 640px){
+  .page .page__inner-wrap .page__content .grid4{ grid-template-columns: 1fr; }
+}
 
-.card {
-  background: #f3f6fb; /* light blue-grey */
+/* ===== Cards ===== */
+.page .page__inner-wrap .page__content .card {
+  background: #f3f6fb;
   border-radius: 12px;
   padding: 14px 14px 10px;
   border: 1px solid #d7dfef;
   min-height: 320px;
 }
-.card h3 {
+.page .page__inner-wrap .page__content .card h3 {
   margin: 0 0 8px;
   color: #2a3e6e;
   font-weight: 800;
   font-size: 1.05rem;
 }
-.card p, .card li { font-size: 0.98rem; }
-.card ul { margin: 0 0 0 1.1rem; }
+.page .page__inner-wrap .page__content .card p,
+.page .page__inner-wrap .page__content .card li {
+  font-size: 0.98rem;
+}
+.page .page__inner-wrap .page__content .card ul { margin: 0 0 0 1.1rem; }
 
-.badge {
+.page .page__inner-wrap .page__content .badge {
   display: inline-block;
   background: #2a3e6e;
   color: #fff;
@@ -68,14 +72,14 @@
   margin-right: 6px;
 }
 
-.section-title {
-  font-size: 1.05rem; 
-  margin-top: 0.5rem; 
+.page .page__inner-wrap .page__content .section-title {
+  font-size: 1.05rem;
+  margin-top: 0.5rem;
   font-weight: 700;
 }
 
-/* Footer note (optional) */
-.footer-note {
+/* Optional small footer line */
+.page .page__inner-wrap .page__content .footer-note {
   text-align: center;
   font-size: 0.9rem;
   color: #666;
