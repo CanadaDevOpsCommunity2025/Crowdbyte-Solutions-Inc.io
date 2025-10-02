@@ -1,0 +1,44 @@
+title: "CrowdByte Solutions Inc."
+description: "DevOps + AI Community of Practice in Canada"
+url: "https://canadadevopscommunityofpracticehackathonseries.io" # change if different
+baseurl: ""     # keep empty when using a user/org or custom domain
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-include-cache
+
+markdown: kramdown
+kramdown:
+  input: GFM
+
+# Minimal Mistakes settings
+logo: "/assets/logo.svg"   # optional
+minimal_mistakes_skin: "default"
+permalink: /:title/
+
+# Navigation data file
+collections:
+  pages:
+    output: true
+    permalink: /:path/
+
+defaults:
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: single
+      classes: wide
+
+include:
+  - _pages
+
+# Social (optional)
+author:
+  name: "CrowdByte Solutions Inc."
+
+# Build
+timezone: "America/Toronto"
