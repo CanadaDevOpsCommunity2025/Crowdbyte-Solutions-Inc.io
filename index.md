@@ -1,11 +1,12 @@
 ---
-title: "Home"
+title: ""
 layout: single
 classes: full-bleed
 ---
 <!-- Inline fallback styles: guarantees hero + 4 columns now -->
 <style>
 /* ===== FORCE FULL-WIDTH (works regardless of theme wrappers) ===== */
+.page.full-bleed .page__title{ display:none !important; }
 
 /* Make hero and grid span the entire viewport width */
 .hero-band,
