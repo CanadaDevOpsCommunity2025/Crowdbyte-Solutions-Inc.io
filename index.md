@@ -81,6 +81,15 @@ classes: full-bleed
   color: #3b6bbd;
   font-weight: 800;
 }
+  /* Calendar emoji before marked dates */
+.cal::before,
+time.cal::before{
+  content: "📅 ";
+  /* Optional small spacing/align tweaks */
+  letter-spacing: 0;
+  vertical-align: baseline;
+}
+
 </style>
 
 
@@ -104,8 +113,8 @@ classes: full-bleed
     <p>Connect with us to get a quote for organizing a local hackathon or start your own with our support.</p>
     <p class="section-title">Upcoming Hackathon</p>
     <ul>
-      <li><strong>DevOps for Gen AI Hackathon — Toronto</strong><br><em>November 3, 2025</em></li>
-      <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br><em>June 2, 2025</em></li>
+      <li><strong>DevOps for Gen AI Hackathon — Toronto</strong><br><span class="cal">November 3, 2025</span></li>
+      <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br><span class="cal">June 2, 2025</span></li>
     </ul>
     <p><a href="https://forms.gle/" target="_blank">[ Google Form ]</a></p>
   </div>
