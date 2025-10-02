@@ -191,3 +191,36 @@
   .greedy-nav .visible-links > li { margin: 0 5px !important; }
   .site-logo img { height: 30px; }   /* trims a bit more if a logo is present */
 }
+/* Desktop: make the tagline full-bleed and single-line */
+@media (min-width: 1200px) {
+  .tagline{
+    /* pull out of the centered wrapper to span the viewport */
+    margin-left: calc(50% - 50vw) !important;
+    margin-right: calc(50% - 50vw) !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+
+    white-space: nowrap;        /* keep it on one line */
+    text-align: center;
+    padding-left: clamp(16px, 3vw, 32px);
+    padding-right: clamp(16px, 3vw, 32px);
+
+    /* scale so it fits across without wrapping */
+    font-size: clamp(15px, 1.4vw, 20px);
+    line-height: 1.3;
+  }
+}
+
+/* Keep your existing mobile/tablet styling below 1200px */
+@media (max-width: 1199px) {
+  .tagline{
+    max-width: none;
+    margin: .5rem auto 1.25rem;
+    text-align: center;
+    font-size: 1.05rem;
+    line-height: 1.4;
+    padding-left: clamp(16px, 3vw, 32px);
+    padding-right: clamp(16px, 3vw, 32px);
+  }
+}
+
