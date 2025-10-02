@@ -77,3 +77,24 @@
   margin-top: 0.5rem;
   font-weight: 700;
 }
+/* One consistent style for the entire subhead line */
+.subhead{
+  text-align:center;
+  margin:1.25rem auto .25rem;
+  font-weight:800;
+  font-size:clamp(1.2rem, 2.5vw, 1.5rem); /* your chosen size */
+  line-height:1.3;
+  color:#3b6bbd; /* blue text for the whole line */
+}
+
+/* Ensure every child matches the parent size/weight and has no pill look */
+.subhead *{
+  font-size:1em !important;        /* same size as .subhead */
+  font-weight:inherit !important;   /* same weight as .subhead */
+  color:inherit !important;         /* same color as .subhead */
+  background:transparent !important;
+  padding:0 !important;
+  border-radius:0 !important;
+  text-decoration:none !important;
+  box-shadow:none !important;
+}
