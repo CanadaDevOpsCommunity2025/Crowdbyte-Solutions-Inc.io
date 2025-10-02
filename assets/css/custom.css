@@ -1,3 +1,10 @@
+/* ============================================================
+   Custom styles for CrowdByte / Minimal Mistakes
+   - Keep this file at: assets/css/custom.css
+   - Ensure it's loaded via: _includes/head/custom.html
+     <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
+   ============================================================ */
+
 /* ===== Hero band ===== */
 .page .page__inner-wrap .page__content .hero-band {
   background: #2a3e6e !important;  /* deep blue */
@@ -28,18 +35,19 @@
   color: #222;
 }
 
-/* ===== 4-column grid ===== */
+/* ===== Responsive grid (auto-fit columns by device) =====
+   Applies to your home "cards" section. Works whether the page
+   is centered or full-bleed. */
 .page .page__inner-wrap .page__content .grid4 {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* fluid */
   gap: 18px;
   margin: 1rem auto 2rem;
+  padding-left: clamp(16px, 3vw, 32px);
+  padding-right: clamp(16px, 3vw, 32px);
 }
-@media (max-width: 1100px){
-  .page .page__inner-wrap .page__content .grid4{ grid-template-columns: repeat(2,1fr); }
-}
-@media (max-width: 640px){
-  .page .page__inner-wrap .page__content .grid4{ grid-template-columns: 1fr; }
+@media (max-width: 360px){
+  .page .page__inner-wrap .page__content .grid4 { grid-template-columns: 1fr; }
 }
 
 /* ===== Cards ===== */
@@ -62,6 +70,7 @@
 }
 .page .page__inner-wrap .page__content .card ul { margin: 0 0 0 1.1rem; }
 
+/* ===== Badges & section titles ===== */
 .page .page__inner-wrap .page__content .badge {
   display: inline-block;
   background: #2a3e6e;
@@ -71,17 +80,51 @@
   font-size: 0.8rem;
   margin-right: 6px;
 }
-
 .page .page__inner-wrap .page__content .section-title {
-  font-size: 1.05rem;
-  margin-top: 0.5rem;
+  font-size: 1.05rem; 
+  margin-top: 0.5rem; 
   font-weight: 700;
 }
 
-/* Optional small footer line */
+/* ===== Footer note (small) ===== */
 .page .page__inner-wrap .page__content .footer-note {
   text-align: center;
   font-size: 0.9rem;
   color: #666;
   margin: 1.5rem 0 0.75rem;
 }
+
+/* ============================================================
+   Full-bleed opt-in
+   Add `classes: full-bleed` to a page's front matter (e.g. index.md)
+   to remove the theme's centered max-width and make content span
+   the full viewport. The header/masthead remains as-is.
+   ============================================================ */
+.page.full-bleed .page__inner-wrap {
+  max-width: 100% !important;     /* remove theme's max width */
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.page.full-bleed .page__content {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Make the hero truly edge-to-edge when full-bleed */
+.page.full-bleed .page__content .hero-band {
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+}
+
+/* ============================================================
+   Optional: if you also want the masthead/nav to stretch full width,
+   uncomment the block below.
+   ============================================================ */
+/*
+.masthead, .greedy-nav {
+  max-width: 100% !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+}
+*/
