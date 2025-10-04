@@ -5,114 +5,112 @@ layout: single
 classes: full-bleed
 ---
 
-<!-- ============ Styles (scoped to this page) ============ -->
+<!-- ======================= STYLES (scoped to this page) ======================= -->
 <style>
-/* --- full-bleed hero (unchanged) --- */
-.bc-hero{
+/* Pull selected sections out of the theme’s centered wrapper (full-bleed) */
+.bc-hero,
+.bc-band{
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   width: 100vw;
-  background: #305890;
-  color: #fff;
-  padding: 22px clamp(16px, 3vw, 36px);
+}
+
+/* ---------- HERO (left-aligned text, full width) ---------- */
+.bc-hero{
+  background:#305890;
+  color:#fff;
+  padding: 22px clamp(18px, 3vw, 40px);
 }
 .bc-hero h1{
   margin: 0;
   font-weight: 800;
   font-size: clamp(20px, 2.6vw, 26px);
+  line-height: 1.25;
+  text-align: left;            /* left like your mock */
 }
 
-/* === NEW: full-bleed band for the rest of the content === */
+/* ---------- CONTENT BAND (full width with comfy side padding) ---------- */
 .bc-band{
-  /* pull out of the theme’s centered wrapper */
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  width: 100vw;
-  padding-left: clamp(16px, 3vw, 36px);
-  padding-right: clamp(16px, 3vw, 36px);
+  padding-left: clamp(18px, 3vw, 40px);
+  padding-right: clamp(18px, 3vw, 40px);
+  padding-top: 10px;
 }
 
-/* Subhead (blue line like home) */
+/* Subhead (blue) */
 .bc-subhead{
   text-align: center;
-  margin: 18px auto 8px;
   font-weight: 800;
   font-size: clamp(18px, 2.2vw, 22px);
-  color: #305890;
+  color:#305890;
+  margin: 16px auto 6px;
 }
-.bc-subhead *{
-  color: inherit !important;
-  background: transparent !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-}
+.bc-subhead *{ color:inherit !important; background:transparent !important; padding:0 !important; border-radius:0 !important; }
 
-/* Tagline: allow full width and one line on large screens */
+/* Tagline centered across the width; single line on big screens */
 .bc-tagline{
-  text-align: center;
-  color: #111;
+  text-align:center;
+  color:#111;
   font-size: clamp(15px, 1.4vw, 18px);
-  margin: 6px 0 12px;
-  white-space: nowrap;             /* single line on desktop */
+  margin: 6px 0 10px;
+  white-space: nowrap;
 }
-@media (max-width: 1024px){
-  .bc-tagline{ white-space: normal; }  /* wrap on smaller screens */
-}
+@media (max-width: 1100px){ .bc-tagline{ white-space: normal; }}
 
-/* Wide two-column row */
+/* ---------- TWO-COLUMN LAYOUT: text (left) + BIG video (right) ---------- */
 .bc-row{
-  display: grid;
-  grid-template-columns: 1.25fr 1fr;   /* text left wider, video right */
+  display:grid;
+  grid-template-columns: 1fr 1.45fr; /* make video column wider */
   gap: clamp(16px, 2.2vw, 28px);
-  align-items: start;
+  align-items:start;
   margin-top: 10px;
 }
-@media (max-width: 920px){
+@media (max-width: 980px){
   .bc-row{ grid-template-columns: 1fr; }
 }
 
 /* Left column list */
-.bc-list{ margin: 10px 0 0; padding-left: 22px; }
+.bc-list{ margin: 8px 0 0; padding-left: 22px; }
 .bc-list li{ margin: 8px 0; font-size: 16px; }
 
-/* Right column: big video card */
+/* Right column video card – big and with a thumbnail view */
 .bc-video{
-  background: #f3f6fb;
-  border: 1px solid #d7dfef;
-  border-radius: 12px;
-  padding: 10px;
+  background:#f3f6fb;
+  border:1px solid #d7dfef;
+  border-radius:12px;
+  padding:10px;
 }
-.bc-video iframe{
-  width: 100%;
-  aspect-ratio: 16 / 9;   /* responsive height */
-  height: auto;
-  border: 0;
+.bc-video .thumb{
+  width:100%;
+  aspect-ratio: 16/9;            /* keeps the image and iframe same size */
   border-radius: 8px;
+  display:block;
+  object-fit: cover;
+  margin:0;
+  border:0;
 }
-.bc-video small{
-  display: block;
-  margin-top: 6px;
-  color: #555;
+.bc-video .play{
+  width:100%;
+  aspect-ratio: 16/9;
+  border:0;
+  border-radius:8px;
+  display:none;                  /* hidden until user clicks the image */
 }
+.bc-video small{ display:block; margin-top:6px; color:#555; }
 
-/* Footer line at bottom */
-.bc-footer{
-  margin: 18px 0 0;
-  font-weight: 600;
-}
+/* Footer line */
+.bc-footer{ font-weight:600; margin: 18px 0 0; }
 </style>
 
+<!-- ======================= PAGE CONTENT ======================= -->
 
-<!-- ============ Page content ============ -->
-
+<!-- Full-width hero -->
 <div class="bc-hero">
-  <div class="bc-wrap">
-    <h1>Become Part of our Amazing Community of<br>
-      Collaborator, Contributors and Sponsors</h1>
-  </div>
+  <h1>Become Part of our Amazing Community of<br>
+    Collaborator, Contributors and Sponsors</h1>
 </div>
 
-<div class="bc-wrap">
+<!-- Full-width band for the rest -->
+<div class="bc-band">
   <p class="bc-subhead">
     <span>Crowdbyte</span> <span>DevOps + AI</span> Community of Practice
   </p>
@@ -122,31 +120,40 @@ classes: full-bleed
   </p>
 
   <div class="bc-row">
-    <!-- Left: bullets -->
+    <!-- LEFT: bullets -->
     <div>
       <ul class="bc-list">
         <li>Start your own DevOps for GenAI Hackathon Day</li>
         <li>Be a Spotlight contributor</li>
         <li>Drive next steps for open-source project</li>
         <li>Write for us</li>
-        <li>
-          <a href="{{ '/contact/' | relative_url }}" rel="noopener">Form to submit contribution</a>
-        </li>
+        <li><a href="{{ '/contact/' | relative_url }}">Form to submit contribution</a></li>
       </ul>
+
+      <p style="margin-top:18px;font-weight:600;">Sponsor Hackathon, Event or Summit</p>
     </div>
 
-    <!-- Right: video -->
+    <!-- RIGHT: BIG video with visible image -->
     <div class="bc-video">
-      <!-- Replace the video ID if you want another clip -->
+      <!-- Thumbnail image users see first (replace with your own still if you like) -->
+      <img
+        class="thumb"
+        src="https://img.youtube.com/vi/9CiU7HR_tQ/maxresdefault.jpg"
+        alt="DevOps for GenAI Hackathon thumbnail"
+        loading="lazy"
+        onclick="(function(img){ img.style.display='none'; img.nextElementSibling.style.display='block'; })(this)"
+      >
+
+      <!-- The actual YouTube player; shown when the image is clicked -->
       <iframe
-        src="https://www.youtube.com/embed/9CiU7HR_tQ"
+        class="play"
+        src="https://www.youtube.com/embed/9CiU7HR_tQ?rel=0&autoplay=1"
         title="DevOps for GenAI Hackathon"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
       ></iframe>
+
       <small>https://youtu.be/9CiU7HR_tQ</small>
     </div>
   </div>
-
-  <p class="bc-footer">Sponsor Hackathon, Event or Summit</p>
 </div>
