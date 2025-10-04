@@ -7,6 +7,23 @@ classes: full-bleed
 
 <!-- ======================= STYLES (scoped to this page) ======================= -->
 <style>
+  /* Hero: single line on desktop, wraps on small screens */
+.bc-hero h1{
+  margin: 0;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: left;
+}
+
+@media (min-width: 1024px){
+  .bc-hero h1{
+    white-space: nowrap;                /* keep it on one line */
+    font-size: clamp(16px, 1.6vw, 22px);/* scales with viewport so it fits */
+    text-overflow: ellipsis;            /* safety if someone narrows window a lot */
+    overflow: hidden;                   /* (pairs with ellipsis) */
+  }
+}
+
 /* Use full-bleed sections (edge-to-edge with safe side padding) */
 .bc-hero, .bc-band{
   margin-left: calc(50% - 50vw);
@@ -144,12 +161,12 @@ classes: full-bleed
       <!-- YouTube player (revealed on click) -->
       <iframe
         class="play"
-        src="https://www.youtube.com/embed/9CiU7HR_tQ?rel=0"
+        src="https://youtu.be/9CiUU7HR_tQ?si=-Iqjgk14D4O-VpTu"
         title="DevOps for GenAI Hackathon"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         allowfullscreen
       ></iframe>
-      <small>https://youtu.be/9CiU7HR_tQ</small>
+      <small>https://youtu.be/9CiUU7HR_tQ</small>
     </div>
   </div>
 </div>
