@@ -7,14 +7,14 @@ classes: full-bleed
 
 <!-- ============ Styles (scoped to this page) ============ -->
 <style>
-/* Full-bleed hero bar */
+/* --- full-bleed hero (unchanged) --- */
 .bc-hero{
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   width: 100vw;
   background: #305890;
   color: #fff;
-  padding: 22px 16px;
+  padding: 22px clamp(16px, 3vw, 36px);
 }
 .bc-hero h1{
   margin: 0;
@@ -22,10 +22,20 @@ classes: full-bleed
   font-size: clamp(20px, 2.6vw, 26px);
 }
 
-/* Subhead (blue line like your home page) */
+/* === NEW: full-bleed band for the rest of the content === */
+.bc-band{
+  /* pull out of the theme’s centered wrapper */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+  padding-left: clamp(16px, 3vw, 36px);
+  padding-right: clamp(16px, 3vw, 36px);
+}
+
+/* Subhead (blue line like home) */
 .bc-subhead{
   text-align: center;
-  margin: 16px auto 6px;
+  margin: 18px auto 8px;
   font-weight: 800;
   font-size: clamp(18px, 2.2vw, 22px);
   color: #305890;
@@ -37,47 +47,45 @@ classes: full-bleed
   border-radius: 0 !important;
 }
 
-/* Tagline */
+/* Tagline: allow full width and one line on large screens */
 .bc-tagline{
   text-align: center;
   color: #111;
-  font-size: 16px;
-  margin: 6px 0 10px;
+  font-size: clamp(15px, 1.4vw, 18px);
+  margin: 6px 0 12px;
+  white-space: nowrap;             /* single line on desktop */
+}
+@media (max-width: 1024px){
+  .bc-tagline{ white-space: normal; }  /* wrap on smaller screens */
 }
 
-/* Centered content row with two columns */
-.bc-wrap{
-  width: min(1100px, calc(100% - 48px));
-  margin: 0 auto;
-}
+/* Wide two-column row */
 .bc-row{
   display: grid;
-  grid-template-columns: 1.2fr 1fr;  /* text left, video right */
-  gap: 18px;
+  grid-template-columns: 1.25fr 1fr;   /* text left wider, video right */
+  gap: clamp(16px, 2.2vw, 28px);
   align-items: start;
-  margin-top: 8px;
+  margin-top: 10px;
 }
-@media (max-width: 900px){
+@media (max-width: 920px){
   .bc-row{ grid-template-columns: 1fr; }
 }
 
 /* Left column list */
-.bc-list{ margin: 8px 0 0 0; padding-left: 20px; }
-.bc-list li{
-  margin: 6px 0;
-  font-size: 16px;
-}
+.bc-list{ margin: 10px 0 0; padding-left: 22px; }
+.bc-list li{ margin: 8px 0; font-size: 16px; }
 
-/* Right column video */
+/* Right column: big video card */
 .bc-video{
   background: #f3f6fb;
   border: 1px solid #d7dfef;
   border-radius: 12px;
-  padding: 8px;
+  padding: 10px;
 }
 .bc-video iframe{
   width: 100%;
-  height: 300px;
+  aspect-ratio: 16 / 9;   /* responsive height */
+  height: auto;
   border: 0;
   border-radius: 8px;
 }
@@ -89,11 +97,11 @@ classes: full-bleed
 
 /* Footer line at bottom */
 .bc-footer{
-  width: min(1100px, calc(100% - 48px));
-  margin: 16px auto 0;
+  margin: 18px 0 0;
   font-weight: 600;
 }
 </style>
+
 
 <!-- ============ Page content ============ -->
 
