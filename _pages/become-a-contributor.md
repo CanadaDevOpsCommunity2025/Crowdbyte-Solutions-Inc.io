@@ -7,10 +7,56 @@ classes: full-bleed
 
 <!-- ======================= STYLES (scoped to this page) ======================= -->
 <style>
-/* ---------- columns: left bigger, right narrower ---------- */
+/* Use full-bleed sections (edge-to-edge with safe side padding) */
+.bc-hero, .bc-band{
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  width: 100vw;
+}
+
+/* ---------- HERO (LEFT-ALIGNED, WRAPS LIKE THE MOCK) ---------- */
+.bc-hero{
+  background:#305890;
+  color:#fff;
+  padding: 22px clamp(18px, 3vw, 40px);
+}
+.bc-hero h1{
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(20px, 2.4vw, 26px); /* size from the mock */
+  line-height: 1.25;
+  text-align: left; /* left, not centered */
+}
+
+/* ---------- CONTENT BAND ---------- */
+.bc-band{
+  padding-left: clamp(18px, 3vw, 40px);
+  padding-right: clamp(18px, 3vw, 40px);
+  padding-top: 10px;
+}
+
+/* Subhead (blue, centered) */
+.bc-subhead{
+  text-align: center;
+  font-weight: 800;
+  font-size: clamp(18px, 2.2vw, 22px);
+  color:#305890;
+  margin: 16px auto 6px;
+}
+.bc-subhead *{ color:inherit !important; background:transparent !important; padding:0 !important; border-radius:0 !important; }
+
+/* Tagline centered, with the same break as the screenshot */
+.bc-tagline{
+  text-align:center;
+  color:#111;
+  font-size: 16px;
+  margin: 6px 0 10px;
+}
+
+/* ---------- TWO COLUMNS: LEFT BIGGER, RIGHT (VIDEO) MEDIUM ---------- */
 .bc-row{
   display:grid;
-  grid-template-columns: 1.7fr 0.85fr;  /* shrink the video column */
+  grid-template-columns: 1.6fr 0.9fr;  /* left bigger, right medium */
   gap: clamp(16px, 2.2vw, 28px);
   align-items:start;
   margin-top: 10px;
@@ -19,49 +65,41 @@ classes: full-bleed
   .bc-row{ grid-template-columns: 1fr; }
 }
 
-/* ---------- video card: medium width, neat aspect ---------- */
+/* Left column list */
+.bc-list{ margin: 8px 0 0; padding-left: 22px; }
+.bc-list li{ margin: 8px 0; font-size: 16px; }
+
+/* Right column video card (medium size with visible thumbnail) */
 .bc-video{
   background:#f3f6fb;
   border:1px solid #d7dfef;
   border-radius:12px;
   padding:10px;
-  width: min(520px, 100%);   /* cap the width so it isn’t huge */
-  justify-self: end;         /* hug the right edge in its column */
+  width: min(520px, 100%);   /* neat medium width */
+  justify-self: end;         /* hug the right edge like the mock */
 }
-
-/* keep a proper 16:9, never “tall” */
 .bc-video .thumb,
 .bc-video .play{
   width:100%;
-  aspect-ratio: 16 / 9;
+  aspect-ratio: 16/9;
   height:auto;
   border:0;
   border-radius:8px;
   display:block;
 }
+.bc-video .play{ display:none; } /* hidden until click */
+.bc-video small{ display:block; margin-top:6px; color:#555; font-size: 12.5px; }
 
-/* on very large screens, keep it classy—not oversized */
-@media (min-width: 1400px){
-  .bc-video{ width: 540px; }
-}
-
-/* on mid screens, slightly smaller */
-@media (max-width: 1200px){
-  .bc-video{ width: min(480px, 100%); }
-}
-
-/* on phones, full width of the single column */
-@media (max-width: 980px){
-  .bc-video{ width: 100%; justify-self: stretch; }
-}
-
+/* Footer line */
+.bc-footer{ font-weight:600; margin: 18px 0 0; }
 </style>
 
 <!-- ======================= PAGE CONTENT ======================= -->
 
-<!-- Full-width hero -->
+<!-- Full-width hero (left-aligned, wraps like the screenshot) -->
 <div class="bc-hero">
-  <h1>Become Part of our Amazing Community of Collaborator, Contributors and Sponsors</h1>
+  <h1>Become Part of our Amazing Community of<br>
+    Collaborator, Contributors and Sponsors</h1>
 </div>
 
 <!-- Full-width band for the rest -->
@@ -70,8 +108,10 @@ classes: full-bleed
     <span>Crowdbyte</span> <span>DevOps + AI</span> Community of Practice
   </p>
 
+  <!-- Force the same line break as the image (Canada on a new line) -->
   <p class="bc-tagline">
-    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in Canada.
+    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in<br>
+    Canada.
   </p>
 
   <div class="bc-row">
