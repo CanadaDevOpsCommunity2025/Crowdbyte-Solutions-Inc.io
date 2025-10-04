@@ -70,25 +70,29 @@ classes: full-bleed
 .bc-list li{ margin: 8px 0; font-size: 16px; }
 
 /* Right column video card (medium size with visible thumbnail) */
+/* Video box = exact video size, no extra padding/border */
 .bc-video{
-  background:#f3f6fb;
-  border:1px solid #d7dfef;
-  border-radius:12px;
-  padding:10px;
-  width: min(520px, 100%);   /* neat medium width */
-  justify-self: end;         /* hug the right edge like the mock */
+  width: min(520px, 100%);   /* medium width; change to 500/560 if you prefer */
+  justify-self: end;         /* align to the right column edge */
+  padding: 0;                /* no padding around the player */
+  background: transparent;   /* no background box */
+  border: 0;                 /* no border so box = video */
 }
-.bc-video .thumb,
-.bc-video .play{
-  width:100%;
-  aspect-ratio: 16/9;
-  height:auto;
-  border:0;
-  border-radius:8px;
-  display:block;
+
+/* Responsive 16:9 player that fills the box */
+.bc-video iframe{
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;      /* keeps correct height automatically */
+  height: auto;
+  border: 0;
 }
-.bc-video .play{ display:none; } /* hidden until click */
-.bc-video small{ display:block; margin-top:6px; color:#555; font-size: 12.5px; }
+
+/* On phones, let it go full width */
+@media (max-width: 980px){
+  .bc-video{ width: 100%; justify-self: stretch; }
+}
+
 
 /* Footer line */
 .bc-footer{ font-weight:600; margin: 18px 0 0; }
@@ -125,15 +129,14 @@ classes: full-bleed
         <li><a href="{{ '/contact/' | relative_url }}">Form to submit contribution</a></li>
       </ul>
 
-      <p class="bc-footer">Sponsor Hackathon, Event or Summit</p>
+  <p class="bc-footer">Sponsor Hackathon, Event or Summit</p>
     </div>
-
-    <!-- RIGHT: medium video with visible thumbnail -->
+<!-- RIGHT: medium video with visible thumbnail -->
     <div class="bc-video">
       <!-- Thumbnail image (shows first). Click to load player. -->
       <img
         class="thumb"
-        src="https://img.youtube.com/vi/9CiU7HR_tQ/maxresdefault.jpg"
+        src="https://www.youtube.com/watch?v=9CiUU7HR_tQ"
         alt="DevOps for GenAI Hackathon thumbnail"
         loading="lazy"
         onclick="(function(img){ img.style.display='none'; var f=img.nextElementSibling; f.style.display='block'; f.src += '&autoplay=1'; })(this)"
