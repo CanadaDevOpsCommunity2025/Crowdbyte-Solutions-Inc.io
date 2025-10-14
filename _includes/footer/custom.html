@@ -1,0 +1,13 @@
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  var nav = document.querySelector('.greedy-nav');
+  if (!nav) return;
+  var hidden = nav.querySelector('.hidden-links');
+  var visible = nav.querySelector('.visible-links');
+  if (hidden && visible) {
+    while (hidden.firstChild) visible.appendChild(hidden.firstChild);
+  }
+  var toggle = nav.querySelector('.greedy-nav__toggle');
+  if (toggle) toggle.remove();
+});
+</script>
