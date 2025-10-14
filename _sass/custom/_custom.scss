@@ -3,3 +3,39 @@
 .pagination--pager {
   display: none !important;
 }
+/* ── Always show all nav items; never use hamburger ───────────────────────── */
+.greedy-nav {
+  flex-wrap: wrap;                  /* allow nav to wrap to a second line */
+}
+
+.greedy-nav .greedy-nav__toggle {
+  display: none !important;         /* hide the hamburger button */
+}
+
+.greedy-nav .visible-links {
+  flex-wrap: wrap !important;       /* allow the main list to wrap */
+  gap: 0.25rem 0.75rem;             /* tighter gaps so more links fit */
+}
+
+/* When theme JS moves overflow items into .hidden-links, still show them inline */
+.greedy-nav .hidden-links {
+  display: inline-flex !important;  /* make the overflow list visible inline */
+  position: static !important;      /* remove dropdown positioning */
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-left: 0.5rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.75rem;
+}
+
+/* Keep header from clipping wrapped links */
+.masthead,
+.masthead__inner-wrap,
+.site-nav {
+  overflow: visible !important;
+}
+
+/* Optional: tighten link padding so more items fit in one row */
+.greedy-nav a {
+  padding: 0.35rem 0.5rem;
+}
