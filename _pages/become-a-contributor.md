@@ -1,172 +1,94 @@
 ---
-title: ""
-permalink: /become-a-contributor/
 layout: single
-classes: full-bleed
+permalink: /become-a-contributor/
+title: "Become a Contributor"
+classes: wide
+sidebar:
+  nav: "main"
 ---
 
-<!-- ======================= STYLES (scoped to this page) ======================= -->
 <style>
-  /* Hero: single line on desktop, wraps on small screens */
-.bc-hero h1{
-  margin: 0;
-  font-weight: 800;
-  line-height: 1.2;
-  text-align: left;
-}
-
-@media (min-width: 1024px){
-  .bc-hero h1{
-    white-space: nowrap;                /* keep it on one line */
-    font-size: clamp(16px, 1.6vw, 22px);/* scales with viewport so it fits */
-    text-overflow: ellipsis;            /* safety if someone narrows window a lot */
-    overflow: hidden;                   /* (pairs with ellipsis) */
-  }
-}
-
-/* Use full-bleed sections (edge-to-edge with safe side padding) */
-.bc-hero, .bc-band{
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  width: 100vw;
-}
-
-/* ---------- HERO (LEFT-ALIGNED, WRAPS LIKE THE MOCK) ---------- */
-.bc-hero{
-  background:#305890;
+/* Hero band */
+.cb-hero {
+  background:#2f5597; /* blue bar like screenshot */
   color:#fff;
-  padding: 22px clamp(18px, 3vw, 40px);
+  padding: 28px 24px;
+  margin: 0 0 24px 0;
 }
-.bc-hero h1{
-  margin: 0;
+.cb-hero h1 {
+  margin:0;
   font-weight: 800;
-  font-size: clamp(20px, 2.4vw, 26px); /* size from the mock */
-  line-height: 1.25;
-  text-align: left; /* left, not centered */
+  font-size: clamp(22px, 3.2vw, 34px);
+  line-height: 1.2;
 }
 
-/* ---------- CONTENT BAND ---------- */
-.bc-band{
-  padding-left: clamp(18px, 3vw, 40px);
-  padding-right: clamp(18px, 3vw, 40px);
-  padding-top: 10px;
-}
+/* Body */
+.cb-section { max-width: 1100px; margin: 0 auto; }
+.cb-title { text-align:center; font-weight:800; margin: 6px 0 14px; font-size: clamp(18px, 2.2vw, 24px); }
+.cb-intro { text-align:center; margin-bottom: 8px; }
 
-/* Subhead (blue, centered) */
-.bc-subhead{
-  text-align: center;
-  font-weight: 800;
-  font-size: clamp(18px, 2.2vw, 22px);
-  color:#305890;
-  margin: 16px auto 6px;
-}
-.bc-subhead *{ color:inherit !important; background:transparent !important; padding:0 !important; border-radius:0 !important; }
-
-/* Tagline centered, with the same break as the screenshot */
-.bc-tagline{
-  text-align:center;
-  color:#111;
-  font-size: 16px;
-  margin: 6px 0 10px;
-}
-
-/* ---------- TWO COLUMNS: LEFT BIGGER, RIGHT (VIDEO) MEDIUM ---------- */
-.bc-row{
+/* Two-column layout */
+.cb-grid {
   display:grid;
-  grid-template-columns: 1.6fr 0.9fr;  /* left bigger, right medium */
-  gap: clamp(16px, 2.2vw, 28px);
+  grid-template-columns: 1fr minmax(320px, 520px);
+  gap: 28px;
   align-items:start;
-  margin-top: 10px;
 }
-@media (max-width: 980px){
-  .bc-row{ grid-template-columns: 1fr; }
-}
+@media (max-width: 880px){ .cb-grid { grid-template-columns: 1fr; } }
 
-/* Left column list */
-.bc-list{ margin: 8px 0 0; padding-left: 22px; }
-.bc-list li{ margin: 8px 0; font-size: 16px; }
+.cb-list { margin-top: 8px; }
+.cb-list li { margin: 8px 0; }
 
-/* Right column video card (medium size with visible thumbnail) */
-/* Video box = exact video size, no extra padding/border */
-.bc-video{
-  width: min(520px, 100%);   /* medium width; change to 500/560 if you prefer */
-  justify-self: end;         /* align to the right column edge */
-  padding: 0;                /* no padding around the player */
-  background: transparent;   /* no background box */
-  border: 0;                 /* no border so box = video */
-}
+/* Responsive video */
+.video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; }
+.video-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
 
-/* Responsive 16:9 player that fills the box */
-.bc-video iframe{
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 9;      /* keeps correct height automatically */
-  height: auto;
-  border: 0;
-}
+.video-caption{ font-size: 12px; color:#444; margin-top:8px; text-align:left; }
+.cb-footer { margin-top: 36px; font-weight:600; }
 
-/* On phones, let it go full width */
-@media (max-width: 980px){
-  .bc-video{ width: 100%; justify-self: stretch; }
-}
-
-
-/* Footer line */
-.bc-footer{ font-weight:600; margin: 18px 0 0; }
+/* Link-like blue for the centered heading */
+.cb-title .hl { color:#2874c7; text-decoration: underline; }
 </style>
 
-<!-- ======================= PAGE CONTENT ======================= -->
-
-<!-- Full-width hero (left-aligned, wraps like the screenshot) -->
-<div class="bc-hero">
-  <h1>Become Part of our Amazing Community of<br>
-    Collaborator, Contributors and Sponsors</h1>
+<div class="cb-hero">
+  <div class="cb-section">
+    <h1>Become Part of our Amazing Community of Collaborator, Contributors and Sponsors</h1>
+  </div>
 </div>
 
-<!-- Full-width band for the rest -->
-<div class="bc-band">
-  <p class="bc-subhead">
-    <span>Crowdbyte</span> <span>DevOps + AI</span> Community of Practice
+<div class="cb-section">
+  <h2 class="cb-title">
+    <span class="hl">Crowdbyte&nbsp;&nbsp;<em><strong>DevOps + AI</strong></em>&nbsp;&nbsp;Community of Practice</span>
+  </h2>
+
+  <p class="cb-intro">
+    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in<br><strong>Canada</strong>
   </p>
 
-  <!-- Force the same line break as the image (Canada on a new line) -->
-  <p class="bc-tagline">
-    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in<br>
-    Canada.
-  </p>
-
-  <div class="bc-row">
-    <!-- LEFT: bullets (larger column) -->
-    <div>
-      <ul class="bc-list">
+  <div class="cb-grid">
+    <div class="cb-left">
+      <ul class="cb-list">
         <li>Start your own DevOps for GenAI Hackathon Day</li>
         <li>Be a Spotlight contributor</li>
         <li>Drive next steps for open-source project</li>
         <li>Write for us</li>
-        <li><a href="{{ '/contact/' | relative_url }}">Form to submit contribution</a></li>
       </ul>
-
-  <p class="bc-footer">Sponsor Hackathon, Event or Summit</p>
+      <p>Form to submit contribution</p>
     </div>
-<!-- RIGHT: medium video with visible thumbnail -->
-    <div class="bc-video">
-      <!-- Thumbnail image (shows first). Click to load player. -->
-      <img
-        class="thumb"
-        src="https://www.youtube.com/watch?v=9CiUU7HR_tQ"
-        alt="DevOps for GenAI Hackathon thumbnail"
-        loading="lazy"
-        onclick="(function(img){ img.style.display='none'; var f=img.nextElementSibling; f.style.display='block'; f.src += '&autoplay=1'; })(this)"
-      >
-      <!-- YouTube player (revealed on click) -->
-      <iframe
-        class="play"
-        src="https://youtu.be/9CiUU7HR_tQ?si=-Iqjgk14D4O-VpTu"
-        title="DevOps for GenAI Hackathon"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen
-      ></iframe>
-      <small>https://youtu.be/9CiUU7HR_tQ</small>
+
+    <div class="cb-right">
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube.com/embed/9CiUU7HR_tQ"
+          title="DevOps for GenAI Hackathon"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <p class="video-caption">https://youtu.be/9CiUU7HR_tQ?si=-Iqjgk14D4O-VpTu</p>
     </div>
   </div>
+
+  <p class="cb-footer">Sponsor Hackathon, Event or Summit</p>
 </div>
