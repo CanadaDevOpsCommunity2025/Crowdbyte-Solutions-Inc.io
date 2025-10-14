@@ -3,11 +3,15 @@ layout: single
 permalink: /become-a-contributor/
 title: "Become a Contributor"
 classes: wide
-sidebar:
-  nav: "main"
+sidebar: false   # <— overrides site defaults to remove the left nav pane
 ---
 
 <style>
+/* Hide Previous / Next pager buttons */
+.page__footer .pagination,
+.pagination,
+.pagination--pager { display: none !important; }
+
 /* Hero band */
 .cb-hero {
   background:#2f5597; /* blue bar like screenshot */
