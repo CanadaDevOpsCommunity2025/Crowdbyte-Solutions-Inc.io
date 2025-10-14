@@ -1,64 +1,64 @@
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
-<!-- Ultra-compact, one-line header: smallest nav text + tight spacing -->
+<!-- Ultra-compact, one-line header; first item visible -->
 <style>
-/* Keep default site title on large screens; trim spacing next to it */
+/* Keep theme default for site title; trim side spacing a bit */
 .site-title {
   font-size: inherit !important;
   line-height: inherit !important;
   font-weight: inherit !important;
-  margin-right: .35rem !important;
+  margin-right: .28rem !important;
 }
 
-/* Never wrap header/nav; remove hamburger */
+/* Keep header on ONE line; remove hamburger */
 .masthead__inner-wrap, .site-nav, .greedy-nav { white-space: nowrap !important; }
 .greedy-nav .greedy-nav__toggle { display: none !important; }
 
-/* Put ALL links on one row (even overflow ones) */
+/* Show ALL links inline (even ones theme tries to overflow) */
 .greedy-nav .visible-links,
 .greedy-nav .hidden-links {
   display: inline-flex !important;
   flex-wrap: nowrap !important;
   white-space: nowrap !important;
-  gap: 0 .25rem;                   /* tighter gaps */
+  gap: 0 .2rem;                       /* tiniest gaps */
 }
 .greedy-nav .hidden-links {
   position: static !important;
   visibility: visible !important;
   opacity: 1 !important;
-  margin-left: .25rem;
+  margin-left: .2rem;
 }
 
-/* ↓↓↓ Make nav text smaller + tighter so more fits ↓↓↓ */
+/* Make nav text smaller + ultra-tight padding so everything fits */
 .greedy-nav a {
-  font-size: .80rem !important;     /* smaller base */
-  padding: .12rem .22rem !important;
+  font-size: .74rem !important;       /* ↓ smaller */
+  padding: .08rem .16rem !important;  /* ↓ tighter */
   line-height: 1.05 !important;
   letter-spacing: -0.01em;
 }
 
-/* Trim header vertical padding */
-.masthead, .site-nav {
-  padding-top: .12rem !important;
-  padding-bottom: .12rem !important;
+/* Reduce header vertical padding to gain a few px */
+.masthead, .site-nav { padding-top: .10rem !important; padding-bottom: .10rem !important; }
+
+/* Allow horizontal scroll as last resort; but we’ll snap to the LEFT via JS */
+.masthead__inner-wrap, .greedy-nav {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
 }
 
-/* Allow horizontal scroll as last resort (no wrapping, no hamburger) */
-.masthead__inner-wrap { overflow-x: auto; overflow-y: hidden; }
-.masthead__inner-wrap::-webkit-scrollbar { height: 0; }
+/* (cosmetic) hide scrollbar in WebKit while keeping scroll */
+.masthead__inner-wrap::-webkit-scrollbar,
+.greedy-nav::-webkit-scrollbar { height: 0; }
 
-/* Progressive tightening on narrower screens */
-@media (max-width: 1400px) {
-  .greedy-nav a { font-size: .78rem !important; padding: .10rem .20rem !important; }
-}
-@media (max-width: 1250px) {
-  .greedy-nav a { font-size: .76rem !important; padding: .10rem .18rem !important; }
-  .site-title { margin-right: .28rem !important; }
+/* On narrower screens only, gently shrink the title just a touch to help fit */
+@media (max-width: 1280px) {
+  .site-title { font-size: .96em !important; }
+  .greedy-nav a { font-size: .72rem !important; padding: .08rem .14rem !important; }
 }
 @media (max-width: 1120px) {
-  .greedy-nav a { font-size: .74rem !important; padding: .08rem .16rem !important; }
-  /* On smaller screens only, gently reduce the title so nav fits */
-  .site-title { font-size: 0.95em !important; }
+  .site-title { font-size: .94em !important; }
+  .greedy-nav a { font-size: .70rem !important; padding: .06rem .12rem !important; }
 }
 </style>
+
 
 
