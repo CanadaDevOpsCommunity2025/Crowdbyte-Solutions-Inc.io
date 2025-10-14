@@ -1,1 +1,27 @@
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
+<!-- Force Minimal Mistakes nav to always show all items, no hamburger -->
+<style>
+/* Let the nav wrap instead of collapsing */
+.greedy-nav { flex-wrap: wrap; }
+.greedy-nav .visible-links { flex-wrap: wrap !important; gap: .25rem .75rem; }
+
+/* Show anything the JS tried to hide as an overflow "hidden-links" menu */
+.greedy-nav .hidden-links {
+  display: inline-flex !important;
+  position: static !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex-wrap: wrap;
+  gap: .25rem .75rem;
+  margin-left: .5rem;
+}
+
+/* Hide the hamburger/toggle entirely */
+.greedy-nav .greedy-nav__toggle { display: none !important; }
+
+/* Prevent clipping if links wrap to a second line */
+.masthead, .masthead__inner-wrap, .site-nav { overflow: visible !important; }
+
+/* Optional: tighter link padding so more items fit on one row */
+.greedy-nav a { padding: .35rem .5rem; }
+</style>
