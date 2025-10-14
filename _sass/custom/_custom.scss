@@ -1,0 +1,5 @@
+/* Hide Minimal Mistakes prev/next pager everywhere */
+.pagination,
+.pagination--pager {
+  display: none !important;
+}
