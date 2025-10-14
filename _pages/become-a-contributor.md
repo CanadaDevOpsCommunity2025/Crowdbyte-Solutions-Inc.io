@@ -5,6 +5,13 @@ title: "Become a Contributor"
 sidebar: false
 classes: "full-bleed"   # used by the CSS below to remove the theme's width limits
 ---
+<style>
+/* Hide the Previous / Next pager on this page only */
+.pagination,
+.pagination--pager {
+  display: none !important;
+}
+</style>
 
 <style>
 /* ===== Remove theme width limits & gutters for THIS PAGE only ===== */
