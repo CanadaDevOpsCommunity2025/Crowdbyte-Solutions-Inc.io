@@ -5,6 +5,14 @@
 .page.h-entry.full-bleed {
   width: 100% !important;
 }
+---
+# Only the main Sass file needs front matter
+---
+
+@import "minimal-mistakes/skins/air";    // or your chosen skin
+@import "minimal-mistakes";              // theme
+@import "custom/custom";                 // your overrides in _sass/custom/_custom.scss
+
 
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content,
