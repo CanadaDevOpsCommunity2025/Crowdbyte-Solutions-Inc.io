@@ -2,12 +2,20 @@
 document.addEventListener('DOMContentLoaded', function () {
   var nav = document.querySelector('.greedy-nav');
   if (!nav) return;
+
+  // Move any overflow items back into the visible list
   var hidden = nav.querySelector('.hidden-links');
   var visible = nav.querySelector('.visible-links');
   if (hidden && visible) {
     while (hidden.firstChild) visible.appendChild(hidden.firstChild);
   }
+
+  // Remove the toggle if any remains
   var toggle = nav.querySelector('.greedy-nav__toggle');
   if (toggle) toggle.remove();
+
+  // Ensure the menu scroll is positioned at the LEFT so the first item is visible
+  var wrap = document.querySelector('.masthead__inner-wrap');
+  if (wrap) wrap.scrollLeft = 0;
 });
 </script>
