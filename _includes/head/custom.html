@@ -1,35 +1,59 @@
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
 <!-- Site-wide nav: one line, no hamburger, inline overflow -->
+<!-- Compact one-line header: smaller nav text + tighter spacing -->
 <style>
-/* keep theme defaults for title */
-.site-title { font-size: inherit !important; line-height: inherit !important; font-weight: inherit !important; }
+/* Keep theme default site title size, but reduce right spacing */
+.site-title {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  font-weight: inherit !important;
+  margin-right: 0.5rem !important;   /* was larger; saves space for links */
+}
 
-/* never wrap header to two lines */
+/* Never wrap header to 2 lines; remove hamburger */
 .masthead__inner-wrap, .site-nav, .greedy-nav { white-space: nowrap !important; }
-
-/* remove hamburger */
 .greedy-nav .greedy-nav__toggle { display: none !important; }
 
-/* render both lists inline on the same row */
+/* Put ALL links on same row (even overflow ones) */
 .greedy-nav .visible-links,
 .greedy-nav .hidden-links {
   display: inline-flex !important;
   flex-wrap: nowrap !important;
   white-space: nowrap !important;
-  gap: 0 .5rem;
+  gap: 0 .4rem;                      /* tighter gaps */
 }
 .greedy-nav .hidden-links {
   position: static !important;
   visibility: visible !important;
   opacity: 1 !important;
-  margin-left: .5rem;
+  margin-left: .4rem;
 }
 
-/* tighter spacing so long labels fit */
-.greedy-nav a { padding: .24rem .44rem !important; font-size: .95rem !important; }
+/* Make nav text smaller + tighter padding so more fits */
+.greedy-nav a {
+  font-size: .88rem !important;      /* ↓ smaller text */
+  padding: .18rem .34rem !important; /* ↓ tighter padding */
+  line-height: 1.1 !important;
+}
 
-/* if space runs out, allow horizontal scroll instead of wrapping */
+/* Reduce masthead vertical padding to gain a few px */
+.masthead, .site-nav {
+  padding-top: .15rem !important;
+  padding-bottom: .15rem !important;
+}
+
+/* If it still can't all fit on very small screens, allow horizontal scroll (no wrap) */
 .masthead__inner-wrap { overflow-x: auto; overflow-y: hidden; }
-.masthead__inner-wrap::-webkit-scrollbar { height: 0; } /* cosmetic */
+.masthead__inner-wrap::-webkit-scrollbar { height: 0; } /* hide scrollbar, keep scroll */
+
+/* Optional: on narrower screens, shrink a touch more */
+@media (max-width: 1280px) {
+  .greedy-nav a { font-size: .85rem !important; padding: .16rem .3rem !important; }
+}
+@media (max-width: 1100px) {
+  .greedy-nav a { font-size: .82rem !important; padding: .14rem .28rem !important; }
+  .site-title { margin-right: .4rem !important; }
+}
 </style>
+
 
