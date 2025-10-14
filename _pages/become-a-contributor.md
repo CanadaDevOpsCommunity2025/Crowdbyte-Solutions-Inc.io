@@ -2,22 +2,31 @@
 layout: single
 permalink: /become-a-contributor/
 title: "Become a Contributor"
-classes: wide
-sidebar: false   # <— overrides site defaults to remove the left nav pane
+sidebar: false
+classes: "full-bleed"   # used by the CSS below to remove the theme's width limits
 ---
 
 <style>
-/* Hide Previous / Next pager buttons */
-.page__footer .pagination,
-.pagination,
-.pagination--pager { display: none !important; }
+/* ===== Remove theme width limits & gutters for THIS PAGE only ===== */
+.page.full-bleed .page__inner-wrap,
+.page.full-bleed .page__content {
+  max-width: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Full-bleed helper that truly spans the viewport width */
+.full-bleed-row {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
 
 /* Hero band */
 .cb-hero {
-  background:#2f5597; /* blue bar like screenshot */
+  background:#2f5597;
   color:#fff;
   padding: 28px 24px;
-  margin: 0 0 24px 0;
 }
 .cb-hero h1 {
   margin:0;
@@ -26,41 +35,56 @@ sidebar: false   # <— overrides site defaults to remove the left nav pane
   line-height: 1.2;
 }
 
-/* Body */
-.cb-section { max-width: 1100px; margin: 0 auto; }
-.cb-title { text-align:center; font-weight:800; margin: 6px 0 14px; font-size: clamp(18px, 2.2vw, 24px); }
+/* Main content row (also full-bleed) */
+.cb-wrap {
+  padding: 20px 24px;
+}
+
+/* Section heading + intro */
+.cb-title { 
+  text-align:center; 
+  font-weight:800; 
+  margin: 8px 0 14px; 
+  font-size: clamp(18px, 2.2vw, 24px); 
+}
+.cb-title .hl { color:#2874c7; text-decoration: underline; }
 .cb-intro { text-align:center; margin-bottom: 8px; }
 
-/* Two-column layout */
+/* Two-column layout that can breathe across the full width */
 .cb-grid {
   display:grid;
-  grid-template-columns: 1fr minmax(320px, 520px);
+  grid-template-columns: minmax(280px, 1fr) minmax(360px, 640px);
   gap: 28px;
   align-items:start;
+  max-width: 1600px;          /* keep lines readable on ultra-wide screens */
+  margin: 0 auto;             /* centered inside the full-bleed row */
 }
 @media (max-width: 880px){ .cb-grid { grid-template-columns: 1fr; } }
 
 .cb-list { margin-top: 8px; }
 .cb-list li { margin: 8px 0; }
 
-/* Responsive video */
+/* Video */
 .video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; }
 .video-wrap iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
-
 .video-caption{ font-size: 12px; color:#444; margin-top:8px; text-align:left; }
-.cb-footer { margin-top: 36px; font-weight:600; }
 
-/* Link-like blue for the centered heading */
-.cb-title .hl { color:#2874c7; text-decoration: underline; }
+/* Footer line */
+.cb-footer { margin: 28px auto 8px; font-weight:600; max-width:1600px; }
+  
+/* Hide Previous/Next pager buttons on this page */
+.page.full-bleed .pagination,
+.page.full-bleed .pagination--pager,
+.page.full-bleed .page__footer .pagination { display:none !important; }
 </style>
 
-<div class="cb-hero">
-  <div class="cb-section">
-    <h1>Become Part of our Amazing Community of Collaborator, Contributors and Sponsors</h1>
-  </div>
+<!-- HERO (full width) -->
+<div class="full-bleed-row cb-hero">
+  <h1>Become Part of our Amazing Community of Collaborator, Contributors and Sponsors</h1>
 </div>
 
-<div class="cb-section">
+<!-- MAIN (full width) -->
+<div class="full-bleed-row cb-wrap">
   <h2 class="cb-title">
     <span class="hl">Crowdbyte&nbsp;&nbsp;<em><strong>DevOps + AI</strong></em>&nbsp;&nbsp;Community of Practice</span>
   </h2>
