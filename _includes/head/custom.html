@@ -1,16 +1,17 @@
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
 <!-- Keep Minimal Mistakes nav in a single line with your full labels -->
+<!-- Keep all nav items on ONE LINE; show overflow inline; hide hamburger -->
 <style>
-/* Keep the default site title size */
+/* Keep default site title sizing */
 .site-title { font-size: inherit !important; line-height: inherit !important; font-weight: inherit !important; }
 
-/* Never wrap header/nav to two lines */
+/* Never wrap header/nav to a second line */
 .masthead__inner-wrap, .site-nav, .greedy-nav { white-space: nowrap !important; }
 
-/* Hide hamburger/toggle */
+/* Remove the hamburger entirely */
 .greedy-nav .greedy-nav__toggle { display: none !important; }
 
-/* Show ALL links on the same row (even those the JS tries to overflow) */
+/* Make both visible- and hidden-links render inline on the same row */
 .greedy-nav .visible-links,
 .greedy-nav .hidden-links {
   display: inline-flex !important;
@@ -25,11 +26,14 @@
   margin-left: .5rem;
 }
 
-/* Slightly tighter spacing so your long labels fit */
-.greedy-nav a { padding: .25rem .45rem !important; font-size: .95rem !important; }
+/* Slightly tighter link spacing so long labels fit in one line on laptops */
+.greedy-nav a {
+  padding: .24rem .44rem !important;
+  font-size: .95rem !important;
+}
 
-/* If space still runs out on small screens, allow horizontal scroll instead of wrapping */
+/* If it STILL can’t all fit on small screens, allow horizontal scroll instead of wrapping */
 .masthead__inner-wrap { overflow-x: auto; overflow-y: hidden; }
-.masthead__inner-wrap::-webkit-scrollbar { height: 0; } /* hide scrollbar, keep scroll */
+/* (purely cosmetic) hide the scrollbar groove on WebKit while keeping scroll behavior */
+.masthead__inner-wrap::-webkit-scrollbar { height: 0; }
 </style>
-
