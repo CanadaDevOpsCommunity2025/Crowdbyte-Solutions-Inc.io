@@ -1,21 +1,23 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+  // 1) Put any overflowed items back into the visible list
   var nav = document.querySelector('.greedy-nav');
-  if (!nav) return;
-
-  // Move any overflow items back into the visible list
-  var hidden = nav.querySelector('.hidden-links');
-  var visible = nav.querySelector('.visible-links');
-  if (hidden && visible) {
-    while (hidden.firstChild) visible.appendChild(hidden.firstChild);
+  if (nav) {
+    var hidden = nav.querySelector('.hidden-links');
+    var visible = nav.querySelector('.visible-links');
+    if (hidden && visible) {
+      while (hidden.firstChild) visible.appendChild(hidden.firstChild);
+    }
+    var toggle = nav.querySelector('.greedy-nav__toggle');
+    if (toggle) toggle.remove();
   }
 
-  // Remove the toggle if any remains
-  var toggle = nav.querySelector('.greedy-nav__toggle');
-  if (toggle) toggle.remove();
-
-  // Ensure the menu scroll is positioned at the LEFT so the first item is visible
-  var wrap = document.querySelector('.masthead__inner-wrap');
-  if (wrap) wrap.scrollLeft = 0;
+  // 2) Snap header scroll hard-left so the first item ("Become a Contributor") is visible
+  var scrollers = [
+    document.querySelector('.masthead__inner-wrap'),
+    document.querySelector('.greedy-nav'),
+    document.querySelector('.site-nav')
+  ];
+  scrollers.forEach(function(el){ if (el) el.scrollLeft = 0; });
 });
 </script>
