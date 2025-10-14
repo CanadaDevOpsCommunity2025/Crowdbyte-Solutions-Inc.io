@@ -9,3 +9,5 @@ main:
     url: /ask-an-expert/
   - title: "Member Login"
     url: /member-login/
+  - title: "Contact"
+    url: /contact/
