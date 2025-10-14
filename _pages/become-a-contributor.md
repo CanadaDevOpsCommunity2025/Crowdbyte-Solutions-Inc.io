@@ -110,6 +110,78 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
       </ul>
       <p>Form to submit contribution</p>
     </div>
+    <!-- ===== Contribution Form (inserted here) ===== -->
+      <div class="cb-form" id="contribution-form">
+        <h3>Form to submit contribution</h3>
+
+        <!-- Replace the Formspree endpoint below with your real ID -->
+        <form id="fs-contrib" action="https://formspree.io/f/XXXXXXXX" method="POST">
+          <!-- What is this about -->
+          <label class="required" for="topic">What is this about</label>
+          <select id="topic" name="topic" required>
+            <option value="" disabled selected>Select one…</option>
+            <option>Start your own DevOps for GenAI Hackathon Day</option>
+            <option>Be a Spotlight contributor</option>
+            <option>Drive next steps for open-source project</option>
+            <option>Write for us</option>
+            <option>Sponsor Hackathon / Event / Summit</option>
+          </select>
+
+          <div class="row">
+            <div>
+              <label class="required" for="name">Your Name</label>
+              <input id="name" name="name" type="text" autocomplete="name" required />
+            </div>
+            <div>
+              <label class="required" for="email">Email</label>
+              <input id="email" name="email" type="email" autocomplete="email" required />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label for="org">Organization (optional)</label>
+              <input id="org" name="organization" type="text" />
+            </div>
+            <div>
+              <label for="role">Role / Title (optional)</label>
+              <input id="role" name="role" type="text" />
+            </div>
+          </div>
+
+          <label class="required" for="summary">Short summary</label>
+          <textarea id="summary" name="summary" placeholder="Tell us briefly what you’d like to contribute…" required></textarea>
+          <div class="hint">E.g., talk/workshop idea, open-source contribution, sponsorship interest, or an article outline.</div>
+
+          <!-- Interest details vary by topic -->
+          <label for="details">Details (links welcome)</label>
+          <textarea id="details" name="details" placeholder="Add details, links to repos/slides, topics, target audience, timelines, etc."></textarea>
+
+          <!-- Consent -->
+          <label><input type="checkbox" name="consent" value="yes" required /> I agree to be contacted about this submission.</label>
+
+          <!-- Hidden helpers -->
+          <input type="hidden" name="_subject" value="New Contribution via Become-a-Contributor page" />
+          <input type="hidden" name="_template" value="table" />
+          <!-- Redirect (fallback if JS disabled): change to a thank-you page if you have one -->
+          <input type="hidden" name="_redirect" value="https://canadadevopscommunity2025.github.io/Crowdbyte-Solutions-Inc.io/become-a-contributor/" />
+
+          <!-- Honeypot -->
+          <div class="hp">
+            <label for="company">Company</label>
+            <input id="company" type="text" name="company">
+          </div>
+
+          <div class="actions">
+            <button type="submit" id="cb-submit">Submit Contribution</button>
+            <span class="status" id="cb-form-status" aria-live="polite"></span>
+          </div>
+        </form>
+      </div>
+      <!-- ===== /Contribution Form ===== -->
+
+    </div>
+
 
     <div class="cb-right">
       <div class="video-wrap">
@@ -127,3 +199,45 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
 
   <p class="cb-footer">Sponsor Hackathon, Event or Summit</p>
 </div>
+
+<script>
+/* AJAX submit to Formspree for inline success/error (no page redirect) */
+(function () {
+  var form = document.getElementById('fs-contrib');
+  if (!form) return;
+  var statusEl = document.getElementById('cb-form-status');
+  var btn = document.getElementById('cb-submit');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    statusEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    try {
+      const data = new FormData(form);
+      // Basic honeypot check
+      if (data.get('company')) throw new Error('Spam filtered');
+
+      const resp = await fetch(form.action, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: data
+      });
+      if (resp.ok) {
+        form.reset();
+        statusEl.textContent = 'Thank you! We’ve received your submission.';
+        statusEl.className = 'status success';
+      } else {
+        const result = await resp.json().catch(() => ({}));
+        throw new Error(result.error || 'Submission failed. Please try again.');
+      }
+    } catch (err) {
+      statusEl.textContent = err.message || 'Something went wrong. Please try again.';
+      statusEl.className = 'status error';
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Submit Contribution';
+    }
+  });
+})();
+</script>
