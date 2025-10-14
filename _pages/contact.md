@@ -4,6 +4,11 @@ permalink: /contact/
 layout: single
 classes: wide   # keep the page constrained; we'll explicitly center the inner content
 ---
+<style>
+/* Hide Previous / Next pager on this page only */
+.pagination,
+.pagination--pager { display: none !important; }
+</style>
 
 <div class="contact-wrap">
   <section class="contact-hero">
