@@ -110,61 +110,13 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
       </ul>
       <p>Form to submit contribution</p>
     </div>
-    <!-- ===== Contribution Form (inserted here) ===== -->
-      <div class="cb-form" id="contribution-form">
-        <h3>Form to submit contribution</h3>
+    <!-- Actions: go fill the form page OR contact page -->
+      <div class="cb-actions">
+        <a class="btn btn--primary" href="{{ site.baseurl }}/submit-contribution/">Fill Contribution Form</a>
+        <a class="btn" href="{{ site.baseurl }}/contact/">Contact Us Instead</a>
+      </div>
+    </div>
 
-        <!-- Replace the Formspree endpoint below with your real ID -->
-        <form id="fs-contrib" action="https://formspree.io/f/XXXXXXXX" method="POST">
-          <!-- What is this about -->
-          <label class="required" for="topic">What is this about</label>
-          <select id="topic" name="topic" required>
-            <option value="" disabled selected>Select one…</option>
-            <option>Start your own DevOps for GenAI Hackathon Day</option>
-            <option>Be a Spotlight contributor</option>
-            <option>Drive next steps for open-source project</option>
-            <option>Write for us</option>
-            <option>Sponsor Hackathon / Event / Summit</option>
-          </select>
-
-          <div class="row">
-            <div>
-              <label class="required" for="name">Your Name</label>
-              <input id="name" name="name" type="text" autocomplete="name" required />
-            </div>
-            <div>
-              <label class="required" for="email">Email</label>
-              <input id="email" name="email" type="email" autocomplete="email" required />
-            </div>
-          </div>
-
-          <div class="row">
-            <div>
-              <label for="org">Organization (optional)</label>
-              <input id="org" name="organization" type="text" />
-            </div>
-            <div>
-              <label for="role">Role / Title (optional)</label>
-              <input id="role" name="role" type="text" />
-            </div>
-          </div>
-
-          <label class="required" for="summary">Short summary</label>
-          <textarea id="summary" name="summary" placeholder="Tell us briefly what you’d like to contribute…" required></textarea>
-          <div class="hint">E.g., talk/workshop idea, open-source contribution, sponsorship interest, or an article outline.</div>
-
-          <!-- Interest details vary by topic -->
-          <label for="details">Details (links welcome)</label>
-          <textarea id="details" name="details" placeholder="Add details, links to repos/slides, topics, target audience, timelines, etc."></textarea>
-
-          <!-- Consent -->
-          <label><input type="checkbox" name="consent" value="yes" required /> I agree to be contacted about this submission.</label>
-
-          <!-- Hidden helpers -->
-          <input type="hidden" name="_subject" value="New Contribution via Become-a-Contributor page" />
-          <input type="hidden" name="_template" value="table" />
-          <!-- Redirect (fallback if JS disabled): change to a thank-you page if you have one -->
-          <input type="hidden" name="_redirect" value="https://canadadevopscommunity2025.github.io/Crowdbyte-Solutions-Inc.io/become-a-contributor/" />
 
           <!-- Honeypot -->
           <div class="hp">
