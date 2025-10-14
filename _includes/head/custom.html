@@ -1,27 +1,60 @@
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
-<!-- Force Minimal Mistakes nav to always show all items, no hamburger -->
+<!-- Header/nav: single line, close to title, bigger site title -->
 <style>
-/* Let the nav wrap instead of collapsing */
-.greedy-nav { flex-wrap: wrap; }
-.greedy-nav .visible-links { flex-wrap: wrap !important; gap: .25rem .75rem; }
+/* Make the site title larger */
+.site-title {
+  font-size: 1.85rem !important;   /* bump as desired */
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+}
 
-/* Show anything the JS tried to hide as an overflow "hidden-links" menu */
+/* Keep everything on one line and push links right next to the title */
+.masthead__inner-wrap,
+.greedy-nav {
+  white-space: nowrap !important;    /* prevents wrapping to 2 lines */
+  overflow-x: auto;                  /* allow horizontal scroll on very small screens */
+  overflow-y: hidden;
+}
+
+.greedy-nav {
+  justify-content: flex-start !important; /* sit links near the title, not spaced out */
+  gap: 0 !important;
+}
+
+/* Pull menu closer to the title */
+.greedy-nav .visible-links {
+  margin-left: 0.75rem !important;
+  flex-wrap: nowrap !important;      /* never wrap menu items */
+}
+
+/* If theme tries to overflow into hidden-links, still keep them inline on the same row */
 .greedy-nav .hidden-links {
   display: inline-flex !important;
   position: static !important;
   visibility: visible !important;
   opacity: 1 !important;
-  flex-wrap: wrap;
-  gap: .25rem .75rem;
-  margin-left: .5rem;
+  white-space: nowrap !important;
+  margin-left: 0.5rem !important;
 }
 
-/* Hide the hamburger/toggle entirely */
-.greedy-nav .greedy-nav__toggle { display: none !important; }
+/* Hide hamburger/toggle entirely */
+.greedy-nav .greedy-nav__toggle {
+  display: none !important;
+}
 
-/* Prevent clipping if links wrap to a second line */
-.masthead, .masthead__inner-wrap, .site-nav { overflow: visible !important; }
+/* Tighten link padding so more items fit on one line */
+.greedy-nav a {
+  padding: 0.35rem 0.55rem !important;
+}
 
-/* Optional: tighter link padding so more items fit on one row */
-.greedy-nav a { padding: .35rem .5rem; }
+/* Trim header vertical padding to visually tighten the bar */
+.masthead,
+.site-nav {
+  padding-top: 0.3rem !important;
+  padding-bottom: 0.3rem !important;
+}
+
+/* Optional: hide scrollbar on WebKit while preserving scroll */
+.masthead__inner-wrap::-webkit-scrollbar { height: 0; }
 </style>
+
