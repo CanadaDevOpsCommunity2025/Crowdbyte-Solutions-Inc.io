@@ -5,12 +5,11 @@ title: "Become a Contributor"
 sidebar: false
 classes: "full-bleed"   # used by the CSS below to remove the theme's width limits
 ---
+
 <style>
 /* Hide the Previous / Next pager on this page only */
 .pagination,
-.pagination--pager {
-  display: none !important;
-}
+.pagination--pager { display: none !important; }
 </style>
 
 <style>
@@ -43,9 +42,7 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
 }
 
 /* Main content row (also full-bleed) */
-.cb-wrap {
-  padding: 20px 24px;
-}
+.cb-wrap { padding: 20px 24px; }
 
 /* Section heading + intro */
 .cb-title { 
@@ -70,6 +67,10 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
 
 .cb-list { margin-top: 8px; }
 .cb-list li { margin: 8px 0; }
+
+/* Action buttons under bullets */
+.cb-actions { margin-top: 12px; display:flex; gap:10px; flex-wrap:wrap; }
+.cb-actions .btn { border-radius: 999px; }
 
 /* Video */
 .video-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; }
@@ -108,32 +109,14 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
         <li>Drive next steps for open-source project</li>
         <li>Write for us</li>
       </ul>
-      <p>Form to submit contribution</p>
-    </div>
-    <!-- Actions: go fill the form page OR contact page -->
+
+      <p><strong>Form to submit contribution</strong></p>
+      <!-- Actions: go fill the dedicated form page OR contact page -->
       <div class="cb-actions">
         <a class="btn btn--primary" href="{{ site.baseurl }}/submit-contribution/">Fill Contribution Form</a>
         <a class="btn" href="{{ site.baseurl }}/contact/">Contact Us Instead</a>
       </div>
     </div>
-
-
-          <!-- Honeypot -->
-          <div class="hp">
-            <label for="company">Company</label>
-            <input id="company" type="text" name="company">
-          </div>
-
-          <div class="actions">
-            <button type="submit" id="cb-submit">Submit Contribution</button>
-            <span class="status" id="cb-form-status" aria-live="polite"></span>
-          </div>
-        </form>
-      </div>
-      <!-- ===== /Contribution Form ===== -->
-
-    </div>
-
 
     <div class="cb-right">
       <div class="video-wrap">
@@ -151,45 +134,3 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
 
   <p class="cb-footer">Sponsor Hackathon, Event or Summit</p>
 </div>
-
-<script>
-/* AJAX submit to Formspree for inline success/error (no page redirect) */
-(function () {
-  var form = document.getElementById('fs-contrib');
-  if (!form) return;
-  var statusEl = document.getElementById('cb-form-status');
-  var btn = document.getElementById('cb-submit');
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    statusEl.textContent = '';
-    btn.disabled = true;
-    btn.textContent = 'Sending…';
-    try {
-      const data = new FormData(form);
-      // Basic honeypot check
-      if (data.get('company')) throw new Error('Spam filtered');
-
-      const resp = await fetch(form.action, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: data
-      });
-      if (resp.ok) {
-        form.reset();
-        statusEl.textContent = 'Thank you! We’ve received your submission.';
-        statusEl.className = 'status success';
-      } else {
-        const result = await resp.json().catch(() => ({}));
-        throw new Error(result.error || 'Submission failed. Please try again.');
-      }
-    } catch (err) {
-      statusEl.textContent = err.message || 'Something went wrong. Please try again.';
-      statusEl.className = 'status error';
-    } finally {
-      btn.disabled = false;
-      btn.textContent = 'Submit Contribution';
-    }
-  });
-})();
-</script>
