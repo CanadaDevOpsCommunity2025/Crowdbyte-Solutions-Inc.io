@@ -1,60 +1,47 @@
 <link rel="stylesheet" href="{{ '/assets/css/custom.css' | relative_url }}?v={{ site.github.build_revision }}">
-<!-- Header/nav: single line, close to title, bigger site title -->
+<!-- Header: revert title size, keep nav in one line, no hamburger -->
 <style>
-/* Make the site title larger */
+/* 1) Revert site title to Minimal Mistakes defaults */
 .site-title {
-  font-size: 1.85rem !important;   /* bump as desired */
-  line-height: 1.1 !important;
-  font-weight: 800 !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
 }
 
-/* Keep everything on one line and push links right next to the title */
+/* 2) Force a single-line header and remove hamburger */
 .masthead__inner-wrap,
+.site-nav,
 .greedy-nav {
-  white-space: nowrap !important;    /* prevents wrapping to 2 lines */
-  overflow-x: auto;                  /* allow horizontal scroll on very small screens */
-  overflow-y: hidden;
+  white-space: nowrap !important;   /* never wrap to two lines */
 }
+.greedy-nav .greedy-nav__toggle { display: none !important; }
 
-.greedy-nav {
-  justify-content: flex-start !important; /* sit links near the title, not spaced out */
-  gap: 0 !important;
-}
-
-/* Pull menu closer to the title */
-.greedy-nav .visible-links {
-  margin-left: 0.75rem !important;
-  flex-wrap: nowrap !important;      /* never wrap menu items */
-}
-
-/* If theme tries to overflow into hidden-links, still keep them inline on the same row */
+/* 3) Keep ALL links on one line (no wrap), show overflow inline */
+.greedy-nav .visible-links,
 .greedy-nav .hidden-links {
   display: inline-flex !important;
+  flex-wrap: nowrap !important;
+  white-space: nowrap !important;
+  gap: 0 .5rem;
+}
+.greedy-nav .hidden-links {
   position: static !important;
   visibility: visible !important;
   opacity: 1 !important;
-  white-space: nowrap !important;
-  margin-left: 0.5rem !important;
+  margin-left: .5rem;
 }
 
-/* Hide hamburger/toggle entirely */
-.greedy-nav .greedy-nav__toggle {
-  display: none !important;
-}
-
-/* Tighten link padding so more items fit on one line */
+/* 4) Tighten spacing so more items fit on one line (adjust to taste) */
 .greedy-nav a {
-  padding: 0.35rem 0.55rem !important;
+  padding: .25rem .45rem !important;
+  font-size: .95rem !important;   /* smaller menu text to fit one line */
 }
 
-/* Trim header vertical padding to visually tighten the bar */
-.masthead,
-.site-nav {
-  padding-top: 0.3rem !important;
-  padding-bottom: 0.3rem !important;
+/* 5) Allow horizontal scroll on very small screens (instead of wrapping) */
+.masthead__inner-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
 }
-
-/* Optional: hide scrollbar on WebKit while preserving scroll */
+/* Optional: hide scrollbar in WebKit while preserving scroll */
 .masthead__inner-wrap::-webkit-scrollbar { height: 0; }
 </style>
-
