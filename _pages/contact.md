@@ -43,6 +43,10 @@ classes: wide   # keep the page constrained; we'll explicitly center the inner c
         <legend>What is this about? <span class="req">*</span></legend>
         <div class="chips" role="radiogroup" aria-label="Topic">
           <label class="chip">
+            <input type="radio" name="Topic" value="Be a Sponsor" required>
+            <span>Be a Sponsor</span>
+          </label>
+          <label class="chip">
             <input type="radio" name="Topic" value="Participate / be part of the community" required>
             <span>Participate / be part of the community</span>
           </label>
@@ -76,7 +80,11 @@ classes: wide   # keep the page constrained; we'll explicitly center the inner c
     <a class="btn-secondary" href="{{ '/' | relative_url }}">Back to Home</a>
   </div>
 </div>
-
+<p style="margin-top:16px;">
+  <a class="btn btn--primary" href="https://github.com/CanadaDevOpsCommunity2025" target="_blank" rel="noopener">
+    Join our GitHub Community
+  </a>
+</p>
 <script>
   (function () {
     const params = new URLSearchParams(location.search);
