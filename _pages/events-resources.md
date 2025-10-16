@@ -22,6 +22,12 @@ classes: "full-bleed"
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
 }
+/* Center the page title */
+.page__title {
+  text-align: center !important;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* ===== Hero band ===== */
 .cb-hero {
