@@ -10,6 +10,13 @@ classes: "full-bleed"
 /* Hide pager */
 .pagination, .pagination--pager { display:none !important; }
 
+/* Center the Crowdbyte DevOps + AI subtitle */
+.subtitle {
+  text-align: center !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /* ===== Full-bleed helpers ===== */
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content {
@@ -107,6 +114,7 @@ classes: "full-bleed"
 </div>
 
 <!-- MAIN -->
+
 <div class="full-bleed-row wrap">
   <div class="subtitle">Crowdbyte&nbsp;&nbsp;<em><strong>DevOps + AI</strong></em>&nbsp;&nbsp;Community of Practice</div>
 
