@@ -180,7 +180,7 @@ classes: "full-bleed"
       <!-- Card 3 -->
       <article class="card">
         <img class="thumb"
-             src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             src="https://images.unsplash.com/photo-1581091870622-7ebd7faa6f15?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
              alt="Abstract neural network representing AI">
         <div class="meta">
           <h3 class="title-text">SRE in the Age of AI</h3>
