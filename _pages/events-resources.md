@@ -135,7 +135,7 @@ font-size: 0.80rem !important;
         <div class="caps">DevOps for GenAI,</div>
         <div class="caps">Hackathon Series Global</div>
         <div class="inline-links">
-          <a href="#">Propose a Location</a>
+          <a href="{{ site.baseurl }}/contact/">Propose a Location</a>
         </div>
       </div>
     </div>
@@ -146,7 +146,7 @@ font-size: 0.80rem !important;
         <div class="caps">DevOps Summit, Canada</div>
         <div class="caps">AI Summit, Canada</div>
         <div class="inline-links">
-          <a href="#">Become a Sponsor</a>
+          <a href="{{ site.baseurl }}/contact/">Become a Sponsor</a>
           <a href="#">Submit Speaker Proposal</a>
           <a href="#">Get Tickets</a>
         </div>
