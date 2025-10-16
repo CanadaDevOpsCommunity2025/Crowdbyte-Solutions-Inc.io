@@ -177,17 +177,20 @@ classes: "full-bleed"
           <a class="btn" href="https://devops.com/accelerating-genai-innovation-with-devops-hackathons-hackathon-insights-strategic-gaps-and-future-directions/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
-
       <!-- Card 3 -->
       <article class="card">
         <div class="thumb"
-             style="background-image:url(https://images.unsplash.com/photo-1581091870622-7ebd7faa6f15?q=80&w=1600&auto=format&fit=crop);">
+           style="background-image:url('https://images.unsplash.com/photo-1503023345310-bd7c1de61c7dq=80&amp;w=1600&amp;auto=format&amp;fit=crop');
+              background-size:cover;
+              background-position:center;
+              min-height:220px;">
         </div>
         <div class="meta">
           <h4 class="title-text">SRE in the Age of AI</h4>
           <a class="btn" href="https://devops.com/sre-in-the-age-of-ai/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
+
 
       <!-- Card 4 -->
       <article class="card">
