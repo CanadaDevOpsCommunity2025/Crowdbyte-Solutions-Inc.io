@@ -111,7 +111,9 @@ classes: "full-bleed"
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
   padding: clamp(8px, 1.6vw, 12px) 0; /* smaller */
+  margin-top: clamp(24px, 4vw, 56px); /* NEW: push it lower */
 }
+
 .sponsors-inner {
   max-width: 1200px;
   margin: 0 auto;
