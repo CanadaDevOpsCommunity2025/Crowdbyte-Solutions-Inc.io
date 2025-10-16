@@ -119,6 +119,14 @@ time.cal::before{
   outline-offset:2px;
 }
 
+/* NEW: Primary button for GitHub Org */
+.btn-primary{
+  display:inline-block; padding:.5rem .9rem; border-radius:999px;
+  background:#2a3e6e; color:#fff !important; font-weight:800; font-size:.95rem;
+  text-decoration:none; box-shadow:0 8px 24px rgba(42,62,110,.22);
+}
+.btn-primary:hover{ background:#3b6bbd; text-decoration:none; }
+
 /* ===== FULL-SCREEN CHAPTERS OVERLAY ===== */
 #chaptersOverlay{
   position:fixed; inset:0; background:rgba(8,13,26,.65);
@@ -210,7 +218,8 @@ time.cal::before{
     <p>Opportunities to co-create open-source tools such as centralized monitoring and observability solutions and taking winning projects to the next steps.</p>
     <p>Participating directly in repository yields connection with experts, peers, and industry legends.</p>
     <p>Open a new issue describing what you want to contribute. Clearly explain your proposal and the problem it addresses.</p>
-    <p><a href="https://github.com/CanadaDevOpsCommunity2025" target="_blank">[ GitHub Org ]</a></p>
+    <!-- UPDATED: GitHub Org as a primary button pointing to the provided URL -->
+    <p><a class="btn-primary" href="https://canadadevopscommunity2025.github.io/Crowdbyte-Solutions-Inc.io/" target="_blank" rel="noopener">GitHub Org</a></p>
   </div>
 
   <div class="card">
