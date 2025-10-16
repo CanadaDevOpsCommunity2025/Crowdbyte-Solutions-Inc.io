@@ -76,9 +76,18 @@ classes: "full-bleed"
 .inline-links a {
   display:block;
   text-decoration: none;
-  color:#2874c7;              /* <-- match heading blue */
+  color:#2874c7;          /* keep your blue */
   font-weight:600;
+  font-style: italic;     /* NEW: italics */
+  font-size: 0.95rem;     /* NEW: slightly smaller */
+  line-height: 1.2;       /* optional: tighter line height */
 }
+font-style: italic !important;
+font-size: 0.95rem !important;
+@media (max-width: 880px){
+  .inline-links a { font-size: 0.9rem; }
+}
+
 .inline-links a:visited { color:#2874c7; }  /* keep same after visit */
 .inline-links a:hover,
 .inline-links a:focus { text-decoration: underline; }
