@@ -171,6 +171,52 @@ time.cal::before{
   font-weight:800; font-size:.9rem; box-shadow:0 6px 18px rgba(47,85,151,.22)
 }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
+
+/* ===== COMPACT SPONSORS SLIDER (home page) ===== */
+.sponsors-band-home{
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
+  border-top: 1px solid rgba(0,0,0,.06);
+  border-bottom: 1px solid rgba(0,0,0,.06);
+  padding: clamp(8px, 1.6vw, 12px) 0;   /* compact height */
+  margin-top: clamp(28px, 4vw, 60px);   /* push it lower on the page */
+}
+.sponsors-inner{
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(12px, 3vw, 20px);
+}
+.sponsors-head{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; margin-bottom: clamp(6px, 1vw, 10px);
+}
+.sponsors-title{
+  margin:0; font-weight:800; font-size: clamp(14px, 1.8vw, 18px); color:#1f2a44;
+}
+.sponsors-note{ margin:0; font-size:.85rem; color:#475569; }
+.logo-marquee{ position:relative; overflow:hidden; }
+.logo-track{
+  display:flex; align-items:center;
+  gap: clamp(18px, 3vw, 36px);
+  will-change: transform;
+  animation: sponsors-marquee-rtl 26s linear infinite;
+}
+.logo-track:hover{ animation-play-state: paused; }
+@keyframes sponsors-marquee-rtl{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(-50%); }
+}
+.logo{
+  flex:0 0 auto;
+  height: clamp(22px, 4vw, 34px);
+  filter:saturate(.98) contrast(1.05);
+  opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
+}
+.logo:hover{ transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
+@media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
+@media (max-width:480px){ .sponsors-note{ display:none; } }
 </style>
 
 
@@ -216,7 +262,7 @@ time.cal::before{
     <p>Opportunities to co-create open-source tools such as centralized monitoring and observability solutions and taking winning projects to the next steps.</p>
     <p>Participating directly in repository yields connection with experts, peers, and industry legends.</p>
     <p>Open a new issue describing what you want to contribute. Clearly explain your proposal and the problem it addresses.</p>
-    <!-- New: smaller GitHub Repo button (same size style as Explore Local Chapters) -->
+    <!-- smaller GitHub Repo button -->
     <p><a class="btn-small btn-tiny" href="https://github.com/CanadaDevOpsCommunity2025" target="_blank" rel="noopener">GitHub Repo</a></p>
   </div>
 
@@ -227,6 +273,46 @@ time.cal::before{
     <p>Organizing meetings or virtual gatherings for members to exchange ideas.</p>
     <p>Helping organizations implement CoP models for long-term cultural or operational change.</p>
     <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
+  </div>
+</div>
+
+<!-- ===== COMPACT SPONSORS SLIDER (dynamic, full-bleed) ===== -->
+<div class="sponsors-band-home" aria-label="Sponsors">
+  <div class="sponsors-inner">
+    <div class="sponsors-head">
+      <h3 class="sponsors-title">Sponsors</h3>
+      <p class="sponsors-note">Thank you to our partners powering the community.</p>
+    </div>
+
+    {% comment %}
+      Dynamically gather all images in /assets/img/sponsors/
+    {% endcomment %}
+    {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/sponsors/'" %}
+    {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
+    {% assign paths = "" %}
+    {% for f in all %}
+      {% if img_exts contains f.extname %}
+        {% assign paths = paths | append: f.path | append: "||" %}
+      {% endif %}
+    {% endfor %}
+    {% assign logos = paths | split:"||" | uniq | sort | reject: "" %}
+
+    {% if logos.size > 0 %}
+      <div class="logo-marquee">
+        <div class="logo-track">
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+          {%- endfor -%}
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+          {%- endfor -%}
+        </div>
+      </div>
+    {% else %}
+      <p style="margin:0.25rem 0 0.2rem;"><em>Add sponsor logos to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
+    {% endif %}
   </div>
 </div>
 
@@ -274,4 +360,42 @@ time.cal::before{
       <article class="ch-card" data-city="Montreal Montréal QC Quebec Québec">
         <h3 class="ch-city">Montréal, QC</h3>
         <p class="ch-blurb">Community of Practice — DevOps &amp; DataOps (Montréal)</p>
-        <a class="ch-btn" href="https://www.meetup.com/communi
+        <a class="ch-btn" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Open Meetup</a>
+      </article>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const overlay = document.getElementById('chaptersOverlay');
+  const openBtn = document.getElementById('openChapters');
+  const closeBtn = document.getElementById('closeChapters');
+  const search = document.getElementById('chSearch');
+  const cards = Array.from(document.querySelectorAll('#chGrid .ch-card'));
+
+  function openOverlay(e){
+    if(e) e.preventDefault();
+    overlay.setAttribute('aria-hidden','false');
+    if (search) search.focus();
+    document.documentElement.style.overflow='hidden';
+  }
+  function closeOverlay(){
+    overlay.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow='';
+    if (openBtn) openBtn.focus();
+  }
+  function filter(){
+    const q = (search && search.value || '').toLowerCase();
+    cards.forEach(card=>{
+      const hay = (card.dataset.city + ' ' + card.textContent).toLowerCase();
+      card.style.display = hay.includes(q) ? '' : 'none';
+    });
+  }
+  if (openBtn) openBtn.addEventListener('click', openOverlay);
+  if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
+  if (overlay) overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.getAttribute('aria-hidden')==='false') closeOverlay(); });
+  if (search) search.addEventListener('input', filter);
+})();
+</script>
