@@ -103,6 +103,28 @@ time.cal::before{
   font-size:.82rem; font-weight:700; text-decoration:none;
 }
 .btn-mini:hover{ background:#3b6bbd; text-decoration:none; }
+
+/* ===== Chapters Quick Links band (full-bleed) ===== */
+.ch-band{
+  width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
+  background:linear-gradient(135deg,#f6f8fb 0%,#eef4ff 60%,#e8f2ff 100%);
+  border-top:1px solid rgba(0,0,0,.06); border-bottom:1px solid rgba(0,0,0,.06);
+  padding: clamp(16px, 3.5vw, 28px) clamp(16px, 3vw, 40px);
+  text-align:center;
+}
+.ch-title{
+  margin:0 0 .6rem; font-weight:800; color:#1f2a44;
+  font-size:clamp(1.05rem, 2.2vw, 1.25rem);
+}
+.ch-pills{
+  display:flex; flex-wrap:wrap; gap:.5rem .6rem; align-items:center; justify-content:center;
+}
+.ch-pill{
+  display:inline-block; padding:.45rem .75rem; border-radius:999px;
+  background:#2f5597; color:#fff !important; text-decoration:none; font-weight:700; font-size:.9rem;
+  box-shadow:0 6px 18px rgba(47,85,151,.16);
+}
+.ch-pill:hover{ background:#2874c7; text-decoration:none; }
 </style>
 
 
@@ -176,6 +198,18 @@ time.cal::before{
     <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
   </div>
 </div>
+
+<!-- ===== Chapters – Quick Links (full-bleed pill band) ===== -->
+<section class="ch-band" aria-label="Local chapters quick links">
+  <h2 class="ch-title">Chapters — Quick Links</h2>
+  <div class="ch-pills">
+    <a class="ch-pill" href="https://www.meetup.com/ottawa-devops-dataops-collaboration-community" target="_blank" rel="noopener">Ottawa, ON</a>
+    <a class="ch-pill" href="https://www.meetup.com/canada-devops-community-of-practice-toronto-chapter" target="_blank" rel="noopener">Toronto, ON</a>
+    <a class="ch-pill" href="https://www.meetup.com/canada-devops-community-of-practice-edmonton-chapter/" target="_blank" rel="noopener">Edmonton, AB</a>
+    <a class="ch-pill" href="https://www.meetup.com/community-of-practice-devops-dataops-atlantic-provinces/" target="_blank" rel="noopener">Atlantic Provinces</a>
+    <a class="ch-pill" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Montréal, QC</a>
+  </div>
+</section>
 
 <div class="footer-note">
   © {{ site.time | date: "%Y" }} CrowdByte Solutions Inc. — Canada DevOps Community of Practice
