@@ -96,7 +96,7 @@ time.cal::before{
   vertical-align: baseline;
 }
 
-/* Simple, smaller chapters button */
+/* Simple, smaller button (used by Chapters + GitHub Repo) */
 .btn-small{
   display:inline-block;
   padding:.38rem .7rem;
@@ -118,14 +118,12 @@ time.cal::before{
   outline:2px solid #99b3e6;
   outline-offset:2px;
 }
-
-/* NEW: Primary button for GitHub Org */
-.btn-primary{
-  display:inline-block; padding:.5rem .9rem; border-radius:999px;
-  background:#2a3e6e; color:#fff !important; font-weight:800; font-size:.95rem;
-  text-decoration:none; box-shadow:0 8px 24px rgba(42,62,110,.22);
+/* Even smaller variant */
+.btn-small.btn-tiny{
+  padding:.28rem .55rem;     /* tighter */
+  font-size:.82rem;          /* smaller text */
+  border-radius:6px;         /* slightly squarer */
 }
-.btn-primary:hover{ background:#3b6bbd; text-decoration:none; }
 
 /* ===== FULL-SCREEN CHAPTERS OVERLAY ===== */
 #chaptersOverlay{
@@ -206,8 +204,8 @@ time.cal::before{
     <h3>Summits &amp; Events</h3>
     <p>The Community of Practice hosts major events throughout the year, including a summit in Canada and virtual sessions, gathering practitioners and leaders in DevOps, SRE, cloud, and AI-native practices.</p>
 
-    <!-- Single, simpler CTA instead of listing links -->
-    <p><a href="#chapters" class="btn-small" id="openChapters">Explore Local Chapters</a></p>
+    <!-- Smaller CTA (unchanged size) -->
+    <p><a href="#chapters" class="btn-small btn-tiny" id="openChapters">Explore Local Chapters</a></p>
 
     <p>Connect with us to get a quote for organizing a local event or start your own with our support.</p>
     <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
@@ -218,8 +216,8 @@ time.cal::before{
     <p>Opportunities to co-create open-source tools such as centralized monitoring and observability solutions and taking winning projects to the next steps.</p>
     <p>Participating directly in repository yields connection with experts, peers, and industry legends.</p>
     <p>Open a new issue describing what you want to contribute. Clearly explain your proposal and the problem it addresses.</p>
-    <!-- UPDATED: GitHub Org as a primary button pointing to the provided URL -->
-    <p><a class="btn-primary" href="https://canadadevopscommunity2025.github.io/Crowdbyte-Solutions-Inc.io/" target="_blank" rel="noopener">GitHub Org</a></p>
+    <!-- New: smaller GitHub Repo button (same size style as Explore Local Chapters) -->
+    <p><a class="btn-small btn-tiny" href="https://canadadevopscommunity2025.github.io/Crowdbyte-Solutions-Inc.io/" target="_blank" rel="noopener">GitHub Repo</a></p>
   </div>
 
   <div class="card">
@@ -276,46 +274,4 @@ time.cal::before{
       <article class="ch-card" data-city="Montreal Montréal QC Quebec Québec">
         <h3 class="ch-city">Montréal, QC</h3>
         <p class="ch-blurb">Community of Practice — DevOps &amp; DataOps (Montréal)</p>
-        <a class="ch-btn" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Open Meetup</a>
-      </article>
-    </div>
-  </div>
-</div>
-
-<div class="footer-note">
-  © {{ site.time | date: "%Y" }} CrowdByte Solutions Inc. — Canada DevOps Community of Practice
-</div>
-
-<script>
-(function(){
-  const overlay = document.getElementById('chaptersOverlay');
-  const openBtn = document.getElementById('openChapters');
-  const closeBtn = document.getElementById('closeChapters');
-  const search = document.getElementById('chSearch');
-  const cards = Array.from(document.querySelectorAll('#chGrid .ch-card'));
-
-  function openOverlay(e){
-    if(e) e.preventDefault();
-    overlay.setAttribute('aria-hidden','false');
-    search && search.focus();
-    document.documentElement.style.overflow='hidden';
-  }
-  function closeOverlay(){
-    overlay.setAttribute('aria-hidden','true');
-    document.documentElement.style.overflow='';
-    openBtn && openBtn.focus();
-  }
-  function filter(){
-    const q = (search.value || '').toLowerCase();
-    cards.forEach(card=>{
-      const hay = (card.dataset.city + ' ' + card.textContent).toLowerCase();
-      card.style.display = hay.includes(q) ? '' : 'none';
-    });
-  }
-  openBtn && openBtn.addEventListener('click', openOverlay);
-  closeBtn && closeBtn.addEventListener('click', closeOverlay);
-  overlay && overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
-  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.getAttribute('aria-hidden')==='false') closeOverlay(); });
-  search && search.addEventListener('input', filter);
-})();
-</script>
+        <a class="ch-btn" href="https://www.meetup.com/communi
