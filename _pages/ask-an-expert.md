@@ -5,9 +5,6 @@ title: "Ask an Expert"
 sidebar: false
 classes: "full-bleed"
 ---
-<div class="full-bleed-row hero">
-  <h1>Ask an Expert</h1>
-</div>
 
 <style>
 /* Hide pager */
