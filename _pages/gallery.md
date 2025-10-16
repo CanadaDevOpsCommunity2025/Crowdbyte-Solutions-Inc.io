@@ -17,21 +17,21 @@ classes: "full-bleed"
 
 /* Body: CONSTRAINED WIDTH so cards don’t cover entire page */
 .g-wrap {
-  max-width: 1100px;  /* adjust to taste (e.g., 960px or 1200px) */
-  margin:18px 0 40px 0;
-  padding-left: 0;
+  max-width: 1100px;
+  margin: 18px auto 40px;
+  padding: 0 clamp(12px, 3vw, 24px);
 }
 
 /* ===== Small square folder cards with thumbnail (LEFT-ALIGNED) ===== */
 .folder-grid{
   display:grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 180px)); /* small squares */
+  grid-template-columns: repeat(auto-fit, minmax(140px, 180px));
   gap: clamp(10px, 1.6vw, 18px);
-  justify-content:flex-start;   /* <-- left align the grid */
+  justify-content:flex-start;
 }
 .folder-card{
   display:block; position:relative; text-decoration:none;
-  aspect-ratio: 1 / 1;     /* perfect square */
+  aspect-ratio: 1 / 1;
   border-radius:12px; overflow:hidden;
   border:1px solid #e6ecf8; background:#f7f9fc;
   box-shadow:0 8px 20px rgba(2,24,71,.06);
@@ -147,7 +147,7 @@ classes: "full-bleed"
             {% endif %}
           {% endfor %}
           {% assign slug = name | slugify %}
-          <a class="folder-card" href="/gallery/?album={{ name | uri_escape }}" data-folder="{{ slug }}">
+          <a class="folder-card" href="{{ '/gallery/' | relative_url }}?album={{ name | uri_escape }}" data-folder="{{ slug }}">
             <span class="folder-thumb" style="background-image:url('{{ thumb | relative_url }}');" aria-hidden="true"></span>
             <span class="folder-fade" aria-hidden="true"></span>
             <span class="folder-label">
@@ -167,7 +167,7 @@ classes: "full-bleed"
     {% assign slug = name | slugify %}
     <section class="album-section" id="album-{{ slug }}" data-folder="{{ slug }}" hidden>
       <div class="album-actions">
-        <a class="back-link" href="/gallery/">← Back to all albums</a>
+        <a class="back-link" href="{{ '/gallery/' | relative_url }}">← Back to all albums</a>
         <strong>{{ name }}</strong>
       </div>
       <div class="g-grid">
@@ -202,7 +202,7 @@ classes: "full-bleed"
   if(foldersView && albumSection){
     foldersView.hidden = true;
     albumSection.hidden = false;
-    // Keep shareable URL
+    // Keep shareable URL (already correct)
     const url = new URL(location.href);
     url.searchParams.set('album', albumName.trim());
     history.replaceState(null,'',url.toString());
