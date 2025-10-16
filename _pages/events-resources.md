@@ -79,11 +79,11 @@ classes: "full-bleed"
   color:#2874c7;          /* keep your blue */
   font-weight:600;
   font-style: italic;     /* NEW: italics */
-  font-size: 0.95rem;     /* NEW: slightly smaller */
+  font-size: 0.80rem;     /* NEW: slightly smaller */
   line-height: 1.2;       /* optional: tighter line height */
 }
 font-style: italic !important;
-font-size: 0.95rem !important;
+font-size: 0.80rem !important;
 @media (max-width: 880px){
   .inline-links a { font-size: 0.9rem; }
 }
