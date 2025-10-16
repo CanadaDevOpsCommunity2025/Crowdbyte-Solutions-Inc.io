@@ -25,6 +25,7 @@ classes: "full-bleed"
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
 }
+.card .thumb h3 { display:none; }
 
 /* ===== HERO (full width, centered) ===== */
 .blog-hero {
@@ -164,7 +165,7 @@ classes: "full-bleed"
   background-repeat: repeat-x, no-repeat;
 }
 
-/* Body of card */
+/* Card meta area */
 .card .meta {
   padding: 14px 16px 16px;
   display:flex;
@@ -173,11 +174,27 @@ classes: "full-bleed"
   justify-content: space-between;
   flex-wrap: wrap;
 }
-.card .source {
-  font-size:.9rem;
-  font-weight:700;
-  color:#2f5597;
+
+/* "Image-style" title badge under each card */
+.card .title-badge {
+  display:inline-block;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #2f5597 0%, #2874c7 60%, #7fb0f0 100%);
+  color:#fff;
+  font-weight:800;
+  font-size:.92rem;
+  line-height:1.1;
+  text-decoration:none;
+  box-shadow: 0 6px 18px rgba(47,85,151,.25);
   letter-spacing:.2px;
+  white-space: normal;       /* allow wrap for long titles */
+  max-width: 100%;
+  border: 1px solid rgba(255,255,255,.35);
+}
+
+@media (max-width: 520px){
+  .card .title-badge { font-size:.88rem; }
 }
 
 /* Button */
@@ -220,7 +237,7 @@ classes: "full-bleed"
           <h3>DevOps + GenAI Hackathon series energizes Ottawa tech community</h3>
         </div>
         <div class="meta">
-          <span class="source">LinkedIn Pulse</span>
+          <span class="title-badge">DevOps + GenAI Hackathon series energizes Ottawa tech community</span>
           <a class="btn" href="https://www.linkedin.com/pulse/devops-genai-hackathon-series-energizes-ottawa-tech-community-willis-suzxe/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
@@ -231,7 +248,7 @@ classes: "full-bleed"
           <h3>Accelerating GenAI innovation with DevOps hackathons</h3>
         </div>
         <div class="meta">
-          <span class="source">DevOps.com</span>
+          <span class="title-badge">Accelerating GenAI innovation with DevOps hackathons</span>
           <a class="btn" href="https://devops.com/accelerating-genai-innovation-with-devops-hackathons-hackathon-insights-strategic-gaps-and-future-directions/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
@@ -242,7 +259,7 @@ classes: "full-bleed"
           <h3>SRE in the Age of AI</h3>
         </div>
         <div class="meta">
-          <span class="source">DevOps.com</span>
+          <span class="title-badge">SRE in the Age of AI</span>
           <a class="btn" href="https://devops.com/sre-in-the-age-of-ai/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
@@ -253,7 +270,7 @@ classes: "full-bleed"
           <h3>Cloud-first, cloud-smart to cloud-minimalism</h3>
         </div>
         <div class="meta">
-          <span class="source">DevOps.com</span>
+          <span class="title-badge">Cloud-first, cloud-smart to cloud-minimalism</span>
           <a class="btn" href="https://devops.com/cloud-first-cloud-smart-to-cloud-minimalism-a-strategic-shift/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
