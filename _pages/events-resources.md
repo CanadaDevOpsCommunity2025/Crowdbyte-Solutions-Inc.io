@@ -129,12 +129,12 @@ classes: "full-bleed"
 .sponsors-note { margin:0; font-size:.85rem; color:#475569; }
 
 .logo-marquee { position:relative; overflow:hidden; }
-.logo-track {
+.logo-track{
   display:flex; align-items:center;
-  gap: clamp(18px, 3vw, 28px);          /* tighter gap works better with uniform tiles */
+  gap: clamp(22px, 3.2vw, 36px);  /* was 18–28/36px */
   will-change: transform;
   animation: sponsors-marquee-rtl 26s linear infinite;
-}
+} 
 .logo-track:hover { animation-play-state: paused; }
 @keyframes sponsors-marquee-rtl {
   from { transform: translateX(0); }
@@ -142,27 +142,28 @@ classes: "full-bleed"
 }
 
 /* UNIFORM TILES for every logo */
+/* UNIFORM (BIGGER) TILES for every logo */
 .logo-box{
   flex: 0 0 auto;
-  width: clamp(100px, 12vw, 140px);     /* ← adjust these two to change tile size */
-  height: clamp(34px, 5vw, 48px);
+  width: clamp(120px, 14vw, 180px);   /* was ~100–140px */
+  height: clamp(44px, 6vw, 64px);     /* was ~34–48px  */
   display:flex; align-items:center; justify-content:center;
   background: transparent;
   border-radius: 6px;
-  padding: 2px;                         /* tiny breathing room */
+  padding: 4px;                       /* a touch more breathing room */
 }
+
 
 /* Fit images inside the tile without cropping */
 .logo{
   max-width: 100%;
   max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;                  /* key: preserve aspect ratio, no crop */
+  width: auto; height: auto;
+  object-fit: contain;
   filter:saturate(.98) contrast(1.05);
   opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
 }
-.logo:hover { transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
+.logo:hover{ transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
 
 @media (prefers-reduced-motion: reduce) { .logo-track { animation:none; } }
 @media (max-width:480px){ .sponsors-note { display:none; } }
