@@ -75,11 +75,11 @@ classes: full-bleed
 /* Make "Crowdbyte  DevOps + AI" look like plain blue text (no pill) */
 .subhead .badge {
   background: transparent !important;
-  color: #3b6bbd !important;   /* match the screenshot blue */
+  color: #3b6bbd !important;
   padding: 0 !important;
   border-radius: 0 !important;
   font-weight: 800;
-  text-decoration: none;       /* no underline */
+  text-decoration: none;
 }
 
 /* Optional: make the section headers use the same blue as the screenshot */
@@ -96,18 +96,28 @@ time.cal::before{
   vertical-align: baseline;
 }
 
-/* CTA button for chapters */
-.btn-large{
+/* Simple, smaller chapters button */
+.btn-small{
   display:inline-block;
-  padding:.7rem 1rem;
-  border-radius:999px;
-  background:#2a3e6e;
-  color:#fff !important;
-  font-weight:800; font-size:.98rem;
+  padding:.38rem .7rem;
+  border:1px solid #2a3e6e;
+  border-radius:8px;
+  background:#fff;
+  color:#2a3e6e !important;
+  font-weight:700;
+  font-size:.9rem;
   text-decoration:none;
-  box-shadow:0 8px 24px rgba(42,62,110,.22);
+  box-shadow:none;
 }
-.btn-large:hover{ background:#3b6bbd; text-decoration:none; }
+.btn-small:hover{
+  background:#f5f8ff;
+  border-color:#3b6bbd;
+  color:#3b6bbd !important;
+}
+.btn-small:focus{
+  outline:2px solid #99b3e6;
+  outline-offset:2px;
+}
 
 /* ===== FULL-SCREEN CHAPTERS OVERLAY ===== */
 #chaptersOverlay{
@@ -188,8 +198,8 @@ time.cal::before{
     <h3>Summits &amp; Events</h3>
     <p>The Community of Practice hosts major events throughout the year, including a summit in Canada and virtual sessions, gathering practitioners and leaders in DevOps, SRE, cloud, and AI-native practices.</p>
 
-    <!-- Single CTA instead of listing links -->
-    <p><a href="#chapters" class="btn-large" id="openChapters">Explore Local Chapters</a></p>
+    <!-- Single, simpler CTA instead of listing links -->
+    <p><a href="#chapters" class="btn-small" id="openChapters">Explore Local Chapters</a></p>
 
     <p>Connect with us to get a quote for organizing a local event or start your own with our support.</p>
     <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
