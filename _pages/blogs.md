@@ -87,13 +87,14 @@ classes: "full-bleed"
   isolation:isolate;
 }
 
-/* Poster-style “image” */
+/* “Innovative photo” header using gradients + SVG patterns (no external images) */
 .card .thumb {
-  min-height: 140px;
-  background: linear-gradient(135deg, #2f5597 0%, #2874c7 45%, #7fb0f0 100%);
+  min-height: 160px;
   display:flex;
   align-items: flex-end;
   padding: 16px;
+  position: relative;
+  color:#fff;
 }
 .card .thumb h3{
   margin:0;
@@ -101,7 +102,66 @@ classes: "full-bleed"
   font-weight:800;
   font-size: clamp(16px, 1.6vw, 22px);
   line-height:1.25;
-  text-shadow: 0 2px 12px rgba(0,0,0,.25);
+  text-shadow: 0 2px 12px rgba(0,0,0,.28);
+  word-break: break-word;
+}
+
+/* Pattern 1: diagonal tech lines */
+.thumb.c1{
+  background:
+    /* svg pattern */
+    url("data:image/svg+xml;utf8,\
+      <svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'>\
+        <defs>\
+          <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>\
+            <stop stop-color='%23ffffff' stop-opacity='0.12' offset='0'/>\
+            <stop stop-color='%23ffffff' stop-opacity='0.02' offset='1'/>\
+          </linearGradient>\
+        </defs>\
+        <g opacity='0.7'>\
+          <rect x='-60' y='100' width='360' height='4' fill='url(%23g)' transform='rotate(-30 120 120)'/>\
+          <rect x='-60' y='140' width='360' height='4' fill='url(%23g)' transform='rotate(-30 120 120)'/>\
+          <rect x='-60' y='180' width='360' height='4' fill='url(%23g)' transform='rotate(-30 120 120)'/>\
+        </g>\
+      </svg>"),
+    linear-gradient(135deg, #2f5597 0%, #2874c7 55%, #7fb0f0 100%);
+  background-size: auto, cover;
+  background-repeat: repeat, no-repeat;
+}
+
+/* Pattern 2: isometric cubes */
+.thumb.c2{
+  background:
+    url("data:image/svg+xml;utf8,\
+      <svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'>\
+        <path d='M60 10 L90 25 L60 40 L30 25 Z' fill='rgba(255,255,255,0.08)'/>\
+        <path d='M90 25 L120 40 L90 55 L60 40 Z' fill='rgba(255,255,255,0.06)'/>\
+        <path d='M30 25 L60 40 L30 55 L0 40 Z' fill='rgba(255,255,255,0.04)'/>\
+      </svg>"),
+    linear-gradient(135deg, #1a5ad7 0%, #2f5597 50%, #1f8eea 100%);
+  background-size: auto, cover;
+  background-repeat: repeat, no-repeat;
+}
+
+/* Pattern 3: dotted grid */
+.thumb.c3{
+  background:
+    radial-gradient(circle at 8px 8px, rgba(255,255,255,0.20) 2px, transparent 2px),
+    linear-gradient(135deg, #1a3d7c 0%, #2f5597 50%, #2874c7 100%);
+  background-size: 22px 22px, cover;
+}
+
+/* Pattern 4: wave */
+.thumb.c4{
+  background:
+    url("data:image/svg+xml;utf8,\
+      <svg xmlns='http://www.w3.org/2000/svg' width='360' height='160' viewBox='0 0 360 160'>\
+        <path d='M0,110 C60,140 120,80 180,100 C240,120 300,70 360,95 L360,160 L0,160 Z' fill='rgba(255,255,255,0.12)'/>\
+        <path d='M0,95 C60,125 120,65 180,85 C240,105 300,55 360,80 L360,160 L0,160 Z' fill='rgba(255,255,255,0.08)'/>\
+      </svg>"),
+    linear-gradient(135deg, #224a95 0%, #2f5597 50%, #5aa0ef 100%);
+  background-size: auto, cover;
+  background-repeat: repeat-x, no-repeat;
 }
 
 /* Body of card */
@@ -136,9 +196,6 @@ classes: "full-bleed"
 }
 .card .btn:hover { background:#2874c7; text-decoration:none; }
 .card .btn:active { transform: translateY(1px); }
-
-/* Make long titles wrap nicely */
-.card .thumb h3 { word-break: break-word; }
 </style>
 
 <!-- HERO -->
@@ -159,7 +216,7 @@ classes: "full-bleed"
     <div class="card-grid">
       <!-- Card 1 -->
       <article class="card">
-        <div class="thumb">
+        <div class="thumb c1">
           <h3>DevOps + GenAI Hackathon series energizes Ottawa tech community</h3>
         </div>
         <div class="meta">
@@ -170,8 +227,8 @@ classes: "full-bleed"
 
       <!-- Card 2 -->
       <article class="card">
-        <div class="thumb">
-          <h3>Accelerating GenAI innovation with DevOps hackathons—insights, gaps & future directions</h3>
+        <div class="thumb c2">
+          <h3>Accelerating GenAI innovation with DevOps hackathons</h3>
         </div>
         <div class="meta">
           <span class="source">DevOps.com</span>
@@ -181,7 +238,7 @@ classes: "full-bleed"
 
       <!-- Card 3 -->
       <article class="card">
-        <div class="thumb">
+        <div class="thumb c3">
           <h3>SRE in the Age of AI</h3>
         </div>
         <div class="meta">
@@ -192,8 +249,8 @@ classes: "full-bleed"
 
       <!-- Card 4 -->
       <article class="card">
-        <div class="thumb">
-          <h3>Cloud-first, cloud-smart to cloud-minimalism: a strategic shift</h3>
+        <div class="thumb c4">
+          <h3>Cloud-first, cloud-smart to cloud-minimalism</h3>
         </div>
         <div class="meta">
           <span class="source">DevOps.com</span>
