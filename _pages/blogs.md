@@ -181,7 +181,7 @@ classes: "full-bleed"
       <!-- Card 3 -->
       <article class="card">
         <div class="thumb"
-             style="background-image:url('https://images.unsplash.com/photo-1554475901-4538ddfbccc2?q=80&w=1600&auto=format&fit=crop');">
+             style="background-image:url(https://images.unsplash.com/photo-1581091870622-7ebd7faa6f15?q=80&w=1600&auto=format&fit=crop);">
         </div>
         <div class="meta">
           <h4 class="title-text">SRE in the Age of AI</h4>
