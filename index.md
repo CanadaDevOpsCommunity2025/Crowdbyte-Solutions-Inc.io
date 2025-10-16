@@ -211,15 +211,17 @@ time.cal::before{
 }
 
 /* UNIFORM TILES for every logo (same sizing as Events & Resources) */
+/* UNIFORM (BIGGER) TILES for every logo */
 .logo-box{
   flex: 0 0 auto;
-  width: clamp(100px, 12vw, 140px);
-  height: clamp(34px, 5vw, 48px);
+  width: clamp(120px, 14vw, 180px);   /* was ~100–140px */
+  height: clamp(44px, 6vw, 64px);     /* was ~34–48px  */
   display:flex; align-items:center; justify-content:center;
   background: transparent;
   border-radius: 6px;
-  padding: 2px;
+  padding: 4px;                       /* a touch more breathing room */
 }
+
 
 /* Images fit inside the tile without cropping */
 .logo{
