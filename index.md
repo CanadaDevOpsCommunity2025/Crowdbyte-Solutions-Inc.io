@@ -96,35 +96,65 @@ time.cal::before{
   vertical-align: baseline;
 }
 
-/* Tiny button style for Meetup links (keeps page aesthetic) */
-.btn-mini{
-  display:inline-block; margin-left:.4rem; padding:.18rem .55rem;
-  background:#2a3e6e; color:#fff !important; border-radius:999px;
-  font-size:.82rem; font-weight:700; text-decoration:none;
+/* CTA button for chapters */
+.btn-large{
+  display:inline-block;
+  padding:.7rem 1rem;
+  border-radius:999px;
+  background:#2a3e6e;
+  color:#fff !important;
+  font-weight:800; font-size:.98rem;
+  text-decoration:none;
+  box-shadow:0 8px 24px rgba(42,62,110,.22);
 }
-.btn-mini:hover{ background:#3b6bbd; text-decoration:none; }
+.btn-large:hover{ background:#3b6bbd; text-decoration:none; }
 
-/* ===== Chapters Quick Links band (full-bleed) ===== */
-.ch-band{
-  width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
-  background:linear-gradient(135deg,#f6f8fb 0%,#eef4ff 60%,#e8f2ff 100%);
-  border-top:1px solid rgba(0,0,0,.06); border-bottom:1px solid rgba(0,0,0,.06);
-  padding: clamp(16px, 3.5vw, 28px) clamp(16px, 3vw, 40px);
-  text-align:center;
+/* ===== FULL-SCREEN CHAPTERS OVERLAY ===== */
+#chaptersOverlay{
+  position:fixed; inset:0; background:rgba(8,13,26,.65);
+  display:none; z-index:9999;
 }
-.ch-title{
-  margin:0 0 .6rem; font-weight:800; color:#1f2a44;
-  font-size:clamp(1.05rem, 2.2vw, 1.25rem);
+#chaptersOverlay[aria-hidden="false"]{ display:block; }
+.ch-panel{
+  position:relative; margin:4vh auto; max-width:1200px;
+  background:#ffffff; border-radius:18px; overflow:hidden;
+  box-shadow:0 20px 60px rgba(0,0,0,.35);
 }
-.ch-pills{
-  display:flex; flex-wrap:wrap; gap:.5rem .6rem; align-items:center; justify-content:center;
+.ch-top{
+  background:linear-gradient(135deg,#2f5597 0%,#2874c7 60%,#7fb0f0 100%);
+  color:#fff; padding:18px 18px;
+  display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
 }
-.ch-pill{
-  display:inline-block; padding:.45rem .75rem; border-radius:999px;
-  background:#2f5597; color:#fff !important; text-decoration:none; font-weight:700; font-size:.9rem;
-  box-shadow:0 6px 18px rgba(47,85,151,.16);
+.ch-top h2{ margin:0; font-weight:800; font-size:clamp(1.1rem,2.2vw,1.4rem); }
+.ch-actions{ display:flex; gap:10px; align-items:center; }
+.ch-search{
+  padding:.55rem .7rem; border-radius:10px; border:none;
+  min-width:220px; font-size:.95rem;
 }
-.ch-pill:hover{ background:#2874c7; text-decoration:none; }
+.ch-close{
+  background:rgba(255,255,255,.14); color:#fff; border:none; border-radius:10px;
+  padding:.5rem .75rem; font-weight:800; cursor:pointer;
+}
+.ch-close:hover{ background:rgba(255,255,255,.25); }
+
+/* grid of chapter cards */
+.ch-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:16px; padding:16px;
+}
+.ch-card{
+  background:#f6f8fb; border:1px solid #e6ecf8; border-radius:14px;
+  padding:12px; display:flex; flex-direction:column; gap:10px;
+  box-shadow:0 8px 30px rgba(2,24,71,.06);
+}
+.ch-city{ margin:0; color:#1f2a44; font-weight:800; font-size:1rem; }
+.ch-blurb{ margin:0; color:#334155; font-size:.92rem; line-height:1.3; }
+.ch-btn{
+  align-self:flex-start; display:inline-block; padding:.5rem .75rem;
+  border-radius:999px; background:#2f5597; color:#fff !important; text-decoration:none;
+  font-weight:800; font-size:.9rem; box-shadow:0 6px 18px rgba(47,85,151,.22)
+}
+.ch-btn:hover{ background:#2874c7; text-decoration:none; }
 </style>
 
 
@@ -158,24 +188,8 @@ time.cal::before{
     <h3>Summits &amp; Events</h3>
     <p>The Community of Practice hosts major events throughout the year, including a summit in Canada and virtual sessions, gathering practitioners and leaders in DevOps, SRE, cloud, and AI-native practices.</p>
 
-    <p class="section-title">Join Local Chapters on Meetup</p>
-    <ul>
-      <li>Ottawa, ON
-        <a class="btn-mini" href="https://www.meetup.com/ottawa-devops-dataops-collaboration-community" target="_blank" rel="noopener">Join</a>
-      </li>
-      <li>Toronto, ON
-        <a class="btn-mini" href="https://www.meetup.com/canada-devops-community-of-practice-toronto-chapter" target="_blank" rel="noopener">Join</a>
-      </li>
-      <li>Edmonton, AB
-        <a class="btn-mini" href="https://www.meetup.com/canada-devops-community-of-practice-edmonton-chapter/" target="_blank" rel="noopener">Join</a>
-      </li>
-      <li>Atlantic Provinces
-        <a class="btn-mini" href="https://www.meetup.com/community-of-practice-devops-dataops-atlantic-provinces/" target="_blank" rel="noopener">Join</a>
-      </li>
-      <li>Montréal, QC
-        <a class="btn-mini" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Join</a>
-      </li>
-    </ul>
+    <!-- Single CTA instead of listing links -->
+    <p><a href="#chapters" class="btn-large" id="openChapters">Explore Local Chapters</a></p>
 
     <p>Connect with us to get a quote for organizing a local event or start your own with our support.</p>
     <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
@@ -199,18 +213,90 @@ time.cal::before{
   </div>
 </div>
 
-<!-- ===== Chapters – Quick Links (full-bleed pill band) ===== -->
-<section class="ch-band" aria-label="Local chapters quick links">
-  <h2 class="ch-title">Chapters — Quick Links</h2>
-  <div class="ch-pills">
-    <a class="ch-pill" href="https://www.meetup.com/ottawa-devops-dataops-collaboration-community" target="_blank" rel="noopener">Ottawa, ON</a>
-    <a class="ch-pill" href="https://www.meetup.com/canada-devops-community-of-practice-toronto-chapter" target="_blank" rel="noopener">Toronto, ON</a>
-    <a class="ch-pill" href="https://www.meetup.com/canada-devops-community-of-practice-edmonton-chapter/" target="_blank" rel="noopener">Edmonton, AB</a>
-    <a class="ch-pill" href="https://www.meetup.com/community-of-practice-devops-dataops-atlantic-provinces/" target="_blank" rel="noopener">Atlantic Provinces</a>
-    <a class="ch-pill" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Montréal, QC</a>
+<!-- ===== FULL-SCREEN OVERLAY: Chapters ===== -->
+<div id="chaptersOverlay" aria-hidden="true" role="dialog" aria-label="Local chapters">
+  <div class="ch-panel">
+    <div class="ch-top">
+      <h2>Join a Local Chapter</h2>
+      <div class="ch-actions">
+        <input id="chSearch" class="ch-search" type="search" placeholder="Filter by city or province…" aria-label="Filter chapters"/>
+        <button class="ch-close" id="closeChapters" aria-label="Close chapters panel">Close ✕</button>
+      </div>
+    </div>
+
+    <div class="ch-grid" id="chGrid">
+      <!-- Ottawa -->
+      <article class="ch-card" data-city="Ottawa ON Ontario">
+        <h3 class="ch-city">Ottawa, ON</h3>
+        <p class="ch-blurb">Ottawa DevOps &amp; DataOps Collaboration Community</p>
+        <a class="ch-btn" href="https://www.meetup.com/ottawa-devops-dataops-collaboration-community" target="_blank" rel="noopener">Open Meetup</a>
+      </article>
+
+      <!-- Toronto -->
+      <article class="ch-card" data-city="Toronto ON Ontario">
+        <h3 class="ch-city">Toronto, ON</h3>
+        <p class="ch-blurb">Canada DevOps Community of Practice — Toronto Chapter</p>
+        <a class="ch-btn" href="https://www.meetup.com/canada-devops-community-of-practice-toronto-chapter" target="_blank" rel="noopener">Open Meetup</a>
+      </article>
+
+      <!-- Edmonton -->
+      <article class="ch-card" data-city="Edmonton AB Alberta">
+        <h3 class="ch-city">Edmonton, AB</h3>
+        <p class="ch-blurb">Canada DevOps Community of Practice — Edmonton Chapter</p>
+        <a class="ch-btn" href="https://www.meetup.com/canada-devops-community-of-practice-edmonton-chapter/" target="_blank" rel="noopener">Open Meetup</a>
+      </article>
+
+      <!-- Atlantic -->
+      <article class="ch-card" data-city="Atlantic Provinces NS NB PE NL">
+        <h3 class="ch-city">Atlantic Provinces</h3>
+        <p class="ch-blurb">Community of Practice — DevOps &amp; DataOps (Atlantic)</p>
+        <a class="ch-btn" href="https://www.meetup.com/community-of-practice-devops-dataops-atlantic-provinces/" target="_blank" rel="noopener">Open Meetup</a>
+      </article>
+
+      <!-- Montréal -->
+      <article class="ch-card" data-city="Montreal Montréal QC Quebec Québec">
+        <h3 class="ch-city">Montréal, QC</h3>
+        <p class="ch-blurb">Community of Practice — DevOps &amp; DataOps (Montréal)</p>
+        <a class="ch-btn" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Open Meetup</a>
+      </article>
+    </div>
   </div>
-</section>
+</div>
 
 <div class="footer-note">
   © {{ site.time | date: "%Y" }} CrowdByte Solutions Inc. — Canada DevOps Community of Practice
 </div>
+
+<script>
+(function(){
+  const overlay = document.getElementById('chaptersOverlay');
+  const openBtn = document.getElementById('openChapters');
+  const closeBtn = document.getElementById('closeChapters');
+  const search = document.getElementById('chSearch');
+  const cards = Array.from(document.querySelectorAll('#chGrid .ch-card'));
+
+  function openOverlay(e){
+    if(e) e.preventDefault();
+    overlay.setAttribute('aria-hidden','false');
+    search && search.focus();
+    document.documentElement.style.overflow='hidden';
+  }
+  function closeOverlay(){
+    overlay.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow='';
+    openBtn && openBtn.focus();
+  }
+  function filter(){
+    const q = (search.value || '').toLowerCase();
+    cards.forEach(card=>{
+      const hay = (card.dataset.city + ' ' + card.textContent).toLowerCase();
+      card.style.display = hay.includes(q) ? '' : 'none';
+    });
+  }
+  openBtn && openBtn.addEventListener('click', openOverlay);
+  closeBtn && closeBtn.addEventListener('click', closeOverlay);
+  overlay && overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.getAttribute('aria-hidden')==='false') closeOverlay(); });
+  search && search.addEventListener('input', filter);
+})();
+</script>
