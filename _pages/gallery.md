@@ -18,8 +18,8 @@ classes: "full-bleed"
 /* Body: CONSTRAINED WIDTH so cards don’t cover entire page */
 .g-wrap {
   max-width: 1100px;  /* adjust to taste (e.g., 960px or 1200px) */
-  margin: 18px auto 40px;
-  padding: 0 clamp(12px, 3vw, 24px);
+  margin:18px 0 40px 0;
+  padding-left: 0;
 }
 
 /* ===== Small square folder cards with thumbnail (LEFT-ALIGNED) ===== */
