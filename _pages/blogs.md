@@ -162,7 +162,7 @@ classes: "full-bleed"
              style="background-image:url('https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&w=1600&auto=format&fit=crop');">
         </div>
         <div class="meta">
-          <h3 class="title-text">DevOps + GenAI Hackathon series energizes Ottawa tech community</h3>
+          <h4 class="title-text">DevOps + GenAI Hackathon series energizes Ottawa tech community</h4>
           <a class="btn" href="https://www.linkedin.com/pulse/devops-genai-hackathon-series-energizes-ottawa-tech-community-willis-suzxe/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
@@ -173,7 +173,7 @@ classes: "full-bleed"
              style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop');">
         </div>
         <div class="meta">
-          <h3 class="title-text">Accelerating GenAI innovation with DevOps hackathons</h3>
+          <h4 class="title-text">Accelerating GenAI innovation with DevOps hackathons</h4>
           <a class="btn" href="https://devops.com/accelerating-genai-innovation-with-devops-hackathons-hackathon-insights-strategic-gaps-and-future-directions/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
@@ -184,7 +184,7 @@ classes: "full-bleed"
              style="background-image:url('https://images.unsplash.com/photo-1587202372775-98927b1b5a52?q=80&w=1600&auto=format&fit=crop');">
         </div>
         <div class="meta">
-          <h3 class="title-text">SRE in the Age of AI</h3>
+          <h4 class="title-text">SRE in the Age of AI</h4>
           <a class="btn" href="https://devops.com/sre-in-the-age-of-ai/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
@@ -195,7 +195,7 @@ classes: "full-bleed"
              style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop');">
         </div>
         <div class="meta">
-          <h3 class="title-text">Cloud-first, cloud-smart to cloud-minimalism</h3>
+          <h4 class="title-text">Cloud-first, cloud-smart to cloud-minimalism</h4>
           <a class="btn" href="https://devops.com/cloud-first-cloud-smart-to-cloud-minimalism-a-strategic-shift/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
