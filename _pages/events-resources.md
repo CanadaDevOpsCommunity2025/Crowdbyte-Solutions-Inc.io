@@ -71,14 +71,18 @@ classes: "full-bleed"
   margin-bottom: 4px;
 }
 
+/* Link list styles */
 .inline-links { margin-top: 6px; }
 .inline-links a {
   display:block;
   text-decoration: none;
-  color:#111;
+  color:#2874c7;              /* <-- match heading blue */
   font-weight:600;
 }
-.inline-links a:hover { text-decoration: underline; }
+.inline-links a:visited { color:#2874c7; }  /* keep same after visit */
+.inline-links a:hover,
+.inline-links a:focus { text-decoration: underline; }
+.inline-links a:active { opacity: .9; }
 </style>
 
 <!-- HERO -->
