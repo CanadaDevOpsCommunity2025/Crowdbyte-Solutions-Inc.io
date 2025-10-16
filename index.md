@@ -42,6 +42,12 @@ classes: full-bleed
   padding-right: clamp(16px, 3vw, 32px);
   max-width: none; /* don't constrain */
 }
+/* Center the page title */
+.page__title {
+  text-align: center !important;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 /* Hero look */
 .hero-band{ background:#2a3e6e; color:#fff; text-align:center; padding:2.5rem 1rem; }
