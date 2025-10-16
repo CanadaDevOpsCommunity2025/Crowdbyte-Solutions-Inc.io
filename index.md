@@ -172,7 +172,7 @@ time.cal::before{
 }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
 
-/* ===== COMPACT SPONSORS SLIDER (home page) ===== */
+/* ===== COMPACT SPONSORS SLIDER (home page, UNIFORM tiles) ===== */
 .sponsors-band-home{
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -196,10 +196,11 @@ time.cal::before{
   margin:0; font-weight:800; font-size: clamp(14px, 1.8vw, 18px); color:#1f2a44;
 }
 .sponsors-note{ margin:0; font-size:.85rem; color:#475569; }
+
 .logo-marquee{ position:relative; overflow:hidden; }
 .logo-track{
   display:flex; align-items:center;
-  gap: clamp(18px, 3vw, 36px);
+  gap: clamp(18px, 3vw, 28px);          /* match Events & Resources */
   will-change: transform;
   animation: sponsors-marquee-rtl 26s linear infinite;
 }
@@ -208,13 +209,29 @@ time.cal::before{
   from{ transform: translateX(0); }
   to  { transform: translateX(-50%); }
 }
+
+/* UNIFORM TILES for every logo (same sizing as Events & Resources) */
+.logo-box{
+  flex: 0 0 auto;
+  width: clamp(100px, 12vw, 140px);
+  height: clamp(34px, 5vw, 48px);
+  display:flex; align-items:center; justify-content:center;
+  background: transparent;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+/* Images fit inside the tile without cropping */
 .logo{
-  flex:0 0 auto;
-  height: clamp(22px, 4vw, 34px);
+  max-width: 100%;
+  max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain;
   filter:saturate(.98) contrast(1.05);
   opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
 }
 .logo:hover{ transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
+
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 @media (max-width:480px){ .sponsors-note{ display:none; } }
 </style>
@@ -276,7 +293,7 @@ time.cal::before{
   </div>
 </div>
 
-<!-- ===== COMPACT SPONSORS SLIDER (dynamic, full-bleed) ===== -->
+<!-- ===== COMPACT SPONSORS SLIDER (dynamic, full-bleed, uniform tiles) ===== -->
 <div class="sponsors-band-home" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -302,11 +319,16 @@ time.cal::before{
         <div class="logo-track">
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            <div class="logo-box">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            </div>
           {%- endfor -%}
+          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            <div class="logo-box">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            </div>
           {%- endfor -%}
         </div>
       </div>
