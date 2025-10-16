@@ -5,6 +5,9 @@ title: "Ask an Expert"
 sidebar: false
 classes: "full-bleed"
 ---
+<div class="full-bleed-row hero">
+  <h1>Ask an Expert</h1>
+</div>
 
 <style>
 /* Hide pager */
@@ -22,13 +25,26 @@ classes: "full-bleed"
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
 }
+/* Center the page title */
+.page__title {
+  text-align: center !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+.subtitle {
+  font-weight:800;
+  color:#2874c7;
+  font-size: clamp(18px,2.2vw,22px);
+  margin: 6px 0 12px;
+  text-align: center;   /* was: left */
+}
 
 /* ===== Hero band ===== */
-.hero {
+.hero { 
   background:#2f5597;
   color:#fff;
   padding: clamp(28px,5vw,56px) clamp(12px,3vw,32px);
-  text-align:left;              /* spread, not centered */
+  text-align: center;   /* was: left */
 }
 .hero h1{
   margin:0;
