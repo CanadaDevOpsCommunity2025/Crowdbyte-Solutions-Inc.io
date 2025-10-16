@@ -1,23 +1,55 @@
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  // 1) Put any overflowed items back into the visible list
-  var nav = document.querySelector('.greedy-nav');
-  if (nav) {
-    var hidden = nav.querySelector('.hidden-links');
-    var visible = nav.querySelector('.visible-links');
-    if (hidden && visible) {
-      while (hidden.firstChild) visible.appendChild(hidden.firstChild);
-    }
-    var toggle = nav.querySelector('.greedy-nav__toggle');
-    if (toggle) toggle.remove();
+<!-- _includes/footer/custom.html -->
+<style>
+  .coc-footer {
+    margin-top: .75rem;
+    padding-top: .75rem;
+    border-top: 1px solid var(--mmst-border, rgba(0,0,0,.12));
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem .75rem;
+    align-items: center;
+    justify-content: center; /* centered row; change to flex-start to left-align */
+    font: 600 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   }
+  .coc-footer a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .coc-footer a:hover { text-decoration: underline; }
+  .coc-footer .sep { opacity: .5; }
+  .coc-footer .gh {
+    display: inline-flex; align-items: center; gap: .35rem;
+  }
+  .coc-footer .gh svg {
+    width: 18px; height: 18px; display: inline-block;
+    fill: currentColor;
+  }
+  @media (max-width: 520px){
+    .coc-footer { justify-content: center; }
+    .coc-footer .sep { display: none; }
+  }
+</style>
 
-  // 2) Snap header scroll hard-left so the first item ("Become a Contributor") is visible
-  var scrollers = [
-    document.querySelector('.masthead__inner-wrap'),
-    document.querySelector('.greedy-nav'),
-    document.querySelector('.site-nav')
-  ];
-  scrollers.forEach(function(el){ if (el) el.scrollLeft = 0; });
-});
-</script>
+<nav class="coc-footer" aria-label="Site footer links">
+  <a href="{{ '/contact/' | relative_url }}">Contact us</a>
+  <span class="sep">•</span>
+
+  <a href="https://acrobat.adobe.com/link/track?uri=urn%3Aaaid%3Ascds%3AUS%3A1cb574fd-0e7e-440e-baf9-2f835c3ab602"
+     target="_blank" rel="noopener">
+    All members are obligated to follow the Code of Conduct
+  </a>
+  <span class="sep">•</span>
+
+  <a class="gh" href="https://github.com/CanadaDevOpsCommunity2025" target="_blank" rel="noopener" aria-label="GitHub organization">
+    <!-- GitHub logo (inline SVG, no external assets needed) -->
+    <svg viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M8 0C3.58 0 0 3.58 0 8a8 8 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
+      0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
+      -.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+      0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27
+      1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
+      0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8 8 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+    </svg>
+    GitHub
+  </a>
+</nav>
