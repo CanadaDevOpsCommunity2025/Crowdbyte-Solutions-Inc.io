@@ -217,7 +217,7 @@ time.cal::before{
     <p>Participating directly in repository yields connection with experts, peers, and industry legends.</p>
     <p>Open a new issue describing what you want to contribute. Clearly explain your proposal and the problem it addresses.</p>
     <!-- New: smaller GitHub Repo button (same size style as Explore Local Chapters) -->
-    <p><a class="btn-small btn-tiny" href="https://canadadevopscommunity2025.github.io/Crowdbyte-Solutions-Inc.io/" target="_blank" rel="noopener">GitHub Repo</a></p>
+    <p><a class="btn-small btn-tiny" href="https://github.com/CanadaDevOpsCommunity2025" target="_blank" rel="noopener">GitHub Repo</a></p>
   </div>
 
   <div class="card">
