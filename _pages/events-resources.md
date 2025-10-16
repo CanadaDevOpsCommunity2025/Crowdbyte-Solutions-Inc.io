@@ -66,7 +66,7 @@ classes: "full-bleed"
 
 .block .caps {
   font-weight: 800;
-  text-transform: uppercase;
+  text-transform: none;
   letter-spacing: .02em;
   margin-bottom: 4px;
 }
@@ -123,8 +123,8 @@ font-size: 0.80rem !important;
     <!-- LEFT COLUMN -->
     <div>
       <div class="block">
-        <div class="caps">DEVOPS FOR GENAI,</div>
-        <div class="caps">HACKATHON SERIES CANADA</div>
+        <div class="caps">DevOps for GenAI,</div>
+        <div class="caps">Hackathon Series Global</div>
         <div class="inline-links">
           <a href="{{ site.baseurl }}/contact/">Become a Sponsor</a>
           <a href="https://www.eventbrite.ca/e/devops-for-genai-hackathon-tickets-1407877793379" target="_blank" rel="noopener">Register on Eventbrite</a>
@@ -132,8 +132,8 @@ font-size: 0.80rem !important;
       </div>
 
       <div class="block">
-        <div class="caps">DEVOPS FOR GENAI,</div>
-        <div class="caps">HACKATHON SERIES GLOBAL</div>
+        <div class="caps">DevOps for GenAI,</div>
+        <div class="caps">Hackathon Series Global</div>
         <div class="inline-links">
           <a href="#">Propose a Location</a>
         </div>
@@ -143,8 +143,8 @@ font-size: 0.80rem !important;
     <!-- RIGHT COLUMN -->
     <div>
       <div class="block">
-        <div class="caps">DEVOPS SUMMIT, CANADA</div>
-        <div class="caps">AI SUMMIT, CANADA</div>
+        <div class="caps">DevOps Summit, Canada</div>
+        <div class="caps">AI Summit, Canada</div>
         <div class="inline-links">
           <a href="#">Become a Sponsor</a>
           <a href="#">Submit Speaker Proposal</a>
