@@ -92,88 +92,17 @@ classes: "full-bleed"
   .inline-links a { font-size: 0.9rem; }
 }
 /* Space between link lines */
-.inline-links a + a { margin-top: 8px; }
-@media (min-width: 881px){ .inline-links a + a { margin-top: 10px; } }
+.inline-links a + a { 
+  margin-top: 8px;
+}
+@media (min-width: 881px){
+  .inline-links a + a { margin-top: 10px; }
+}
 
 .inline-links a:visited { color:#2874c7; }
 .inline-links a:hover,
 .inline-links a:focus { text-decoration: underline; }
 .inline-links a:active { opacity: .9; }
-
-/* ===== Sponsors slider (full-bleed) ===== */
-.sponsors-band {
-  background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
-  border-top: 1px solid rgba(0,0,0,.06);
-  border-bottom: 1px solid rgba(0,0,0,.06);
-  padding: clamp(14px, 2.4vw, 22px) 0;
-}
-
-.sponsors-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(16px, 3vw, 24px);
-}
-
-.sponsors-head {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px; margin-bottom: clamp(10px, 1.6vw, 14px);
-}
-.sponsors-title {
-  margin: 0;
-  font-weight: 800;
-  font-size: clamp(16px, 2vw, 20px);
-  color: #1f2a44;
-}
-.sponsors-note {
-  margin: 0;
-  font-size: .9rem;
-  color: #475569;
-}
-
-/* Marquee container */
-.logo-marquee {
-  position: relative;
-  overflow: hidden;
-}
-
-/* Scrolling track (duplicated rows for seamless loop) */
-.logo-track {
-  display: flex;
-  align-items: center;
-  gap: clamp(28px, 4vw, 56px);
-  will-change: transform;
-  animation: marquee-rtl 28s linear infinite;
-}
-.logo-track:hover { animation-play-state: paused; }
-
-@keyframes marquee-rtl {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); } /* because we duplicate content 2x */
-}
-
-/* Each logo */
-.logo {
-  flex: 0 0 auto;
-  height: clamp(28px, 5vw, 48px);  /* consistent height */
-  filter: saturate(0.95) contrast(1.05);
-  opacity: .95;
-  transition: transform .2s ease, opacity .2s ease, filter .2s ease;
-}
-.logo:hover {
-  transform: translateY(-2px) scale(1.04);
-  opacity: 1;
-  filter: none;
-}
-
-/* Prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .logo-track { animation: none; }
-}
-
-/* Small screens: a bit more space */
-@media (max-width: 480px){
-  .sponsors-note { display:none; }
-}
 </style>
 
 <!-- HERO -->
@@ -228,45 +157,5 @@ classes: "full-bleed"
   </div>
 </div>
 
-<!-- SPONSORS SLIDER (full-bleed, dynamic) -->
-<div class="full-bleed-row sponsors-band" aria-label="Sponsors">
-  <div class="sponsors-inner">
-    <div class="sponsors-head">
-      <h3 class="sponsors-title">Sponsors</h3>
-      <p class="sponsors-note">Thank you to our partners powering the community.</p>
-    </div>
-
-    {% comment %}
-      Collect all image files inside /assets/img/sponsors/ dynamically.
-    {% endcomment %}
-    {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/sponsors/'" %}
-    {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
-    {% assign paths = "" %}
-    {% for f in all %}
-      {% assign ext = f.extname %}
-      {% if img_exts contains ext %}
-        {% assign paths = paths | append: f.path | append: "||" %}
-      {% endif %}
-    {% endfor %}
-    {% assign logos = paths | split:"||" | uniq | sort %}
-    {% assign logos = logos | reject: "" %}
-
-    {% if logos.size > 0 %}
-      <div class="logo-marquee">
-        <div class="logo-track">
-          {%- for p in logos -%}
-            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
-          {%- endfor -%}
-          {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
-          {%- for p in logos -%}
-            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
-          {%- endfor -%}
-        </div>
-      </div>
-    {% else %}
-      <p><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
-    {% endif %}
-  </div>
-</div>
+<!-- ===== Compact Sponsors Slider (dynamic, full-bleed) ===== -->
+{% include sponsors_slider.html title="Sponsors" note="Thank you to our partners powering the community." %}
