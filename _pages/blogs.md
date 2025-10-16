@@ -7,7 +7,7 @@ classes: "full-bleed"
 ---
 
 <style>
-/* Hide built-in page title; we use the hero heading */
+/* Hide the built-in page title; we use the hero heading */
 .page__title { display:none !important; }
 
 /* Hide Previous / Next pager on this page only */
@@ -80,22 +80,21 @@ classes: "full-bleed"
   overflow: hidden;
   box-shadow: 0 8px 30px rgba(0,0,0,.06);
   background: #f6f8fb;
-  min-height: 240px;
   display:flex;
   flex-direction:column;
   isolation:isolate;
 }
 
-/* Photo header (real images) */
-.card .thumb {
-  min-height: 200px;                 /* slightly taller for a more visual feel */
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  aspect-ratio: 16/9;                 /* consistent crop across cards */
+/* Image (reliable on GitHub Pages) */
+.card img.thumb {
+  width: 100%;
+  height: auto;
+  display:block;
+  aspect-ratio: 16/9;     /* consistent crop */
+  object-fit: cover;      /* fill nicely */
 }
 
-/* Title + actions below the photo */
+/* Title + actions below the image */
 .card .meta {
   padding: 12px 14px 14px;
   display:grid;
@@ -108,10 +107,10 @@ classes: "full-bleed"
 /* SIMPLE TITLE: smaller + not bold */
 .card .title-text {
   margin: 0;
-  font-weight: 400;                  /* normal weight (not bold) */
-  font-size: 0.95rem;                /* smaller text */
+  font-weight: 400;       /* normal weight */
+  font-size: 0.95rem;     /* smaller text */
   line-height: 1.3;
-  color: #1f2937;                    /* neutral dark */
+  color: #1f2937;         /* neutral dark */
 }
 
 @media (max-width: 520px){
@@ -158,47 +157,44 @@ classes: "full-bleed"
     <div class="card-grid">
       <!-- Card 1 -->
       <article class="card">
-        <div class="thumb"
-             style="background-image:url('https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&w=1600&auto=format&fit=crop');">
-        </div>
+        <img class="thumb"
+             src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             alt="Hackathon crowd collaborating">
         <div class="meta">
-          <h4 class="title-text">DevOps + GenAI Hackathon series energizes Ottawa tech community</h4>
+          <h3 class="title-text">DevOps + GenAI Hackathon series energizes Ottawa tech community</h3>
           <a class="btn" href="https://www.linkedin.com/pulse/devops-genai-hackathon-series-energizes-ottawa-tech-community-willis-suzxe/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
 
       <!-- Card 2 -->
       <article class="card">
-        <div class="thumb"
-             style="background-image:url('https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1600&auto=format&fit=crop');">
-        </div>
+        <img class="thumb"
+             src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             alt="Team collaborating on innovation whiteboard">
         <div class="meta">
-          <h4 class="title-text">Accelerating GenAI innovation with DevOps hackathons</h4>
+          <h3 class="title-text">Accelerating GenAI innovation with DevOps hackathons</h3>
           <a class="btn" href="https://devops.com/accelerating-genai-innovation-with-devops-hackathons-hackathon-insights-strategic-gaps-and-future-directions/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
+
       <!-- Card 3 -->
       <article class="card">
-        <div class="thumb"
-           style="background-image:url('https://images.unsplash.com/photo-1503023345310-bd7c1de61c7dq=80&amp;w=1600&amp;auto=format&amp;fit=crop');
-              background-size:cover;
-              background-position:center;
-              min-height:220px;">
-        </div>
+        <img class="thumb"
+             src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             alt="Abstract neural network representing AI">
         <div class="meta">
-          <h4 class="title-text">SRE in the Age of AI</h4>
+          <h3 class="title-text">SRE in the Age of AI</h3>
           <a class="btn" href="https://devops.com/sre-in-the-age-of-ai/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
 
-
       <!-- Card 4 -->
       <article class="card">
-        <div class="thumb"
-             style="background-image:url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=1600&auto=format&fit=crop');">
-        </div>
+        <img class="thumb"
+             src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             alt="Minimal cloudscape for cloud strategy">
         <div class="meta">
-          <h4 class="title-text">Cloud-first, cloud-smart to cloud-minimalism</h4>
+          <h3 class="title-text">Cloud-first, cloud-smart to cloud-minimalism</h3>
           <a class="btn" href="https://devops.com/cloud-first-cloud-smart-to-cloud-minimalism-a-strategic-shift/" target="_blank" rel="noopener">Read</a>
         </div>
       </article>
