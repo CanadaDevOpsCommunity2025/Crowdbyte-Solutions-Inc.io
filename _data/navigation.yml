@@ -7,7 +7,7 @@ main:
     url: /blogs/
   - title: "Ask an Expert"
     url: /ask-an-expert/
-  - title: "Member Login"
-    url: /member-login/
+  - title: "Gallery"
+    url: /gallery/
   - title: "Contact"
     url: /contact/
