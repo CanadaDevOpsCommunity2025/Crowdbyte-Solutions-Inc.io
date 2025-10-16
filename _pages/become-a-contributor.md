@@ -128,7 +128,6 @@ classes: "full-bleed"   # used by the CSS below to remove the theme's width limi
           allowfullscreen>
         </iframe>
       </div>
-      <p class="video-caption">https://youtu.be/9CiUU7HR_tQ?si=-Iqjgk14D4O-VpTu</p>
     </div>
   </div>
 
