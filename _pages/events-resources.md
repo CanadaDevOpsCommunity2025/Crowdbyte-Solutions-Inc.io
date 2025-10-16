@@ -102,7 +102,7 @@ classes: "full-bleed"
 .inline-links a:focus { text-decoration: underline; }
 .inline-links a:active { opacity: .9; }
 
-/* ===== COMPACT SPONSORS SLIDER (full-bleed, dynamic) ===== */
+/* ===== COMPACT SPONSORS SLIDER (full-bleed, dynamic, UNIFORM SIZE) ===== */
 .sponsors-band {
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -110,8 +110,8 @@ classes: "full-bleed"
   background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
-  padding: clamp(8px, 1.6vw, 12px) 0; /* smaller */
-  margin-top: clamp(24px, 4vw, 56px); /* NEW: push it lower */
+  padding: clamp(8px, 1.6vw, 12px) 0;  /* compact height */
+  margin-top: clamp(24px, 4vw, 56px);  /* sits a bit lower */
 }
 
 .sponsors-inner {
@@ -127,10 +127,11 @@ classes: "full-bleed"
   margin:0; font-weight:800; font-size: clamp(14px, 1.8vw, 18px); color:#1f2a44;
 }
 .sponsors-note { margin:0; font-size:.85rem; color:#475569; }
+
 .logo-marquee { position:relative; overflow:hidden; }
 .logo-track {
   display:flex; align-items:center;
-  gap: clamp(18px, 3vw, 36px);
+  gap: clamp(18px, 3vw, 28px);          /* tighter gap works better with uniform tiles */
   will-change: transform;
   animation: sponsors-marquee-rtl 26s linear infinite;
 }
@@ -139,13 +140,30 @@ classes: "full-bleed"
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); } /* duplicated content makes seamless loop */
 }
-.logo {
-  flex:0 0 auto;
-  height: clamp(22px, 4vw, 34px); /* compact logos */
+
+/* UNIFORM TILES for every logo */
+.logo-box{
+  flex: 0 0 auto;
+  width: clamp(100px, 12vw, 140px);     /* ← adjust these two to change tile size */
+  height: clamp(34px, 5vw, 48px);
+  display:flex; align-items:center; justify-content:center;
+  background: transparent;
+  border-radius: 6px;
+  padding: 2px;                         /* tiny breathing room */
+}
+
+/* Fit images inside the tile without cropping */
+.logo{
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;                  /* key: preserve aspect ratio, no crop */
   filter:saturate(.98) contrast(1.05);
   opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
 }
 .logo:hover { transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
+
 @media (prefers-reduced-motion: reduce) { .logo-track { animation:none; } }
 @media (max-width:480px){ .sponsors-note { display:none; } }
 </style>
@@ -202,7 +220,7 @@ classes: "full-bleed"
   </div>
 </div>
 
-<!-- ===== COMPACT SPONSORS SLIDER (dynamic) ===== -->
+<!-- ===== COMPACT SPONSORS SLIDER (dynamic, uniform tiles) ===== -->
 <div class="sponsors-band" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -212,7 +230,7 @@ classes: "full-bleed"
 
     {% comment %}
       Dynamically collect all images in /assets/img/sponsors/
-      (PNG/SVG/JPG/WEBP/GIF) and duplicate once for seamless loop.
+      (PNG/SVG/JPG/WEBP/GIF) and duplicate once for a seamless loop.
     {% endcomment %}
     {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/sponsors/'" %}
     {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
@@ -229,11 +247,16 @@ classes: "full-bleed"
         <div class="logo-track">
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            <div class="logo-box">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            </div>
           {%- endfor -%}
+          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            <div class="logo-box">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            </div>
           {%- endfor -%}
         </div>
       </div>
