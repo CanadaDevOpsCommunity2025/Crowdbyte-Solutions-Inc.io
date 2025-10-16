@@ -7,7 +7,7 @@ classes: "full-bleed"
 ---
 
 <style>
-/* Hide Previous / Next on this page */
+/* Hide pager */
 .pagination, .pagination--pager { display:none !important; }
 
 /* ===== Full-bleed helpers ===== */
@@ -25,48 +25,49 @@ classes: "full-bleed"
 
 /* ===== Hero band ===== */
 .hero {
-  background:#2f5597; /* deep blue */
+  background:#2f5597;
   color:#fff;
-  padding: 32px 24px;
+  padding: clamp(28px,5vw,56px) clamp(12px,3vw,32px);
+  text-align:left;              /* spread, not centered */
 }
 .hero h1{
   margin:0;
   font-weight:800;
-  font-size: clamp(26px, 4.2vw, 44px);
+  font-size: clamp(26px,4.2vw,44px);
   line-height:1.2;
 }
 
-/* ===== Body ===== */
-.wrap { padding: 22px 24px; }
+/* ===== Body (FULL WIDTH) ===== */
+.wrap {
+  padding: 16px clamp(12px,3vw,32px); /* small gutters only */
+}
 
 .subtitle {
-  text-align:center;
   font-weight:800;
-  color:#2874c7; /* lighter blue */
-  font-size: clamp(18px, 2.2vw, 22px);
-  margin: 10px 0 12px;
+  color:#2874c7;
+  font-size: clamp(18px,2.2vw,22px);
+  margin: 6px 0 12px;
+  text-align:left;              /* align left to emphasize width */
 }
 
 .intro {
-  text-align:center;
-  margin: 6px auto 20px;
-  line-height: 1.45;
-  max-width: 900px;
+  margin: 0 0 20px;
+  line-height: 1.5;
+  text-align:left;
+  max-width: none;              /* remove width cap */
 }
-.intro strong { display:inline-block; }
 
-/* Two-column grid */
+/* FULL-WIDTH GRID */
 .grid {
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-  max-width: 1100px;
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(12px,2vw,28px);
+  margin: 0;                    /* no centering */
+  max-width: none;              /* remove width cap */
 }
-@media (max-width: 880px){ .grid { grid-template-columns: 1fr; } }
 
-.block { line-height:1.35; }
-.block + .block { margin-top: 22px; }
+.block { line-height:1.45; }
+.block + .block { margin-top: 18px; }
 
 .block h3 {
   margin: 0 0 6px;
@@ -76,20 +77,20 @@ classes: "full-bleed"
 
 .block p { margin: 0 0 10px; }
 
-/* Links styled like your other pages */
+/* Links like other pages */
 .block a {
   color:#2874c7;
   font-style: italic;
   font-weight:600;
-  text-decoration: none;
-  font-size: 0.95rem;
+  text-decoration:none;
+  font-size:0.95rem;
 }
 .block a:hover { text-decoration: underline; }
 </style>
 
 <!-- HERO -->
 <div class="full-bleed-row hero">
-  <h1>Blogs, newsletters, reports, share<br/>knowledge and&nbsp;best practices</h1>
+  <h1>Blogs, newsletters, reports, share knowledge and&nbsp;best practices</h1>
 </div>
 
 <!-- MAIN -->
@@ -97,32 +98,27 @@ classes: "full-bleed"
   <div class="subtitle">Crowdbyte&nbsp;&nbsp;<em><strong>DevOps + AI</strong></em>&nbsp;&nbsp;Community of Practice</div>
 
   <p class="intro">
-    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in
-    <strong>Canada.</strong>
+    We’re an energetic network of technologists, builders, and innovators shaping the future of DevOps and AI in Canada.
   </p>
 
   <div class="grid">
-    <!-- LEFT COLUMN -->
-    <div>
-      <div class="block">
-        <h3>Schedule a Quick Overview</h3>
-        <p>Ask <strong>Steve Taylor</strong> about Ortelius or any questions around participating — from creating a pull request to starting a bigger enhancement effort.
-          <a href="{{ site.baseurl }}/contact/">[link]</a>
-        </p>
-      </div>
-
-      <div class="block">
-        <h3>Schedule a Coffee Chat</h3>
-        <p>Reach out to <strong>Garima Bajpai</strong> to learn more about the Crowdbyte and how you can get involved. She can help.</p>
-      </div>
+    <!-- LEFT SECTION -->
+    <div class="block">
+      <h3>Schedule a Quick Overview</h3>
+      <p>Ask <strong>Steve Taylor</strong> about Ortelius or any questions around participating — from creating a pull request to starting a bigger enhancement effort.
+        <a href="{{ site.baseurl }}/contact/">[link]</a>
+      </p>
     </div>
 
-    <!-- RIGHT COLUMN -->
-    <div>
-      <div class="block">
-        <h3>Schedule a Coffee Chat</h3>
-        <p>Reach out to <strong>Jay Shah</strong> to learn more about our open source projects, Hackathon and how you can get involved.</p>
-      </div>
+    <div class="block">
+      <h3>Schedule a Coffee Chat</h3>
+      <p>Reach out to <strong>Garima Bajpai</strong> to learn more about Crowdbyte and how you can get involved. She can help.</p>
+    </div>
+
+    <!-- RIGHT SECTION -->
+    <div class="block">
+      <h3>Schedule a Coffee Chat</h3>
+      <p>Reach out to <strong>Jay Shah</strong> to learn more about our open source projects, Hackathon and how you can get involved.</p>
     </div>
   </div>
 </div>
