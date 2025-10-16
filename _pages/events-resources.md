@@ -228,7 +228,7 @@ classes: "full-bleed"
   </div>
 </div>
 
-<!-- SPONSORS SLIDER (full-bleed) -->
+<!-- SPONSORS SLIDER (full-bleed, dynamic) -->
 <div class="full-bleed-row sponsors-band" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -236,25 +236,37 @@ classes: "full-bleed"
       <p class="sponsors-note">Thank you to our partners powering the community.</p>
     </div>
 
-    <div class="logo-marquee">
-      <!-- Duplicate the row twice inside .logo-track for seamless infinite scroll -->
-      <div class="logo-track">
-        <!-- ROW A (logos – replace file names with your actual logo files) -->
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor1.png' | relative_url }}" alt="Sponsor 1">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor2.png' | relative_url }}" alt="Sponsor 2">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor3.png' | relative_url }}" alt="Sponsor 3">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor4.png' | relative_url }}" alt="Sponsor 4">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor5.png' | relative_url }}" alt="Sponsor 5">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor6.png' | relative_url }}" alt="Sponsor 6">
+    {% comment %}
+      Collect all image files inside /assets/img/sponsors/ dynamically.
+    {% endcomment %}
+    {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/sponsors/'" %}
+    {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
+    {% assign paths = "" %}
+    {% for f in all %}
+      {% assign ext = f.extname %}
+      {% if img_exts contains ext %}
+        {% assign paths = paths | append: f.path | append: "||" %}
+      {% endif %}
+    {% endfor %}
+    {% assign logos = paths | split:"||" | uniq | sort %}
+    {% assign logos = logos | reject: "" %}
 
-        <!-- ROW B (same logos again for a continuous loop) -->
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor1.png' | relative_url }}" alt="Sponsor 1">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor2.png' | relative_url }}" alt="Sponsor 2">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor3.png' | relative_url }}" alt="Sponsor 3">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor4.png' | relative_url }}" alt="Sponsor 4">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor5.png' | relative_url }}" alt="Sponsor 5">
-        <img class="logo" src="{{ '/assets/img/sponsors/sponsor6.png' | relative_url }}" alt="Sponsor 6">
+    {% if logos.size > 0 %}
+      <div class="logo-marquee">
+        <div class="logo-track">
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+          {%- endfor -%}
+          {%- comment -%} Duplicate for seamless loop {%- endcomment -%}
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+          {%- endfor -%}
+        </div>
       </div>
-    </div>
+    {% else %}
+      <p><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
+    {% endif %}
   </div>
 </div>
