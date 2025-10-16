@@ -72,7 +72,7 @@ classes: full-bleed
 /* Footer note */
 .footer-note{ text-align:center; font-size:.9rem; color:#666; margin:1.5rem 0 .75rem; }
 
-  /* Make "Crowdbyte  DevOps + AI" look like plain blue text (no pill) */
+/* Make "Crowdbyte  DevOps + AI" look like plain blue text (no pill) */
 .subhead .badge {
   background: transparent !important;
   color: #3b6bbd !important;   /* match the screenshot blue */
@@ -87,15 +87,22 @@ classes: full-bleed
   color: #3b6bbd;
   font-weight: 800;
 }
-  /* Calendar emoji before marked dates */
+
+/* Calendar emoji before marked dates */
 .cal::before,
 time.cal::before{
   content: "📅 ";
-  /* Optional small spacing/align tweaks */
   letter-spacing: 0;
   vertical-align: baseline;
 }
 
+/* Tiny button style for Meetup links (keeps page aesthetic) */
+.btn-mini{
+  display:inline-block; margin-left:.4rem; padding:.18rem .55rem;
+  background:#2a3e6e; color:#fff !important; border-radius:999px;
+  font-size:.82rem; font-weight:700; text-decoration:none;
+}
+.btn-mini:hover{ background:#3b6bbd; text-decoration:none; }
 </style>
 
 
@@ -123,13 +130,31 @@ time.cal::before{
       <p><a href="https://www.eventbrite.ca/e/devops-for-genai-hackathon-tickets-1407877793379" target="_blank" rel="noopener noreferrer">Link to Register</a></p>
       <li><strong>DevOps for Gen AI Hackathon — Ottawa</strong><br><span class="cal">June 2, 2025</span></li>
     </ul>
-    
   </div>
 
   <div class="card">
     <h3>Summits &amp; Events</h3>
     <p>The Community of Practice hosts major events throughout the year, including a summit in Canada and virtual sessions, gathering practitioners and leaders in DevOps, SRE, cloud, and AI-native practices.</p>
-    <p>Join local chapters <a href="https://www.meetup.com/" target="_blank">[ Link to meetup ]</a></p>
+
+    <p class="section-title">Join Local Chapters on Meetup</p>
+    <ul>
+      <li>Ottawa, ON
+        <a class="btn-mini" href="https://www.meetup.com/ottawa-devops-dataops-collaboration-community" target="_blank" rel="noopener">Join</a>
+      </li>
+      <li>Toronto, ON
+        <a class="btn-mini" href="https://www.meetup.com/canada-devops-community-of-practice-toronto-chapter" target="_blank" rel="noopener">Join</a>
+      </li>
+      <li>Edmonton, AB
+        <a class="btn-mini" href="https://www.meetup.com/canada-devops-community-of-practice-edmonton-chapter/" target="_blank" rel="noopener">Join</a>
+      </li>
+      <li>Atlantic Provinces
+        <a class="btn-mini" href="https://www.meetup.com/community-of-practice-devops-dataops-atlantic-provinces/" target="_blank" rel="noopener">Join</a>
+      </li>
+      <li>Montréal, QC
+        <a class="btn-mini" href="https://www.meetup.com/community-of-practice-devops-dataops-montreal-chapter/" target="_blank" rel="noopener">Join</a>
+      </li>
+    </ul>
+
     <p>Connect with us to get a quote for organizing a local event or start your own with our support.</p>
     <p><a href="{{ '/contact/' | relative_url }}">Contact Us</a></p>
   </div>
