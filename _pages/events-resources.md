@@ -131,10 +131,11 @@ classes: "full-bleed"
 .logo-marquee { position:relative; overflow:hidden; }
 .logo-track{
   display:flex; align-items:center;
-  gap: clamp(22px, 3.2vw, 36px);  /* was 18–28/36px */
+  gap: clamp(18px, 3vw, 28px); /* or 36px on events page if you had that */
   will-change: transform;
   animation: sponsors-marquee-rtl 26s linear infinite;
-} 
+}
+
 .logo-track:hover { animation-play-state: paused; }
 @keyframes sponsors-marquee-rtl {
   from { transform: translateX(0); }
@@ -145,12 +146,12 @@ classes: "full-bleed"
 /* UNIFORM (BIGGER) TILES for every logo */
 .logo-box{
   flex: 0 0 auto;
-  width: clamp(120px, 14vw, 180px);   /* was ~100–140px */
-  height: clamp(44px, 6vw, 64px);     /* was ~34–48px  */
+  width: clamp(100px, 12vw, 140px);
+  height: clamp(34px, 5vw, 48px);
   display:flex; align-items:center; justify-content:center;
   background: transparent;
   border-radius: 6px;
-  padding: 4px;                       /* a touch more breathing room */
+  padding: 2px;
 }
 
 
