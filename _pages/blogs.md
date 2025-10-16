@@ -158,7 +158,7 @@ classes: "full-bleed"
       <!-- Card 1 -->
       <article class="card">
         <img class="thumb"
-             src="https://images.unsplash.com/photo-1551836022-4c4c79ecde51?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             src="https://media.licdn.com/dms/image/v2/D4E12AQFQOMeRJ4T-iA/article-cover_image-shrink_720_1280/B4EZdD_IUCHcAI-/0/1749192313839?e=1763596800&amp;v=beta&amp;t=bP_aKmFv0yO5uzZ2xwxqPekxEOv1gwWnfmeBbTWw0V4"
              alt="Hackathon crowd collaborating">
         <div class="meta">
           <h3 class="title-text">DevOps + GenAI Hackathon series energizes Ottawa tech community</h3>
