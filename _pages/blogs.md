@@ -180,7 +180,7 @@ classes: "full-bleed"
       <!-- Card 3 (UPDATED IMAGE) -->
       <article class="card">
         <img class="thumb"
-             src="https://images.unsplash.com/photo-1581091870622-7ebd7faa6f15?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
+             src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1600&auto=format&fit=crop"
              alt="AI brain/circuit concept">
         <div class="meta">
           <h3 class="title-text">SRE in the Age of AI</h3>
