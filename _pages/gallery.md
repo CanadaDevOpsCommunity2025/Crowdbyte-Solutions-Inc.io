@@ -22,12 +22,12 @@ classes: "full-bleed"
   padding: 0 clamp(12px, 3vw, 24px);
 }
 
-/* ===== Small square folder cards with thumbnail ===== */
+/* ===== Small square folder cards with thumbnail (LEFT-ALIGNED) ===== */
 .folder-grid{
   display:grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 180px)); /* small squares */
   gap: clamp(10px, 1.6vw, 18px);
-  justify-content:center; /* center the grid */
+  justify-content:flex-start;   /* <-- left align the grid */
 }
 .folder-card{
   display:block; position:relative; text-decoration:none;
@@ -127,7 +127,7 @@ classes: "full-bleed"
   {% assign folders = names | split:"||" | uniq | sort %}
   {% assign folders = folders | reject: "" %}
 
-  <!-- ===== FOLDERS VIEW (small square buttons) ===== -->
+  <!-- ===== FOLDERS VIEW (left-aligned small squares) ===== -->
   <section id="foldersView">
     {% if folders.size == 0 %}
       <p><em>No albums yet. Create subfolders in <code>assets/img/gallery/</code> and add images.</em></p>
