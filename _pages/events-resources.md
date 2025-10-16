@@ -87,6 +87,15 @@ font-size: 0.80rem !important;
 @media (max-width: 880px){
   .inline-links a { font-size: 0.9rem; }
 }
+/* Space between link lines */
+.inline-links a + a { 
+  margin-top: 8px;   /* tweak: 6–10px works well */
+}
+
+/* (optional) a touch more space on wider screens */
+@media (min-width: 881px){
+  .inline-links a + a { margin-top: 10px; }
+}
 
 .inline-links a:visited { color:#2874c7; }  /* keep same after visit */
 .inline-links a:hover,
