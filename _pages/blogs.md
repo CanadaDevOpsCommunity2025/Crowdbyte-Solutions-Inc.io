@@ -177,11 +177,11 @@ classes: "full-bleed"
         </div>
       </article>
 
-      <!-- Card 3 -->
+      <!-- Card 3 (UPDATED IMAGE) -->
       <article class="card">
         <img class="thumb"
              src="https://images.unsplash.com/photo-1581091870622-7ebd7faa6f15?q=80&amp;w=1600&amp;auto=format&amp;fit=crop"
-             alt="Abstract neural network representing AI">
+             alt="AI brain/circuit concept">
         <div class="meta">
           <h3 class="title-text">SRE in the Age of AI</h3>
           <a class="btn" href="https://devops.com/sre-in-the-age-of-ai/" target="_blank" rel="noopener">Read</a>
