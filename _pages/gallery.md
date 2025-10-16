@@ -26,49 +26,59 @@ classes: "full-bleed"
 /* Body */
 .g-wrap { padding: 18px clamp(14px,3vw,40px); }
 
-/* Folder list */
-.folder-list {
-  display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: clamp(10px, 2vw, 18px); margin-bottom: 10px;
+/* ===== Folder cards (square buttons) ===== */
+.folder-grid{
+  display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(12px, 2vw, 20px);
 }
-.folder-card {
-  display:flex; align-items:center; gap:12px;
-  background:#f7f9fc; border:1px solid #e6ecf8; border-radius:14px;
-  padding:12px 14px; cursor:pointer;
-  box-shadow:0 8px 24px rgba(2,24,71,.06);
-  transition: transform .06s ease, box-shadow .2s ease, border-color .2s ease;
+.folder-card{
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  aspect-ratio: 1/1; border-radius: 16px; background:#f7f9fc;
+  border:1px solid #e6ecf8; box-shadow:0 8px 24px rgba(2,24,71,.06);
+  padding: 18px; text-decoration:none; position:relative; overflow:hidden;
+  transition: transform .08s ease, box-shadow .2s ease, border-color .2s ease;
 }
-.folder-card:hover { transform: translateY(-1px); border-color:#d7e3ff; box-shadow:0 10px 30px rgba(2,24,71,.08); }
-.folder-card[aria-expanded="true"] { border-color:#2f5597; box-shadow:0 10px 36px rgba(47,85,151,.18); }
-.folder-icon{
-  width:42px; height:34px; flex:0 0 auto;
+.folder-card:hover{ transform: translateY(-2px); border-color:#d7e3ff; box-shadow:0 12px 30px rgba(2,24,71,.09); }
+.folder-name{
+  color:#1f2a44; font-weight:800; font-size:clamp(1rem, 1.8vw, 1.1rem); line-height:1.25;
+}
+.folder-card .badge{
+  position:absolute; top:10px; right:10px; background:#2f5597; color:#fff;
+  font-weight:700; font-size:.78rem; border-radius:999px; padding:.25rem .5rem;
+}
+
+/* Subtle folder glyph */
+.folder-glyph{
+  position:absolute; left:-16px; bottom:-18px; width:120px; height:90px; opacity:.08;
   background: linear-gradient(180deg,#ffd36c,#ffb942);
-  border-radius:6px 6px 4px 4px; position:relative;
-  box-shadow: inset 0 -2px 0 rgba(0,0,0,.06);
+  border-radius:10px 10px 8px 8px;
 }
-.folder-icon:before{
-  content:""; position:absolute; left:4px; top:-8px; width:22px; height:10px;
-  background: linear-gradient(180deg,#ffe199,#ffd36c);
-  border-radius:4px 4px 0 0; box-shadow: inset 0 -1px 0 rgba(0,0,0,.07);
+.folder-glyph:before{
+  content:""; position:absolute; left:10px; top:-18px; width:48px; height:16px;
+  background: linear-gradient(180deg,#ffe199,#ffd36c); border-radius:6px 6px 0 0;
 }
-.folder-name { margin:0; font-weight:800; color:#1f2a44; }
-.folder-count { margin-left:auto; color:#2f5597; font-weight:700; font-size:.92rem; }
+
+/* ===== Single-album view ===== */
+.album-actions{
+  display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px;
+}
+.back-link{
+  display:inline-block; padding:.45rem .7rem; border:1px solid #d7e3ff; border-radius:8px;
+  color:#2f5597; font-weight:700; text-decoration:none; background:#fff;
+}
+.back-link:hover{ background:#f5f8ff; border-color:#2f5597; }
 
 /* Images grid (no captions) */
-.g-grid {
+.g-grid{
   display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: clamp(8px, 1.6vw, 16px); align-items:start;
-  padding:12px 2px 2px 2px;
 }
-.g-item { margin:0; padding:0; border-radius:12px; overflow:hidden; background:#f7f9fc; box-shadow:0 6px 24px rgba(2,24,71,.06); }
-.g-item img { width:100%; height:auto; display:block; aspect-ratio:16/10; object-fit:cover; transition: transform .25s ease; }
-.g-item:hover img { transform: scale(1.02); }
+.g-item{ margin:0; padding:0; border-radius:12px; overflow:hidden; background:#f7f9fc; box-shadow:0 6px 24px rgba(2,24,71,.06); }
+.g-item img{ width:100%; height:auto; display:block; aspect-ratio:16/10; object-fit:cover; transition: transform .25s ease; }
+.g-item:hover img{ transform: scale(1.02); }
 
-/* Hide/show image sections */
-.folder-images[hidden] { display:none !important; }
-
-/* Tiny helper */
-.m0 { margin:0; }
+/* Hide sections toggled by JS */
+#foldersView[hidden], .album-section[hidden]{ display:none !important; }
 </style>
 
 <!-- HERO -->
@@ -79,10 +89,10 @@ classes: "full-bleed"
 <!-- BODY -->
 <div class="full-bleed-row g-wrap">
 
-  {% comment %}
-    Collect unique subfolder names immediately under /assets/img/gallery/
-    Example path parts: ["", "assets", "img", "gallery", "<FOLDER>", "file.jpg"]
-  {% endcomment %}
+  {%- comment -%}
+    Gather all static files under /assets/img/gallery/, group by immediate subfolder.
+    Path parts: ["", "assets", "img", "gallery", "<FOLDER>", "file.ext"] -> folder index 4
+  {%- endcomment -%}
   {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/gallery/'" %}
   {% assign img_exts = ".jpg,.jpeg,.png,.webp,.gif,.JPG,.JPEG,.PNG,.WEBP,.GIF" %}
 
@@ -99,100 +109,82 @@ classes: "full-bleed"
       {% endif %}
     {% endif %}
   {% endfor %}
-
   {% assign folders = names | split:"||" | uniq | sort %}
   {% assign folders = folders | reject: "" %}
 
-  {% if folders.size == 0 %}
-    <p class="m0"><em>No images yet. Create subfolders inside <code>assets/img/gallery/</code> (one per event) and add images.</em></p>
-  {% else %}
-    <!-- Folder cards -->
-    <div class="folder-list" id="folderList">
-      {% for name in folders %}
-        {% assign slug = name | slugify %}
-        {% comment %} Count images in this folder {% endcomment %}
-        {% capture fprefix %}/assets/img/gallery/{{ name }}/{% endcapture %}
-        {% assign count = 0 %}
-        {% for fl in all %}
-          {% assign ext = fl.extname %}
-          {% if img_exts contains ext and fl.path contains fprefix %}
-            {% assign count = count | plus: 1 %}
-          {% endif %}
-        {% endfor %}
-
-        <button class="folder-card" type="button" data-folder="{{ slug }}" aria-expanded="false" aria-controls="images-{{ slug }}">
-          <span class="folder-icon" aria-hidden="true"></span>
-          <span class="folder-name">{{ name }}</span>
-          <span class="folder-count">{{ count }}</span>
-        </button>
-      {% endfor %}
-    </div>
-
-    <!-- Images per folder -->
-    {% for name in folders %}
-      {% assign slug = name | slugify %}
-      {% capture fprefix %}/assets/img/gallery/{{ name }}/{% endcapture %}
-      <section class="folder-images" id="images-{{ slug }}" data-folder="{{ slug }}" hidden>
-        <div class="g-grid">
-          {% for file in all %}
-            {% assign ext = file.extname %}
-            {% if img_exts contains ext and file.path contains fprefix %}
-              <figure class="g-item">
-                <img src="{{ file.path | relative_url }}" alt="Gallery image">
-              </figure>
+  <!-- ======= FOLDERS VIEW (square buttons) ======= -->
+  <section id="foldersView">
+    {% if folders.size == 0 %}
+      <p><em>No albums yet. Create subfolders inside <code>assets/img/gallery/</code> and add images.</em></p>
+    {% else %}
+      <div class="folder-grid">
+        {% for name in folders %}
+          {% capture fprefix %}/assets/img/gallery/{{ name }}/{% endcapture %}
+          {% assign count = 0 %}
+          {% for fl in all %}
+            {% assign ext = fl.extname %}
+            {% if img_exts contains ext and fl.path contains fprefix %}
+              {% assign count = count | plus: 1 %}
             {% endif %}
           {% endfor %}
-        </div>
-      </section>
-    {% endfor %}
-  {% endif %}
+          {% assign slug = name | slugify %}
+          <a class="folder-card" href="/gallery/?album={{ name | uri_escape }}" data-folder="{{ slug }}">
+            <span class="folder-name">{{ name }}</span>
+            <span class="badge">{{ count }}</span>
+            <span class="folder-glyph" aria-hidden="true"></span>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </section>
+
+  <!-- ======= ONE-ALBUM VIEW (all sections pre-rendered; JS shows one) ======= -->
+  {% for name in folders %}
+    {% capture fprefix %}/assets/img/gallery/{{ name }}/{% endcapture %}
+    {% assign slug = name | slugify %}
+    <section class="album-section" id="album-{{ slug }}" data-folder="{{ slug }}" hidden>
+      <div class="album-actions">
+        <a class="back-link" href="/gallery/">← Back to all albums</a>
+        <strong>{{ name }}</strong>
+      </div>
+      <div class="g-grid">
+        {% for file in all %}
+          {% assign ext = file.extname %}
+          {% if img_exts contains ext and file.path contains fprefix %}
+            <figure class="g-item">
+              <img src="{{ file.path | relative_url }}" alt="Gallery image">
+            </figure>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+  {% endfor %}
+
 </div>
 
 <script>
 (function(){
+  // Read ?album=<Folder Name> from URL
   const params = new URLSearchParams(location.search);
-  const desiredName = params.get('album'); // exact folder name support
+  const albumName = params.get('album'); // pretty name
+  if(!albumName){ return; }
+
+  // Find slug that matches this name (case-insensitive)
   const cards = Array.from(document.querySelectorAll('.folder-card[data-folder]'));
-  const sections = Array.from(document.querySelectorAll('.folder-images[data-folder]'));
-
-  function show(folderSlug){
-    cards.forEach(c => c.setAttribute('aria-expanded','false'));
-    sections.forEach(s => s.hidden = true);
-    const card = cards.find(c => c.dataset.folder === folderSlug);
-    const sec  = sections.find(s => s.dataset.folder === folderSlug);
-    if(card && sec){
-      card.setAttribute('aria-expanded','true');
-      sec.hidden = false;
-      setTimeout(()=> card.scrollIntoView({behavior:'smooth', block:'start'}), 50);
-      const name = card.querySelector('.folder-name')?.textContent?.trim() || '';
-      const url = new URL(location.href);
-      if(name){ url.searchParams.set('album', name); } else { url.searchParams.delete('album'); }
-      history.replaceState(null,'',url.toString());
-    }
-  }
-
-  // Map pretty name -> slug
   const byName = new Map(cards.map(c => [c.querySelector('.folder-name').textContent.trim().toLowerCase(), c.dataset.folder]));
+  const slug = byName.get(albumName.trim().toLowerCase());
+  if(!slug){ return; }
 
-  // Initial open: from ?album=, else first folder
-  let start = cards[0]?.dataset.folder || null;
-  if(desiredName){
-    const wanted = byName.get(desiredName.trim().toLowerCase());
-    if(wanted) start = wanted;
+  // Hide folders view, show the chosen album section
+  const foldersView = document.getElementById('foldersView');
+  const section = document.querySelector('.album-section[data-folder="'+slug+'"]');
+  if(foldersView && section){
+    foldersView.hidden = true;
+    section.hidden = false;
+    // make URL pretty (keeps album param for sharing)
+    const url = new URL(location.href);
+    url.searchParams.set('album', albumName.trim());
+    history.replaceState(null,'',url.toString());
   }
-  if(start) show(start);
-
-  // Click to toggle / open
-  cards.forEach(c => c.addEventListener('click', () => {
-    const isOpen = c.getAttribute('aria-expanded') === 'true';
-    if(isOpen){
-      c.setAttribute('aria-expanded','false');
-      const sec = sections.find(s => s.dataset.folder === c.dataset.folder);
-      if(sec) sec.hidden = true;
-      const url = new URL(location.href); url.searchParams.delete('album'); history.replaceState(null,'',url.toString());
-    }else{
-      show(c.dataset.folder);
-    }
-  }));
 })();
 </script>
