@@ -88,54 +88,56 @@ classes: "full-bleed"
 
 /* Photo header (real images) */
 .card .thumb {
-  min-height: 180px;
+  min-height: 200px;                 /* slightly taller for a more visual feel */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  aspect-ratio: 16/9;                 /* consistent crop across cards */
 }
 
 /* Title + actions below the photo */
 .card .meta {
-  padding: 14px 16px 16px;
+  padding: 12px 14px 14px;
   display:grid;
   grid-template-columns: 1fr auto;
-  gap: 12px;
+  gap: 10px;
   align-items:center;
+  border-top: 1px solid rgba(0,0,0,.06);
 }
 
-/* SIMPLE TITLE (plain letters, no colored cover) */
+/* SIMPLE TITLE: smaller + not bold */
 .card .title-text {
   margin: 0;
-  font-weight: 800;
-  font-size: 1rem;
-  line-height: 1.25;
-  color: #1f2937;   /* neutral dark */
+  font-weight: 400;                  /* normal weight (not bold) */
+  font-size: 0.95rem;                /* smaller text */
+  line-height: 1.3;
+  color: #1f2937;                    /* neutral dark */
 }
 
-@media (min-width: 900px){
-  .card .title-text { font-size: 1.05rem; }
+@media (max-width: 520px){
+  .card .title-text { font-size: 0.92rem; }
+}
+@media (min-width: 1100px){
+  .card .title-text { font-size: 0.98rem; }
 }
 
 /* Button */
 .card .btn {
   display:inline-block;
   line-height: 1;
-  padding: 10px 14px;
+  padding: 9px 13px;
   border-radius: 999px;
   background:#2f5597;
   color:#fff !important;
   text-decoration:none;
   font-weight:700;
-  font-size:.92rem;
+  font-size:.88rem;
   transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
   box-shadow: 0 4px 14px rgba(47,85,151,.22);
   white-space: nowrap;
 }
 .card .btn:hover { background:#2874c7; text-decoration:none; }
 .card .btn:active { transform: translateY(1px); }
-
-/* Optional: subtle divider line above meta */
-.card .meta { border-top: 1px solid rgba(0,0,0,.06); }
 </style>
 
 <!-- HERO -->
