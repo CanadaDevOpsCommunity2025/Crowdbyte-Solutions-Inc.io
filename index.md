@@ -233,7 +233,12 @@ time.cal::before{
   opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
 }
 .logo:hover{ transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
-
+.logo-track{
+  display:flex; align-items:center;
+  gap: clamp(22px, 3.2vw, 36px);  /* was 18–28/36px */
+  will-change: transform;
+  animation: sponsors-marquee-rtl 26s linear infinite;
+}
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 @media (max-width:480px){ .sponsors-note{ display:none; } }
 </style>
