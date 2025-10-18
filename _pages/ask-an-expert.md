@@ -110,7 +110,7 @@ classes: "full-bleed"
 
 <!-- HERO -->
 <div class="full-bleed-row hero">
-  <h1>Blogs, newsletters, reports, share knowledge and&nbsp;best practices</h1>
+  <h1> Connect with Our Experts for Guidance </h1>
 </div>
 
 <!-- MAIN -->
