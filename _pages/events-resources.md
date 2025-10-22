@@ -154,7 +154,6 @@ classes: "full-bleed"
   padding: 2px;
 }
 
-
 /* Fit images inside the tile without cropping */
 .logo{
   max-width: 100%;
@@ -168,6 +167,18 @@ classes: "full-bleed"
 
 @media (prefers-reduced-motion: reduce) { .logo-track { animation:none; } }
 @media (max-width:480px){ .sponsors-note { display:none; } }
+
+/* ===== OVERRIDE: Center sponsors note on its own line ===== */
+.sponsors-head{
+  justify-content: flex-start;   /* keep title left */
+  align-items: center;
+  flex-wrap: wrap;               /* allow a new row */
+  gap: 6px 12px;
+}
+.sponsors-note{
+  flex: 0 0 100%;                /* full-width row below title */
+  text-align: center;            /* centered text */
+}
 </style>
 
 <!-- HERO -->
@@ -253,17 +264,4 @@ classes: "full-bleed"
               <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
             </div>
           {%- endfor -%}
-          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
-          {%- for p in logos -%}
-            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <div class="logo-box">
-              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
-            </div>
-          {%- endfor -%}
-        </div>
-      </div>
-    {% else %}
-      <p style="margin:0.25rem 0 0.2rem;"><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
-    {% endif %}
-  </div>
-</div>
+          {%- comment -%} duplicate for se
