@@ -36,8 +36,6 @@ youtube_ids:
   display:flex; align-items:flex-start; justify-content:center;
   padding: 24px clamp(12px,3vw,36px) 40px;
 }
-
-/* Albums grid (BIGGER + MORE READABLE TITLES) */
 .albums-grid{
   width: 100%;
   max-width: 1280px;
@@ -52,6 +50,7 @@ youtube_ids:
   .albums-grid{ grid-template-columns: repeat(3, minmax(420px, 1fr)); }
 }
 
+/* Album card */
 .album-card{
   position:relative; overflow:hidden; border-radius:16px;
   background:#fff; border:1px solid rgba(0,0,0,.06);
@@ -77,7 +76,7 @@ youtube_ids:
   font-weight:900; letter-spacing:.2px;
   font-size: clamp(16px, 2.2vw, 24px);
   line-height: 1.15;
-  white-space: normal; /* allow wrap */
+  white-space: normal;
   text-shadow: 0 2px 10px rgba(0,0,0,.4);
 }
 .album-count{
@@ -95,7 +94,6 @@ youtube_ids:
   position:absolute; inset:0; display:flex; flex-direction:column; gap:10px;
   padding: clamp(10px,3vw,22px);
 }
-/* Keep bar above everything */
 .viewer-bar{
   position: relative; z-index: 5;
   display:flex; align-items:center; justify-content:space-between; gap:10px;
@@ -114,7 +112,7 @@ youtube_ids:
 }
 .viewer-close:hover{ background: rgba(0,0,0,.7); }
 
-/* ===== Horizontal strip (smaller visuals) ===== */
+/* ===== Horizontal strip (NORMAL/SMALLER visuals) ===== */
 .viewer-strip{
   position:relative; flex:1 1 auto; overflow-x:auto; overflow-y:hidden;
   scroll-snap-type: x mandatory; display:flex; gap:10px; padding: 6px 0;
@@ -124,10 +122,16 @@ youtube_ids:
   display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden;
   border:1px solid rgba(255,255,255,.15);
-  /* Smaller dimensions so images never feel huge */
-  width: min(84vw, 940px);
-  height: min(72vh, 640px);
+  /* Normal size — noticeably smaller than before */
+  width: min(72vw, 780px);
+  height: min(62vh, 520px);
   box-shadow: 0 18px 50px rgba(0,0,0,.45);
+}
+@media (max-width: 640px){
+  .viewer-item{
+    width: 92vw;
+    height: 56vh;
+  }
 }
 .viewer-item img, .viewer-item iframe{
   max-width: 100%; max-height: 100%;
@@ -161,7 +165,7 @@ youtube_ids:
 </section>
 
 <!-- ===== CENTERED ALBUMS ===== -->
-<section class="albums-stage" aria-label="Gallery albums">
+<section id="albumsStage" class="albums-stage" aria-label="Gallery albums" tabindex="-1">
   <div id="albumsGrid" class="albums-grid"></div>
 </section>
 
@@ -204,7 +208,7 @@ youtube_ids:
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <button type="button" class="viewer-close" id="viewerClose" aria-label="Close viewer">✕</button>
+      <button type="button" class="viewer-close" id="viewerClose" aria-label="Close viewer and return to Gallery">✕</button>
     </div>
 
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse">
@@ -221,6 +225,7 @@ youtube_ids:
 (function(){
   const pool = document.getElementById('mediaPool');
   const albumsGrid = document.getElementById('albumsGrid');
+  const albumsStage = document.getElementById('albumsStage');
 
   const medias = Array.from(pool.querySelectorAll('.media')).map(a => ({
     type: a.dataset.type,
@@ -326,8 +331,17 @@ youtube_ids:
 
     viewer.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow = 'hidden';
-    // Focus the close button for easy closing
+    // Focus the close button for quick closing
     setTimeout(()=> btnClose.focus(), 0);
+  }
+
+  function returnToAlbums(){
+    // Scroll/focus back to the main gallery grid
+    if (albumsStage) {
+      albumsStage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // ensure focus for keyboard users
+      setTimeout(()=> albumsStage.focus({preventScroll:true}), 350);
+    }
   }
 
   function closeViewer(){
@@ -335,6 +349,8 @@ youtube_ids:
     document.documentElement.style.overflow = '';
     // Stop any playing videos by resetting iframes
     viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
+    // Navigate user back to the main gallery section
+    returnToAlbums();
   }
 
   function next(){
@@ -353,13 +369,6 @@ youtube_ids:
   // Robust closing (multiple paths)
   btnClose.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); closeViewer(); });
   viewer.addEventListener('click', function(e){ if(e.target === viewer) closeViewer(); });
-  // Delegated catch-all: works even if another style interferes
-  document.addEventListener('click', function(e){
-    const closeEl = e.target.closest('#viewerClose');
-    if(closeEl && viewer.getAttribute('aria-hidden') === 'false'){
-      e.preventDefault(); e.stopPropagation(); closeViewer();
-    }
-  });
 
   // Keyboard (when viewer open)
   document.addEventListener('keydown', (e)=>{
