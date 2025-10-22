@@ -126,7 +126,7 @@ classes: "full-bleed"
     <!-- LEFT SECTION -->
     <div class="block">
       <h3>Schedule a Quick Overview</h3>
-      <p>Ask <strong>us</strong> about Crowdbyte Solutions or any questions around participating from creating a pull request to starting a bigger enhancement effort.
+      <p>Ask about Crowdbyte Solutions or any questions around participating from creating a pull request to starting a bigger enhancement effort.
         <a href="{{ site.baseurl }}/contact/">[link]</a>
       </p>
     </div>
