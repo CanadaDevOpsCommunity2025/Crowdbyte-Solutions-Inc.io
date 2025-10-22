@@ -20,21 +20,27 @@ youtube_ids:
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content { max-width: none !important; padding: 0 !important; }
 
-/* ===== No hero: remove space reserved by page title */
+/* Hide theme title to avoid duplicate H1 */
 .page__title { display:none !important; }
+
+/* ===== Blue header (hero) ===== */
+.g-hero {
+  width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
+  background: linear-gradient(135deg,#2f5597 0%,#2874c7 50%,#7fb0f0 100%);
+  color:#fff; text-align:center; padding: 34px 16px 24px;
+}
+.g-hero h1 { margin:0; font-weight:900; font-size: clamp(24px,3.6vw,40px); }
 
 /* ===== Centered content wrapper ===== */
 .albums-stage{
-  /* centers the gallery section and gives breathing room */
   display:flex; align-items:flex-start; justify-content:center;
-  min-height: 60vh;            /* feels centered on most screens */
   padding: 24px clamp(12px,3vw,36px) 40px;
 }
 
 /* Albums grid (BIGGER + MORE READABLE TITLES) */
 .albums-grid{
   width: 100%;
-  max-width: 1280px;           /* keeps the grid centered and tidy */
+  max-width: 1280px;
   margin: 0 auto;
   display:grid; gap:20px;
   grid-template-columns: repeat(1, minmax(320px, 1fr));
@@ -71,7 +77,7 @@ youtube_ids:
   font-weight:900; letter-spacing:.2px;
   font-size: clamp(16px, 2.2vw, 24px);
   line-height: 1.15;
-  white-space: normal; /* allow wrap to 2 lines */
+  white-space: normal; /* allow wrap */
   text-shadow: 0 2px 10px rgba(0,0,0,.4);
 }
 .album-count{
@@ -138,7 +144,12 @@ youtube_ids:
 .pagination, .pagination--pager { display:none !important; }
 </style>
 
-<!-- ===== CENTERED ALBUMS (no header hero) ===== -->
+<!-- ===== BLUE HEADER ===== -->
+<section class="g-hero" aria-labelledby="gallery-heading">
+  <h1 id="gallery-heading">Gallery</h1>
+</section>
+
+<!-- ===== CENTERED ALBUMS ===== -->
 <section class="albums-stage" aria-label="Gallery albums">
   <div id="albumsGrid" class="albums-grid"></div>
 </section>
