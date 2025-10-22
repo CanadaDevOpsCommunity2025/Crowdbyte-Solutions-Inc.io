@@ -211,7 +211,6 @@ time.cal::before{
 }
 
 /* UNIFORM TILES for every logo (same sizing as Events & Resources) */
-/* UNIFORM (BIGGER) TILES for every logo */
 .logo-box{
   flex: 0 0 auto;
   width: clamp(100px, 12vw, 140px);
@@ -241,7 +240,7 @@ time.cal::before{
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 @media (max-width:480px){ .sponsors-note{ display:none; } }
 
-/* ====== NEW: Hero inline layout + icon-only GitHub button ====== */
+/* ====== NEW: Hero inline layout + icon-only GitHub button (white) ====== */
 .hero-band-inner{
   max-width: 1200px;
   margin: 0 auto;
@@ -270,7 +269,24 @@ time.cal::before{
 .btn-hero--icon:hover{ background:rgba(255,255,255,.1); }
 .btn-hero--icon:focus{ outline:2px solid #99b3e6; outline-offset:2px; }
 .btn-hero--icon svg{ width:18px; height:18px; display:block; }
+
+/* ====== OVERRIDE: Center sponsors note on its own line ====== */
+.sponsors-head{
+  justify-content: flex-start;   /* title stays left */
+  align-items: center;
+  flex-wrap: wrap;               /* allow note to wrap to next line */
+  gap: 6px 12px;
+}
+.sponsors-title{
+  flex: 0 0 auto;                /* keep title inline left */
+}
+.sponsors-note{
+  flex: 0 0 100%;                /* full row under the title */
+  text-align: center;            /* centered text */
+}
 </style>
+
+
 
 <div class="hero-band">
   <div class="hero-band-inner">
@@ -470,6 +486,6 @@ time.cal::before{
   if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
   if (overlay) overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
   document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.getAttribute('aria-hidden')==='false') closeOverlay(); });
-  if (search) search.addEventListener('input', filter);
+  if (search) addEventListener('input', filter);
 })();
 </script>
