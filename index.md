@@ -222,7 +222,6 @@ time.cal::before{
   padding: 2px;
 }
 
-
 /* Images fit inside the tile without cropping */
 .logo{
   max-width: 100%;
@@ -242,7 +241,7 @@ time.cal::before{
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 @media (max-width:480px){ .sponsors-note{ display:none; } }
 
-/* ====== NEW: Hero inline layout + tiny icon-only GitHub button ====== */
+/* ====== NEW: Hero inline layout + icon-only GitHub button ====== */
 .hero-band-inner{
   max-width: 1200px;
   margin: 0 auto;
@@ -251,6 +250,13 @@ time.cal::before{
   justify-content: center;
   gap: 10px;                 /* snug spacing between H1 and icon */
   flex-wrap: wrap;           /* stacks nicely on small screens */
+}
+/* Force white icon regardless of theme link colors */
+.hero-band .btn-hero--icon,
+.hero-band .btn-hero--icon:link,
+.hero-band .btn-hero--icon:visited{
+  color:#fff !important;
+  border-color: rgba(255,255,255,.9) !important;
 }
 .btn-hero--icon{
   display:inline-flex; align-items:center; justify-content:center;
@@ -273,9 +279,9 @@ time.cal::before{
        href="https://github.com/CanadaDevOpsCommunity2025"
        target="_blank" rel="noopener noreferrer"
        aria-label="Open the CanadaDevOpsCommunity2025 GitHub organization">
-      <!-- GitHub mark (inherits currentColor = white) -->
-      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false" fill="currentColor">
-        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+      <!-- GitHub mark forced to white -->
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path fill="#fff" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
         0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
         -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07
         -.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08
