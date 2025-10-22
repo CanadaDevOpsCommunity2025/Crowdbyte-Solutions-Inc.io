@@ -366,7 +366,7 @@ time.cal::before{
   <div class="sponsors-inner">
     <div class="sponsors-head">
       <h3 class="sponsors-title">Sponsors</h3>
-      <p class="sponsors-note">Thank you to our partners powering the community.</p>
+      <p class="sponsors-note">Thank you to our partners powering the community</p>
     </div>
 
     {% comment %}
