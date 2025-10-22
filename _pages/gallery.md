@@ -1,7 +1,7 @@
 ---
 layout: single
 permalink: /gallery/
-title: "Gallery"
+title: ""
 classes: "full-bleed"
 sidebar: false
 
@@ -20,17 +20,22 @@ youtube_ids:
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content { max-width: none !important; padding: 0 !important; }
 
-/* Hero */
-.g-hero {
-  width: 100vw; margin-left: calc(50% - 50vw); margin-right: calc(50% - 50vw);
-  background: linear-gradient(135deg,#2f5597 0%,#2874c7 50%,#7fb0f0 100%);
-  color:#fff; text-align:center; padding: 34px 16px 24px;
+/* ===== No hero: remove space reserved by page title */
+.page__title { display:none !important; }
+
+/* ===== Centered content wrapper ===== */
+.albums-stage{
+  /* centers the gallery section and gives breathing room */
+  display:flex; align-items:flex-start; justify-content:center;
+  min-height: 60vh;            /* feels centered on most screens */
+  padding: 24px clamp(12px,3vw,36px) 40px;
 }
-.g-hero h1 { margin:0; font-weight:900; font-size: clamp(24px,3.6vw,40px); }
 
 /* Albums grid (BIGGER + MORE READABLE TITLES) */
-.albums-wrap { padding: 18px clamp(12px,3vw,36px) 40px; }
 .albums-grid{
+  width: 100%;
+  max-width: 1280px;           /* keeps the grid centered and tidy */
+  margin: 0 auto;
   display:grid; gap:20px;
   grid-template-columns: repeat(1, minmax(320px, 1fr));
 }
@@ -133,12 +138,8 @@ youtube_ids:
 .pagination, .pagination--pager { display:none !important; }
 </style>
 
-<!-- HERO -->
-<section class="g-hero" aria-labelledby="gallery-heading">
-  <h1 id="gallery-heading">Gallery</h1>
-</section>
-
-<section class="albums-wrap">
+<!-- ===== CENTERED ALBUMS (no header hero) ===== -->
+<section class="albums-stage" aria-label="Gallery albums">
   <div id="albumsGrid" class="albums-grid"></div>
 </section>
 
@@ -218,7 +219,7 @@ youtube_ids:
   };
   const getDisplayName = (folderName) => albumLabel[folderName] || folderName;
 
-  // Create album cards (bigger covers; clearer titles)
+  // Create album cards
   Object.keys(byAlbum).sort().forEach(albumName => {
     const items = byAlbum[albumName];
     const first = items[0];
