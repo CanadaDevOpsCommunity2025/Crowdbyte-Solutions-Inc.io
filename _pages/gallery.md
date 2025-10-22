@@ -84,7 +84,7 @@ youtube_ids:
   font-size: clamp(12px, 1.4vw, 14px);
 }
 
-/* ===== Viewer (overlay) — JS toggles display only ===== */
+/* ===== Viewer (overlay) — visibility controlled by JS + hashchange fallback ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background: rgba(6,12,24,.6); backdrop-filter: blur(6px);
@@ -101,16 +101,16 @@ youtube_ids:
 }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* ✕ Close button (fixed, top-right) */
+/* ✕ Close button (anchor; works even if JS listener fails) */
 .viewer-close{
   position: fixed; top: 16px; right: 16px;
   z-index: 2147483647;
-  background: rgba(0,0,0,.55); color:#fff; border:1px solid rgba(255,255,255,.45);
+  background: rgba(0,0,0,.65); color:#fff; border:1px solid rgba(255,255,255,.45);
   border-radius:999px; width:46px; height:46px; display:grid; place-items:center;
   text-decoration:none; font-weight:900; font-size:22px; line-height:1;
-  cursor:pointer;
+  cursor:pointer; pointer-events:auto;
 }
-.viewer-close:hover{ background: rgba(0,0,0,.7); }
+.viewer-close:hover{ background: rgba(0,0,0,.8); }
 
 /* Horizontal strip (normal visuals) */
 .viewer-strip{
@@ -141,17 +141,17 @@ youtube_ids:
   right: 16px; top: 50%; transform: translateY(-50%);
   display: flex; flex-direction: column; gap: 10px;
   z-index: 2147483000; /* under close button */
-  pointer-events: none; /* allow clicks only on buttons */
+  pointer-events: none;
 }
 .nav-btn{
   pointer-events: auto;
   width:48px; height:48px; border-radius:999px;
-  background: rgba(0,0,0,.45); color:#fff;
+  background: rgba(0,0,0,.55); color:#fff;
   border:1px solid rgba(255,255,255,.35); display:grid; place-items:center;
   cursor:pointer; font-size: 22px; line-height: 1;
   backdrop-filter: blur(2px);
 }
-.nav-btn:hover{ background: rgba(0,0,0,.6); }
+.nav-btn:hover{ background: rgba(0,0,0,.7); }
 
 /* Hide MM pager here */
 .pagination, .pagination--pager { display:none !important; }
@@ -194,6 +194,7 @@ youtube_ids:
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
+      <!-- IMPORTANT: real anchor (works without JS); JS also listens for hashchange -->
       <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
 
@@ -201,181 +202,4 @@ youtube_ids:
       <!-- items injected by JS -->
     </div>
   </div>
-  <!-- RIGHT-SIDE fixed nav (does not move with pictures) -->
-  <div class="viewer-nav-fixed" aria-hidden="false">
-    <button class="nav-btn" id="navPrev" aria-label="Previous">‹</button>
-    <button class="nav-btn" id="navNext" aria-label="Next">›</button>
-  </div>
-</div>
-
-<script>
-(function(){
-  const pool        = document.getElementById('mediaPool');
-  const albumsGrid  = document.getElementById('albumsGrid');
-  const viewer      = document.getElementById('viewer');
-  const viewerTitle = document.getElementById('viewerTitle');
-  const viewerStrip = document.getElementById('viewerStrip');
-  const btnClose    = document.getElementById('viewerClose');
-  const btnPrev     = document.getElementById('navPrev');
-  const btnNext     = document.getElementById('navNext');
-
-  const medias = Array.from(pool.querySelectorAll('.media')).map(a => ({
-    type: a.dataset.type,
-    album: a.dataset.album,
-    href: a.getAttribute('href')
-  }));
-
-  // Group by album
-  const byAlbum = {};
-  for (const m of medias) (byAlbum[m.album] ||= []).push(m);
-
-  // Optional display-name mapping (folder name -> label)
-  const albumLabel = {
-    "DevOps for Gen AI Ottawa": "DevOps for Gen AI — Ottawa"
-  };
-  const getDisplayName = (folderName) => albumLabel[folderName] || folderName;
-
-  // Create album cards
-  Object.keys(byAlbum).sort().forEach(albumName => {
-    const items = byAlbum[albumName];
-    const first = items[0];
-
-    // Cover image
-    let coverSrc = '';
-    if (first.type === 'image') {
-      coverSrc = first.href;
-    } else {
-      const imgInAlbum = items.find(i => i.type === 'image');
-      coverSrc = imgInAlbum ? imgInAlbum.href
-                            : `https://img.youtube.com/vi/${(first.href.split('/embed/')[1]||'').split(/[?&]/)[0]}/hqdefault.jpg`;
-    }
-
-    const card = document.createElement('article');
-    card.className = 'album-card';
-    card.setAttribute('data-album', albumName);
-    card.innerHTML = `
-      <img class="album-cover" src="${coverSrc}" alt="${getDisplayName(albumName)}">
-      <div class="album-meta">
-        <span class="album-name">${getDisplayName(albumName)}</span>
-        <span class="album-count">${items.length}</span>
-      </div>
-    `;
-    card.addEventListener('click', () => openViewer(albumName));
-    albumsGrid.appendChild(card);
-  });
-
-  /* ========== Viewer logic (JS toggles display only) ========== */
-  let currentIndex = 0;
-  let currentItems = [];
-
-  function buildItemEl(item){
-    const wrap = document.createElement('div');
-    wrap.className = 'viewer-item';
-    if(item.type === 'image'){
-      const img = document.createElement('img');
-      img.src = item.href;
-      img.alt = '';
-      wrap.appendChild(img);
-    }else{
-      const iframe = document.createElement('iframe');
-      iframe.src = item.href;
-      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-      iframe.referrerPolicy = "strict-origin-when-cross-origin";
-      iframe.allowFullscreen = true;
-      wrap.appendChild(iframe);
-    }
-    return wrap;
-  }
-
-  function openViewer(albumName){
-    viewerTitle.textContent = getDisplayName(albumName);
-
-    // Build strip fresh
-    viewerStrip.innerHTML = '';
-    currentItems = byAlbum[albumName] || [];
-    currentItems.forEach(item => viewerStrip.appendChild(buildItemEl(item)));
-
-    currentIndex = 0;
-
-    // Show overlay
-    viewer.style.display = 'block';
-    document.documentElement.style.overflow = 'hidden';
-
-    // Scroll to the first item
-    setTimeout(()=>{
-      const first = viewerStrip.querySelector('.viewer-item');
-      if (first) first.scrollIntoView({behavior:'instant', inline:'center', block:'nearest'});
-      btnClose.focus();
-    }, 0);
-
-    // Update URL (so Back button can close)
-    if (location.hash !== '#viewer') {
-      history.pushState({ viewer: true }, '', '#viewer');
-    }
-  }
-
-  function closeViewer(){
-    // Hide overlay
-    viewer.style.display = 'none';
-    document.documentElement.style.overflow = '';
-
-    // Stop any playing videos
-    viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
-
-    // Normalize URL to gallery anchor
-    if (location.hash !== '#gallery-home') {
-      history.replaceState(null, '', '#gallery-home');
-    }
-
-    // Return focus/scroll to the grid
-    const gridSection = document.getElementById('gallery-home');
-    if (gridSection) {
-      gridSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(()=> gridSection.focus({ preventScroll: true }), 250);
-    }
-  }
-
-  function goTo(index){
-    const items = Array.from(viewerStrip.querySelectorAll('.viewer-item'));
-    if (!items.length) return;
-    currentIndex = (index + items.length) % items.length;
-    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-  }
-  function next(){ goTo(currentIndex + 1); }
-  function prev(){ goTo(currentIndex - 1); }
-
-  // Keep currentIndex roughly in sync as user scrolls manually
-  viewerStrip.addEventListener('scroll', ()=>{
-    const items = Array.from(viewerStrip.querySelectorAll('.viewer-item'));
-    const containerLeft = viewerStrip.getBoundingClientRect().left;
-    let best = 0, bestDist = Infinity;
-    items.forEach((el, i)=>{
-      const d = Math.abs(el.getBoundingClientRect().left - containerLeft);
-      if (d < bestDist) { bestDist = d; best = i; }
-    });
-    currentIndex = best;
-  }, { passive: true });
-
-  /* ——— Interactions ——— */
-  // Close
-  btnClose.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); closeViewer(); });
-  viewer.addEventListener('click', (e)=>{ if (e.target === viewer) closeViewer(); });
-
-  // Keyboard
-  document.addEventListener('keydown', (e)=>{
-    if (viewer.style.display !== 'block') return;
-    if (e.key === 'Escape') closeViewer();
-    else if (e.key === 'ArrowRight') next();
-    else if (e.key === 'ArrowLeft') prev();
-  });
-
-  // Right-side fixed nav
-  btnNext.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); next(); });
-  btnPrev.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); prev(); });
-
-  // Back button should close the viewer (if open)
-  window.addEventListener('popstate', ()=>{
-    if (viewer.style.display === 'block') closeViewer();
-  });
-})();
-</script>
+  <!
