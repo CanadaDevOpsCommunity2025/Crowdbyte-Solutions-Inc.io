@@ -142,8 +142,11 @@ youtube_ids:
       {% assign rel = f.path | remove: root %}
       {% assign album = rel | split:'/' | first %}
       {% if album == rel %}{% assign album = "Photos" %}{% endif %}
-      <!-- IMPORTANT: preserve folder name EXACTLY (no | capitalize) -->
-      <a class="media" data-type="image" data-album="{{ album }}" href="{{ f.path | relative_url }}"></a>
+      <!-- IMPORTANT: preserve folder name EXACTLY and URL-ENCODE the href -->
+      <a class="media"
+         data-type="image"
+         data-album="{{ album }}"
+         href="{{ f.path | relative_url | uri_escape }}"></a>
     {% endif %}
   {% endfor %}
 
@@ -184,7 +187,7 @@ youtube_ids:
   const medias = Array.from(pool.querySelectorAll('.media')).map(a => ({
     type: a.dataset.type,
     album: a.dataset.album,   // exact folder name preserved (incl. spaces)
-    href: a.getAttribute('href')
+    href: a.getAttribute('href') // already URL-encoded by Liquid
   }));
 
   // Group by album
@@ -195,13 +198,9 @@ youtube_ids:
   }
 
   // Optional display-name mapping (folder name -> label)
-  // Add/adjust entries here as you create more albums.
   const albumLabel = {
     "DevOps for Gen AI Ottawa": "DevOps for Gen AI — Ottawa"
-    // "hackathons-2025": "Hackathons 2025"
   };
-
-  // Helper to get display name
   const getDisplayName = (folderName) => albumLabel[folderName] || folderName;
 
   // Create album cards
@@ -212,7 +211,7 @@ youtube_ids:
     // Cover: for images use the image; for videos use YouTube thumbnail (fallback)
     let coverSrc = '';
     if(first.type === 'image') {
-      coverSrc = first.href;
+      coverSrc = first.href; // already encoded
     } else {
       const imgInAlbum = items.find(i => i.type === 'image');
       if(imgInAlbum) coverSrc = imgInAlbum.href;
@@ -250,4 +249,78 @@ youtube_ids:
 
   function buildItemEl(item){
     const wrap = document.createElement('div');
-    wrap.cla
+    wrap.className = 'viewer-item';
+    if(item.type === 'image'){
+      const img = document.createElement('img');
+      img.src = item.href; // encoded
+      img.alt = '';
+      wrap.appendChild(img);
+    }else{
+      const iframe = document.createElement('iframe');
+      iframe.src = item.href;
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+      wrap.appendChild(iframe);
+    }
+    return wrap;
+  }
+
+  function openViewer(albumName){
+    currentAlbum = albumName;
+    currentIndex = 0;
+    viewerTitle.textContent = getDisplayName(albumName);
+
+    // Rebuild strip contents
+    viewerStrip.innerHTML = `
+      <div class="viewer-nav">
+        <button class="nav-btn nav-prev" id="navPrev" aria-label="Previous">‹</button>
+        <button class="nav-btn nav-next" id="navNext" aria-label="Next">›</button>
+      </div>
+    `;
+    const items = byAlbum[albumName] || [];
+    const nav = viewerStrip.querySelector('.viewer-nav');
+    items.forEach(item => viewerStrip.insertBefore(buildItemEl(item), nav));
+
+    // Wire up nav after rebuild
+    viewerStrip.querySelector('#navPrev').addEventListener('click', prev);
+    viewerStrip.querySelector('#navNext').addEventListener('click', next);
+
+    viewer.setAttribute('aria-hidden','false');
+    document.documentElement.style.overflow = 'hidden';
+    setTimeout(()=> viewerStrip.focus(), 0);
+  }
+
+  function closeViewer(){
+    viewer.setAttribute('aria-hidden','true');
+    document.documentElement.style.overflow = '';
+    // Stop any playing videos by resetting iframes
+    viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
+  }
+
+  function next(){
+    const items = Array.from(viewerStrip.querySelectorAll('.viewer-item'));
+    if(!items.length) return;
+    currentIndex = (currentIndex + 1) % items.length;
+    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+  function prev(){
+    const items = Array.from(viewerStrip.querySelectorAll('.viewer-item'));
+    if(!items.length) return;
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+
+  // Close + outside click close
+  btnClose.addEventListener('click', closeViewer);
+  viewer.addEventListener('click', (e) => { if(e.target === viewer) closeViewer(); });
+
+  // Keyboard (when viewer open)
+  document.addEventListener('keydown', (e)=>{
+    if(viewer.getAttribute('aria-hidden') === 'true') return;
+    if(e.key === 'Escape') closeViewer();
+    else if(e.key === 'ArrowRight') next();
+    else if(e.key === 'ArrowLeft') prev();
+  });
+})();
+</script>
