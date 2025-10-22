@@ -84,12 +84,19 @@ youtube_ids:
   font-size: clamp(12px, 1.4vw, 14px);
 }
 
-/* ===== Viewer (modal with horizontal scroll) ===== */
+/* ===== Viewer (pure CSS show/hide using :target) ===== */
+/* Default hidden */
+#viewer { display:none; }
+/* Visible when URL hash is #viewer */
+#viewer:target { display:block; }
+
+/* When open, prevent page scroll in modern browsers */
+html:has(#viewer:target) { overflow: hidden; }
+
 #viewer{
-  position:fixed; inset:0; z-index:9999; display:none;
+  position:fixed; inset:0; z-index:9999;
   background: rgba(6,12,24,.6); backdrop-filter: blur(6px);
 }
-#viewer[aria-hidden="false"]{ display:block; }
 .viewer-inner{
   position:absolute; inset:0; display:flex; flex-direction:column; gap:10px;
   padding: clamp(10px,3vw,22px);
@@ -101,7 +108,7 @@ youtube_ids:
 }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* ✕ Close link — fixed, top-right, works even without JS */
+/* ✕ Close link — fixed, top-right, no JS required */
 .viewer-close{
   position: fixed; top: 16px; right: 16px;
   z-index: 2147483647;
@@ -111,7 +118,7 @@ youtube_ids:
 }
 .viewer-close:hover{ background: rgba(0,0,0,.7); }
 
-/* ===== Horizontal strip (NORMAL visuals) ===== */
+/* Horizontal strip (normal visuals) */
 .viewer-strip{
   position:relative; flex:1 1 auto; overflow-x:auto; overflow-y:hidden;
   scroll-snap-type: x mandatory; display:flex; gap:10px; padding: 6px 0;
@@ -121,12 +128,12 @@ youtube_ids:
   display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden;
   border:1px solid rgba(255,255,255,.15);
-  width: min(68vw, 720px);
-  height: min(58vh, 480px);
+  width: min(66vw, 700px);
+  height: min(56vh, 460px);
   box-shadow: 0 18px 50px rgba(0,0,0,.45);
 }
 @media (max-width: 640px){
-  .viewer-item{ width: 90vw; height: 54vh; }
+  .viewer-item{ width: 90vw; height: 52vh; }
 }
 .viewer-item img, .viewer-item iframe{
   max-width: 100%; max-height: 100%;
@@ -186,14 +193,13 @@ youtube_ids:
   {% endif %}
 </div>
 
-<!-- Viewer Modal -->
-<div id="viewer" aria-hidden="true" aria-label="Album viewer">
+<!-- Viewer Modal (shows only when hash == #viewer thanks to :target) -->
+<div id="viewer" aria-label="Album viewer">
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-
-      <!-- IMPORTANT: anchor link; works w/ or w/o JS -->
-      <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
+      <!-- IMPORTANT: anchor link; hides viewer with pure CSS -->
+      <a class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
 
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse">
@@ -265,10 +271,9 @@ youtube_ids:
   });
 
   // Elements
-  const viewer     = document.getElementById('viewer');
-  const viewerTitle= document.getElementById('viewerTitle');
-  const viewerStrip= document.getElementById('viewerStrip');
-  const btnClose   = document.getElementById('viewerClose');
+  const viewer      = document.getElementById('viewer');
+  const viewerTitle = document.getElementById('viewerTitle');
+  const viewerStrip = document.getElementById('viewerStrip');
 
   let currentAlbum = '';
   let currentIndex = 0;
@@ -312,42 +317,14 @@ youtube_ids:
     viewerStrip.querySelector('#navPrev').addEventListener('click', prev);
     viewerStrip.querySelector('#navNext').addEventListener('click', next);
 
-    // Show viewer
-    viewer.setAttribute('aria-hidden','false');
-    document.documentElement.style.overflow = 'hidden';
+    // Show viewer by setting the hash; CSS :target takes over
+    if (location.hash !== '#viewer') location.hash = '#viewer';
 
-    // Push hash so Back button & hashchange can close viewer
-    if (location.hash !== '#viewer') {
-      history.pushState({ viewer: true }, '', '#viewer');
-    }
-
-    setTimeout(()=> btnClose.focus(), 0);
-  }
-
-  function returnToAlbums(){
-    const home = document.getElementById('gallery-home');
-    if (home) {
-      if (location.hash !== '#gallery-home') {
-        history.replaceState(null, '', '#gallery-home');
-      }
-      home.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(()=> home.focus({ preventScroll: true }), 300);
-    }
-  }
-
-  function closeViewer(){
-    viewer.setAttribute('aria-hidden','true');
-    document.documentElement.style.overflow = '';
-
-    // Stop any playing videos by resetting iframes
-    viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
-
-    // If we were in #viewer state, ensure URL points back to gallery anchor
-    if (location.hash === '#viewer') {
-      history.replaceState(null, '', '#gallery-home');
-    }
-
-    returnToAlbums();
+    // Focus hint (not required for close to work)
+    setTimeout(()=>{
+      const closeLink = viewer.querySelector('.viewer-close');
+      if (closeLink) closeLink.focus();
+    }, 0);
   }
 
   function next(){
@@ -363,34 +340,13 @@ youtube_ids:
     items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
 
-  /* --- Closing interactions --- */
-
-  // 1) Click the ✕ (anchor) — prevent default scroll jump, then close
-  btnClose.addEventListener('click', (e)=>{
-    e.preventDefault(); e.stopPropagation();
-    closeViewer();
-  });
-
-  // 2) Click the dark backdrop
-  viewer.addEventListener('click', (e)=>{ if (e.target === viewer) closeViewer(); });
-
-  // 3) Keyboard
-  document.addEventListener('keydown', (e)=>{
-    if(viewer.getAttribute('aria-hidden') === 'true') return;
-    if(e.key === 'Escape') closeViewer();
-    else if(e.key === 'ArrowRight') next();
-    else if(e.key === 'ArrowLeft') prev();
-  });
-
-  // 4) Browser Back button OR any hash change away from #viewer
-  window.addEventListener('popstate', ()=>{
-    if (viewer.getAttribute('aria-hidden') === 'false') {
-      closeViewer();
-    }
-  });
+  // If someone navigates away from #viewer (e.g., clicks ✕), we can stop any playing videos
   window.addEventListener('hashchange', ()=>{
-    if (location.hash !== '#viewer' && viewer.getAttribute('aria-hidden') === 'false') {
-      closeViewer();
+    if (location.hash !== '#viewer') {
+      viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
+      // also set focus back to gallery grid for accessibility
+      const home = document.getElementById('gallery-home');
+      if (home) setTimeout(()=> home.focus({preventScroll:true}), 150);
     }
   });
 })();
