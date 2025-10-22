@@ -28,23 +28,27 @@ youtube_ids:
 }
 .g-hero h1 { margin:0; font-weight:900; font-size: clamp(24px,3.6vw,40px); }
 
-/* Albums grid */
+/* Albums grid (BIGGER + MORE READABLE TITLES) */
 .albums-wrap { padding: 18px clamp(12px,3vw,36px) 40px; }
 .albums-grid{
-  display:grid; gap:16px;
-  grid-template-columns: repeat(2, 1fr);
+  display:grid; gap:20px;
+  grid-template-columns: repeat(1, minmax(320px, 1fr));
 }
-@media (min-width: 800px){ .albums-grid{ grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 1200px){ .albums-grid{ grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 800px){
+  .albums-grid{ grid-template-columns: repeat(2, minmax(380px, 1fr)); }
+}
+@media (min-width: 1200px){
+  .albums-grid{ grid-template-columns: repeat(3, minmax(420px, 1fr)); }
+}
 
 .album-card{
-  position:relative; overflow:hidden; border-radius:14px;
+  position:relative; overflow:hidden; border-radius:16px;
   background:#fff; border:1px solid rgba(0,0,0,.06);
   box-shadow: 0 12px 36px rgba(2,24,71,.07);
   cursor:pointer;
 }
 .album-cover{
-  width:100%; aspect-ratio: 4/3; object-fit:cover; display:block;
+  width:100%; aspect-ratio: 16/10; object-fit:cover; display:block;
   transition: transform .25s ease;
 }
 .album-card:hover .album-cover{ transform: scale(1.03); }
@@ -52,12 +56,23 @@ youtube_ids:
 .album-meta{
   position:absolute; left:10px; bottom:10px; right:10px;
   display:flex; align-items:center; justify-content:space-between; gap:8px;
-  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(6,18,38,.55) 60%, rgba(6,18,38,.75) 100%);
-  color:#eaf1ff; border-radius:10px; padding:8px 10px;
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%,
+                                      rgba(6,18,38,.50) 50%,
+                                      rgba(6,18,38,.80) 100%);
+  color:#eaf1ff; border-radius:12px; padding:12px 14px;
   backdrop-filter: blur(2px);
 }
-.album-name{ font-weight:900; letter-spacing:.2px; }
-.album-count{ font-weight:800; opacity:.9; }
+.album-name{
+  font-weight:900; letter-spacing:.2px;
+  font-size: clamp(16px, 2.2vw, 24px);
+  line-height: 1.15;
+  white-space: normal; /* allow wrap to 2 lines */
+  text-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+.album-count{
+  font-weight:800; opacity:.9;
+  font-size: clamp(12px, 1.4vw, 14px);
+}
 
 /* Viewer (modal with horizontal scroll) */
 #viewer{
@@ -203,7 +218,7 @@ youtube_ids:
   };
   const getDisplayName = (folderName) => albumLabel[folderName] || folderName;
 
-  // Create album cards
+  // Create album cards (bigger covers; clearer titles)
   Object.keys(byAlbum).sort().forEach(albumName => {
     const items = byAlbum[albumName];
     const first = items[0];
@@ -211,7 +226,7 @@ youtube_ids:
     // Cover: for images use the image; for videos use YouTube thumbnail (fallback)
     let coverSrc = '';
     if(first.type === 'image') {
-      coverSrc = first.href; // already encoded
+      coverSrc = first.href; // encoded
     } else {
       const imgInAlbum = items.find(i => i.type === 'image');
       if(imgInAlbum) coverSrc = imgInAlbum.href;
