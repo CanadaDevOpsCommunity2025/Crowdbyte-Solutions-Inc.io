@@ -131,11 +131,10 @@ classes: "full-bleed"
 .logo-marquee { position:relative; overflow:hidden; }
 .logo-track{
   display:flex; align-items:center;
-  gap: clamp(18px, 3vw, 28px); /* or 36px on events page if you had that */
+  gap: clamp(18px, 3vw, 28px);
   will-change: transform;
   animation: sponsors-marquee-rtl 26s linear infinite;
 }
-
 .logo-track:hover { animation-play-state: paused; }
 @keyframes sponsors-marquee-rtl {
   from { transform: translateX(0); }
@@ -143,7 +142,6 @@ classes: "full-bleed"
 }
 
 /* UNIFORM TILES for every logo */
-/* UNIFORM (BIGGER) TILES for every logo */
 .logo-box{
   flex: 0 0 auto;
   width: clamp(100px, 12vw, 140px);
@@ -168,17 +166,11 @@ classes: "full-bleed"
 @media (prefers-reduced-motion: reduce) { .logo-track { animation:none; } }
 @media (max-width:480px){ .sponsors-note { display:none; } }
 
-/* ===== OVERRIDE: Center sponsors note on its own line ===== */
-.sponsors-head{
-  justify-content: flex-start;   /* keep title left */
-  align-items: center;
-  flex-wrap: wrap;               /* allow a new row */
-  gap: 6px 12px;
-}
-.sponsors-note{
-  flex: 0 0 100%;                /* full-width row below title */
-  text-align: center;            /* centered text */
-}
+/* ===== OVERRIDE: Center sponsors note safely ===== */
+/* Minimal, robust approach: make the header block-level so note centers */
+.sponsors-head { display:block; }
+.sponsors-title { margin:0 0 4px 0; text-align:left; }
+.sponsors-note { text-align:center; }
 </style>
 
 <!-- HERO -->
@@ -264,4 +256,17 @@ classes: "full-bleed"
               <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
             </div>
           {%- endfor -%}
-          {%- comment -%} duplicate for se
+          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <div class="logo-box">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    {% else %}
+      <p style="margin:0.25rem 0 0.2rem;"><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
+    {% endif %}
+  </div>
+</div>
