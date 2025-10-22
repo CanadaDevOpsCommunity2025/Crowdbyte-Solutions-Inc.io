@@ -103,14 +103,16 @@ youtube_ids:
 }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* Rock-solid close button */
+/* ✕ Close button — fixed, top-right, max z-index */
 .viewer-close{
-  position: fixed; top: 14px; right: 14px; z-index: 99999;
-  background: rgba(0,0,0,.35); color:#fff; border:1px solid rgba(255,255,255,.45);
-  border-radius:999px; width:44px; height:44px; display:grid; place-items:center; cursor:pointer;
-  line-height: 1; font-size: 20px; font-weight: 900;
+  position: fixed; top: 16px; right: 16px;
+  z-index: 2147483647; /* max safe */
+  background: rgba(0,0,0,.55); color:#fff; border:1px solid rgba(255,255,255,.45);
+  border-radius:999px; width:46px; height:46px; display:grid; place-items:center; cursor:pointer;
+  line-height: 1; font-size: 22px; font-weight: 900;
+  pointer-events: auto;
 }
-.viewer-close:hover{ background: rgba(0,0,0,.5); }
+.viewer-close:hover{ background: rgba(0,0,0,.7); }
 
 /* ===== Horizontal strip (smaller visuals) ===== */
 .viewer-strip{
@@ -122,13 +124,12 @@ youtube_ids:
   display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden;
   border:1px solid rgba(255,255,255,.15);
-  /* Smaller dimensions for better fit */
-  width: min(88vw, 1000px);
-  height: min(76vh, 700px);
+  /* Smaller dimensions so images never feel huge */
+  width: min(84vw, 940px);
+  height: min(72vh, 640px);
   box-shadow: 0 18px 50px rgba(0,0,0,.45);
 }
 .viewer-item img, .viewer-item iframe{
-  /* Keep inside the box neatly */
   max-width: 100%; max-height: 100%;
   width: auto; height: auto;
   object-fit: contain; display:block; border:0; background:#000;
@@ -203,7 +204,7 @@ youtube_ids:
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <button type="button" class="viewer-close" id="viewerClose" aria-label="Close">✕</button>
+      <button type="button" class="viewer-close" id="viewerClose" aria-label="Close viewer">✕</button>
     </div>
 
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse">
@@ -223,8 +224,8 @@ youtube_ids:
 
   const medias = Array.from(pool.querySelectorAll('.media')).map(a => ({
     type: a.dataset.type,
-    album: a.dataset.album,   // exact folder name preserved (incl. spaces)
-    href: a.getAttribute('href') // already URL-encoded by Liquid
+    album: a.dataset.album,
+    href: a.getAttribute('href')
   }));
 
   // Group by album
@@ -325,7 +326,8 @@ youtube_ids:
 
     viewer.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow = 'hidden';
-    setTimeout(()=> viewerStrip.focus(), 0);
+    // Focus the close button for easy closing
+    setTimeout(()=> btnClose.focus(), 0);
   }
 
   function closeViewer(){
@@ -348,9 +350,16 @@ youtube_ids:
     items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
 
-  // Close + outside click close
-  btnClose.addEventListener('click', (e) => { e.stopPropagation(); closeViewer(); });
-  viewer.addEventListener('click', (e) => { if(e.target === viewer) closeViewer(); });
+  // Robust closing (multiple paths)
+  btnClose.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); closeViewer(); });
+  viewer.addEventListener('click', function(e){ if(e.target === viewer) closeViewer(); });
+  // Delegated catch-all: works even if another style interferes
+  document.addEventListener('click', function(e){
+    const closeEl = e.target.closest('#viewerClose');
+    if(closeEl && viewer.getAttribute('aria-hidden') === 'false'){
+      e.preventDefault(); e.stopPropagation(); closeViewer();
+    }
+  });
 
   // Keyboard (when viewer open)
   document.addEventListener('keydown', (e)=>{
