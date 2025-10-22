@@ -112,7 +112,7 @@ youtube_ids:
 }
 .viewer-close:hover{ background: rgba(0,0,0,.7); }
 
-/* ===== Horizontal strip (NORMAL/SMALLER visuals) ===== */
+/* ===== Horizontal strip (NORMAL visuals) ===== */
 .viewer-strip{
   position:relative; flex:1 1 auto; overflow-x:auto; overflow-y:hidden;
   scroll-snap-type: x mandatory; display:flex; gap:10px; padding: 6px 0;
@@ -122,7 +122,6 @@ youtube_ids:
   display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden;
   border:1px solid rgba(255,255,255,.15);
-  /* Normal size — noticeably smaller than before */
   width: min(72vw, 780px);
   height: min(62vh, 520px);
   box-shadow: 0 18px 50px rgba(0,0,0,.45);
@@ -165,7 +164,7 @@ youtube_ids:
 </section>
 
 <!-- ===== CENTERED ALBUMS ===== -->
-<section id="albumsStage" class="albums-stage" aria-label="Gallery albums" tabindex="-1">
+<section id="gallery-home" class="albums-stage" aria-label="Gallery albums" tabindex="-1">
   <div id="albumsGrid" class="albums-grid"></div>
 </section>
 
@@ -225,7 +224,7 @@ youtube_ids:
 (function(){
   const pool = document.getElementById('mediaPool');
   const albumsGrid = document.getElementById('albumsGrid');
-  const albumsStage = document.getElementById('albumsStage');
+  const galleryHome = document.getElementById('gallery-home');
 
   const medias = Array.from(pool.querySelectorAll('.media')).map(a => ({
     type: a.dataset.type,
@@ -314,7 +313,7 @@ youtube_ids:
     currentIndex = 0;
     viewerTitle.textContent = getDisplayName(albumName);
 
-    // Rebuild strip contents
+    // Build strip
     viewerStrip.innerHTML = `
       <div class="viewer-nav">
         <button class="nav-btn nav-prev" id="navPrev" aria-label="Previous">‹</button>
@@ -329,27 +328,42 @@ youtube_ids:
     viewerStrip.querySelector('#navPrev').addEventListener('click', prev);
     viewerStrip.querySelector('#navNext').addEventListener('click', next);
 
+    // Show viewer
     viewer.setAttribute('aria-hidden','false');
     document.documentElement.style.overflow = 'hidden';
-    // Focus the close button for quick closing
+
+    // Push hash so Back button closes viewer
+    if (location.hash !== '#viewer') {
+      history.pushState({ viewer: true }, '', '#viewer');
+    }
+
     setTimeout(()=> btnClose.focus(), 0);
   }
 
   function returnToAlbums(){
-    // Scroll/focus back to the main gallery grid
-    if (albumsStage) {
-      albumsStage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      // ensure focus for keyboard users
-      setTimeout(()=> albumsStage.focus({preventScroll:true}), 350);
+    const home = document.getElementById('gallery-home');
+    if (home) {
+      // Update URL to anchor (no reload)
+      if (location.hash !== '#gallery-home') {
+        history.replaceState(null, '', '#gallery-home');
+      }
+      home.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(()=> home.focus({ preventScroll: true }), 350);
     }
   }
 
   function closeViewer(){
     viewer.setAttribute('aria-hidden','true');
     document.documentElement.style.overflow = '';
+
     // Stop any playing videos by resetting iframes
     viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
-    // Navigate user back to the main gallery section
+
+    // If we were in #viewer state, replace it with #gallery-home
+    if (location.hash === '#viewer') {
+      history.replaceState(null, '', '#gallery-home');
+    }
+
     returnToAlbums();
   }
 
@@ -366,9 +380,9 @@ youtube_ids:
     items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
 
-  // Robust closing (multiple paths)
-  btnClose.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); closeViewer(); });
-  viewer.addEventListener('click', function(e){ if(e.target === viewer) closeViewer(); });
+  // Close interactions
+  btnClose.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); closeViewer(); });
+  viewer.addEventListener('click', (e)=>{ if (e.target === viewer) closeViewer(); });
 
   // Keyboard (when viewer open)
   document.addEventListener('keydown', (e)=>{
@@ -376,6 +390,13 @@ youtube_ids:
     if(e.key === 'Escape') closeViewer();
     else if(e.key === 'ArrowRight') next();
     else if(e.key === 'ArrowLeft') prev();
+  });
+
+  // Browser Back button should close the viewer
+  window.addEventListener('popstate', ()=>{
+    if (viewer.getAttribute('aria-hidden') === 'false') {
+      closeViewer();
+    }
   });
 })();
 </script>
