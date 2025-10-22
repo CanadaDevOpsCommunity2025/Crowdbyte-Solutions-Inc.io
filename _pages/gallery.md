@@ -84,18 +84,11 @@ youtube_ids:
   font-size: clamp(12px, 1.4vw, 14px);
 }
 
-/* ===== Viewer (pure CSS show/hide using :target) ===== */
-/* Default hidden */
-#viewer { display:none; }
-/* Visible when URL hash is #viewer */
-#viewer:target { display:block; }
-
-/* When open, prevent page scroll in modern browsers */
-html:has(#viewer:target) { overflow: hidden; }
-
+/* ===== Viewer (overlay) — JS toggles display only ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background: rgba(6,12,24,.6); backdrop-filter: blur(6px);
+  display: none; /* hidden by default */
 }
 .viewer-inner{
   position:absolute; inset:0; display:flex; flex-direction:column; gap:10px;
@@ -108,7 +101,7 @@ html:has(#viewer:target) { overflow: hidden; }
 }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* ✕ Close link — fixed, top-right, no JS required */
+/* ✕ Close button (real link for accessibility) */
 .viewer-close{
   position: fixed; top: 16px; right: 16px;
   z-index: 2147483647;
@@ -193,13 +186,12 @@ html:has(#viewer:target) { overflow: hidden; }
   {% endif %}
 </div>
 
-<!-- Viewer Modal (shows only when hash == #viewer thanks to :target) -->
+<!-- Viewer Modal -->
 <div id="viewer" aria-label="Album viewer">
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <!-- IMPORTANT: anchor link; hides viewer with pure CSS -->
-      <a class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
+      <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
 
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse">
@@ -213,8 +205,12 @@ html:has(#viewer:target) { overflow: hidden; }
 
 <script>
 (function(){
-  const pool = document.getElementById('mediaPool');
-  const albumsGrid = document.getElementById('albumsGrid');
+  const pool        = document.getElementById('mediaPool');
+  const albumsGrid  = document.getElementById('albumsGrid');
+  const viewer      = document.getElementById('viewer');
+  const viewerTitle = document.getElementById('viewerTitle');
+  const viewerStrip = document.getElementById('viewerStrip');
+  const btnClose    = document.getElementById('viewerClose');
 
   const medias = Array.from(pool.querySelectorAll('.media')).map(a => ({
     type: a.dataset.type,
@@ -224,9 +220,8 @@ html:has(#viewer:target) { overflow: hidden; }
 
   // Group by album
   const byAlbum = {};
-  for(const m of medias){
-    if(!byAlbum[m.album]) byAlbum[m.album] = [];
-    byAlbum[m.album].push(m);
+  for (const m of medias) {
+    (byAlbum[m.album] ||= []).push(m);
   }
 
   // Optional display-name mapping (folder name -> label)
@@ -242,41 +237,80 @@ html:has(#viewer:target) { overflow: hidden; }
 
     // Cover: for images use the image; for videos use YouTube thumbnail (fallback)
     let coverSrc = '';
-    if(first.type === 'image') {
-      coverSrc = first.href; // encoded
+    if (first.type === 'image') {
+      coverSrc = first.href;
     } else {
       const imgInAlbum = items.find(i => i.type === 'image');
-      if(imgInAlbum) coverSrc = imgInAlbum.href;
-      else {
-        const id = (first.href.split('/embed/')[1] || '').split(/[?&]/)[0];
-        coverSrc = id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : '';
-      }
+      coverSrc = imgInAlbum ? imgInAlbum.href
+                            : `https://img.youtube.com/vi/${(first.href.split('/embed/')[1]||'').split(/[?&]/)[0]}/hqdefault.jpg`;
     }
-
-    const displayName = getDisplayName(albumName);
-    const count = items.length;
 
     const card = document.createElement('article');
     card.className = 'album-card';
     card.setAttribute('data-album', albumName);
     card.innerHTML = `
-      <img class="album-cover" src="${coverSrc}" alt="${displayName}">
+      <img class="album-cover" src="${coverSrc}" alt="${getDisplayName(albumName)}">
       <div class="album-meta">
-        <span class="album-name">${displayName}</span>
-        <span class="album-count">${count}</span>
+        <span class="album-name">${getDisplayName(albumName)}</span>
+        <span class="album-count">${items.length}</span>
       </div>
     `;
     card.addEventListener('click', () => openViewer(albumName));
     albumsGrid.appendChild(card);
   });
 
-  // Elements
-  const viewer      = document.getElementById('viewer');
-  const viewerTitle = document.getElementById('viewerTitle');
-  const viewerStrip = document.getElementById('viewerStrip');
+  // Open / Close (JS toggles display ONLY)
+  function openViewer(albumName){
+    viewerTitle.textContent = getDisplayName(albumName);
 
-  let currentAlbum = '';
-  let currentIndex = 0;
+    // Build strip content fresh
+    viewerStrip.innerHTML = `
+      <div class="viewer-nav">
+        <button class="nav-btn nav-prev" id="navPrev" aria-label="Previous">‹</button>
+        <button class="nav-btn nav-next" id="navNext" aria-label="Next">›</button>
+      </div>
+    `;
+    const items = byAlbum[albumName] || [];
+    const nav = viewerStrip.querySelector('.viewer-nav');
+    items.forEach(item => viewerStrip.insertBefore(buildItemEl(item), nav));
+
+    // Show overlay
+    viewer.style.display = 'block';
+    document.documentElement.style.overflow = 'hidden';
+
+    // Focus the close link
+    setTimeout(()=> btnClose.focus(), 0);
+
+    // Wire nav buttons
+    viewerStrip.querySelector('#navPrev').addEventListener('click', prev);
+    viewerStrip.querySelector('#navNext').addEventListener('click', next);
+
+    // Update URL for back navigation (optional)
+    if (location.hash !== '#viewer') {
+      history.pushState({ viewer: true }, '', '#viewer');
+    }
+  }
+
+  function closeViewer(){
+    // Hide overlay
+    viewer.style.display = 'none';
+    document.documentElement.style.overflow = '';
+
+    // Stop any playing videos by resetting iframes
+    viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
+
+    // Normalize URL to gallery anchor
+    if (location.hash !== '#gallery-home') {
+      history.replaceState(null, '', '#gallery-home');
+    }
+
+    // Return focus to the grid
+    const gridSection = document.getElementById('gallery-home');
+    if (gridSection) {
+      gridSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(()=> gridSection.focus({ preventScroll: true }), 250);
+    }
+  }
 
   function buildItemEl(item){
     const wrap = document.createElement('div');
@@ -297,57 +331,39 @@ html:has(#viewer:target) { overflow: hidden; }
     return wrap;
   }
 
-  function openViewer(albumName){
-    currentAlbum = albumName;
-    currentIndex = 0;
-    viewerTitle.textContent = getDisplayName(albumName);
-
-    // Build strip
-    viewerStrip.innerHTML = `
-      <div class="viewer-nav">
-        <button class="nav-btn nav-prev" id="navPrev" aria-label="Previous">‹</button>
-        <button class="nav-btn nav-next" id="navNext" aria-label="Next">›</button>
-      </div>
-    `;
-    const items = byAlbum[albumName] || [];
-    const nav = viewerStrip.querySelector('.viewer-nav');
-    items.forEach(item => viewerStrip.insertBefore(buildItemEl(item), nav));
-
-    // Wire up nav after rebuild
-    viewerStrip.querySelector('#navPrev').addEventListener('click', prev);
-    viewerStrip.querySelector('#navNext').addEventListener('click', next);
-
-    // Show viewer by setting the hash; CSS :target takes over
-    if (location.hash !== '#viewer') location.hash = '#viewer';
-
-    // Focus hint (not required for close to work)
-    setTimeout(()=>{
-      const closeLink = viewer.querySelector('.viewer-close');
-      if (closeLink) closeLink.focus();
-    }, 0);
-  }
-
   function next(){
     const items = Array.from(viewerStrip.querySelectorAll('.viewer-item'));
     if(!items.length) return;
-    currentIndex = (currentIndex + 1) % items.length;
-    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+    const i = items.findIndex(el => el.getBoundingClientRect().left >= viewerStrip.getBoundingClientRect().left - 2);
+    const nextIndex = Math.min((i < 0 ? 0 : i + 1), items.length - 1);
+    items[nextIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
   function prev(){
     const items = Array.from(viewerStrip.querySelectorAll('.viewer-item'));
     if(!items.length) return;
-    currentIndex = (currentIndex - 1 + items.length) % items.length;
-    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+    const i = items.findIndex(el => el.getBoundingClientRect().left >= viewerStrip.getBoundingClientRect().left - 2);
+    const prevIndex = Math.max((i <= 0 ? 0 : i - 1), 0);
+    items[prevIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
 
-  // If someone navigates away from #viewer (e.g., clicks ✕), we can stop any playing videos
-  window.addEventListener('hashchange', ()=>{
-    if (location.hash !== '#viewer') {
-      viewerStrip.querySelectorAll('iframe').forEach(f => { f.src = f.src; });
-      // also set focus back to gallery grid for accessibility
-      const home = document.getElementById('gallery-home');
-      if (home) setTimeout(()=> home.focus({preventScroll:true}), 150);
-    }
+  /* Close interactions */
+  // Click the ✕ anchor (prevent default, then close)
+  btnClose.addEventListener('click', (e)=>{ e.preventDefault(); e.stopPropagation(); closeViewer(); });
+
+  // Click the dark backdrop
+  viewer.addEventListener('click', (e)=>{ if (e.target === viewer) closeViewer(); });
+
+  // Keyboard
+  document.addEventListener('keydown', (e)=>{
+    if (viewer.style.display !== 'block') return;
+    if (e.key === 'Escape') closeViewer();
+    else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'ArrowLeft') prev();
+  });
+
+  // Back button should close the viewer (if open)
+  window.addEventListener('popstate', ()=>{
+    if (viewer.style.display === 'block') closeViewer();
   });
 })();
 </script>
