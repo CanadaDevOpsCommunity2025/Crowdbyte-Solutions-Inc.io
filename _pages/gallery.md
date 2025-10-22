@@ -85,7 +85,7 @@ youtube_ids:
   font-size: clamp(12px, 1.4vw, 14px);
 }
 
-/* Viewer (modal with horizontal scroll) */
+/* ===== Viewer (modal with horizontal scroll) ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999; display:none;
   background: rgba(6,12,24,.6); backdrop-filter: blur(6px);
@@ -95,34 +95,43 @@ youtube_ids:
   position:absolute; inset:0; display:flex; flex-direction:column; gap:10px;
   padding: clamp(10px,3vw,22px);
 }
+/* Keep bar above everything */
 .viewer-bar{
+  position: relative; z-index: 5;
   display:flex; align-items:center; justify-content:space-between; gap:10px;
   color:#eaf1ff;
 }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
-.viewer-close{
-  background: rgba(255,255,255,.08); color:#fff; border:1px solid rgba(255,255,255,.35);
-  border-radius:999px; width:40px; height:40px; display:grid; place-items:center; cursor:pointer;
-}
-.viewer-close:hover{ background: rgba(255,255,255,.16); }
 
-/* Horizontal strip */
+/* Rock-solid close button */
+.viewer-close{
+  position: fixed; top: 14px; right: 14px; z-index: 99999;
+  background: rgba(0,0,0,.35); color:#fff; border:1px solid rgba(255,255,255,.45);
+  border-radius:999px; width:44px; height:44px; display:grid; place-items:center; cursor:pointer;
+  line-height: 1; font-size: 20px; font-weight: 900;
+}
+.viewer-close:hover{ background: rgba(0,0,0,.5); }
+
+/* ===== Horizontal strip (smaller visuals) ===== */
 .viewer-strip{
   position:relative; flex:1 1 auto; overflow-x:auto; overflow-y:hidden;
-  scroll-snap-type: x mandatory; display:flex; gap:12px; padding: 8px 0;
+  scroll-snap-type: x mandatory; display:flex; gap:10px; padding: 6px 0;
 }
 .viewer-item{
   flex: 0 0 auto; scroll-snap-align: center;
   display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden;
   border:1px solid rgba(255,255,255,.15);
-  width: min(92vw, 1200px);
-  aspect-ratio: 16/9;
-  box-shadow: 0 20px 60px rgba(0,0,0,.45);
+  /* Smaller dimensions for better fit */
+  width: min(88vw, 1000px);
+  height: min(76vh, 700px);
+  box-shadow: 0 18px 50px rgba(0,0,0,.45);
 }
 .viewer-item img, .viewer-item iframe{
-  width:100%; height:100%; object-fit:contain; display:block; border:0;
-  background:#000;
+  /* Keep inside the box neatly */
+  max-width: 100%; max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain; display:block; border:0; background:#000;
 }
 
 /* Prev/Next buttons */
@@ -132,11 +141,12 @@ youtube_ids:
 .nav-btn{
   position:absolute; top:50%; transform: translateY(-50%);
   pointer-events:auto; cursor:pointer; user-select:none;
-  width:44px; height:44px; border-radius:999px;
+  width:42px; height:42px; border-radius:999px;
   background: rgba(255,255,255,.08); color:#fff;
   border:1px solid rgba(255,255,255,.35); display:grid; place-items:center;
+  z-index: 6;
 }
-.nav-btn:hover{ background: rgba(255,255,255,.16); }
+.nav-btn:hover{ background: rgba(255,255,255,.18); }
 .nav-prev{ left: 8px; }
 .nav-next{ right: 8px; }
 
@@ -339,7 +349,7 @@ youtube_ids:
   }
 
   // Close + outside click close
-  btnClose.addEventListener('click', closeViewer);
+  btnClose.addEventListener('click', (e) => { e.stopPropagation(); closeViewer(); });
   viewer.addEventListener('click', (e) => { if(e.target === viewer) closeViewer(); });
 
   // Keyboard (when viewer open)
