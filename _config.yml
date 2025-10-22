@@ -1,4 +1,4 @@
-title: "CrowdByte Solutions Inc."
+title: "CrowdByte Solutions Inc"
 description: "DevOps + AI Community of Practice in Canada"
 url: "https://canadadevopscommunity2025.github.io" # change if different
 baseurl: "/Crowdbyte-Solutions-Inc.io"     # keep empty when using a user/org or custom domain
@@ -39,7 +39,7 @@ include:
 
 # Social (optional)
 author:
-  name: "CrowdByte Solutions Inc."
+  name: "CrowdByte Solutions Inc"
 
 # Build
 timezone: "America/Toronto"
