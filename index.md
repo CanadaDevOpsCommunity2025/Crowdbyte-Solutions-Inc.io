@@ -151,9 +151,9 @@ time.cal::before{
 }
 /* Even smaller variant */
 .btn-small.btn-tiny{
-  padding:.28rem .55rem;     /* tighter */
-  font-size:.82rem;          /* smaller text */
-  border-radius:6px;         /* slightly squarer */
+  padding:.28rem .55rem;
+  font-size:.82rem;
+  border-radius:6px;
 }
 
 /* ===== FULL-SCREEN CHAPTERS OVERLAY ===== */
@@ -203,7 +203,7 @@ time.cal::before{
 }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
 
-/* ===== SPONSORS (uniform tiles + flowing marquee) ===== */
+/* ===== SPONSORS (smaller, professional, flowing marquee) ===== */
 .sponsors-band-home{
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -211,27 +211,28 @@ time.cal::before{
   background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
-  padding: clamp(14px, 2vw, 22px) 0;
-  margin-top: clamp(28px, 4vw, 60px);
+  padding: clamp(12px, 1.8vw, 18px) 0;
+  margin-top: clamp(24px, 3.2vw, 48px);
 }
 .sponsors-inner{
   max-width: 1200px; margin: 0 auto;
-  padding: 0 clamp(12px, 3vw, 24px);
+  padding: 0 clamp(10px, 2.6vw, 20px);
 }
-/* CENTER the heading & note */
+
+/* Center heading & note */
 .sponsors-head{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:6px; margin-bottom: clamp(10px, 1.6vw, 14px);
+  gap:6px; margin-bottom: clamp(8px, 1.4vw, 12px);
   text-align:center;
 }
-.sponsors-title{ margin:0; font-weight:900; font-size: clamp(16px, 2vw, 20px); color:#172b4d; }
-.sponsors-note{ margin:0; font-size:.92rem; color:#51657d; }
+.sponsors-title{ margin:0; font-weight:900; font-size: clamp(15px, 1.8vw, 18px); color:#172b4d; }
+.sponsors-note{ margin:0; font-size: clamp(.86rem, 1.3vw, .95rem); color:#51657d; }
 
-/* Marquee container */
+/* Marquee */
 .logo-marquee{ position:relative; overflow:hidden; }
 .logo-track{
   display:flex; align-items:center;
-  gap: clamp(18px, 2.4vw, 28px);
+  gap: clamp(12px, 1.8vw, 18px);
   will-change: transform;
   animation: sponsors-marquee-rtl 26s linear infinite;
 }
@@ -241,34 +242,35 @@ time.cal::before{
   to  { transform: translateX(-50%); }
 }
 
-/* Uniform tiles: LIGHT background (always) */
+/* Uniform tiles — smaller size, no overflow */
 .logo-box{
   flex: 0 0 auto;
-  width: clamp(160px, 18vw, 220px);
-  height: clamp(60px, 6vw, 80px);
+  width: clamp(120px, 14vw, 170px);
+  height: clamp(44px, 5vw, 60px);
   display:flex; align-items:center; justify-content:center;
-  background:#ffffff;             /* keep light even in dark mode */
+  background:#ffffff;
   border:1px solid rgba(23,43,77,.10);
-  border-radius: 12px;
-  box-shadow: 0 8px 22px rgba(23,43,77,.08);
-  padding: 0;                     /* allow full fill */
-  overflow:hidden;                /* crop overflow when using cover */
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(23,43,77,.08);
+  padding: clamp(6px, 1vw, 10px);
+  overflow:hidden;
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 .logo-box:hover{
-  transform: translateY(-2px);
-  box-shadow: 0 12px 28px rgba(23,43,77,.12);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(23,43,77,.12);
   border-color: rgba(23,43,77,.18);
 }
 
-/* Make the image FILL the tile completely.
-   If you prefer NO cropping, change object-fit to 'contain'. */
+/* Logo image — contained, never cropped or stretched */
 .logo{
   display:block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* fills fully; may crop edges for very wide/tall logos */
-  filter: saturate(1.03) contrast(1.04);
+  max-width: 100%;
+  max-height: 100%;
+  width: auto; height: auto;
+  object-fit: contain;
+  image-rendering: auto;
+  filter: saturate(1.02) contrast(1.03);
 }
 
 /* Reduced motion: disable marquee */
@@ -355,7 +357,7 @@ time.cal::before{
   </div>
 </div>
 
-<!-- ===== SPONSORS (uniform tiles + flowing marquee) ===== -->
+<!-- ===== SPONSORS (smaller, professional, flowing marquee) ===== -->
 <div class="sponsors-band-home" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -401,7 +403,7 @@ time.cal::before{
         </div>
       </div>
     {% else %}
-      <p><em>Add sponsor logos to <code>assets/img/sponsors/</code> to populate this section.</em></p>
+      <p style="text-align:center;"><em>Add sponsor logos to <code>assets/img/sponsors/</code> to populate this section.</em></p>
     {% endif %}
   </div>
 </div>
