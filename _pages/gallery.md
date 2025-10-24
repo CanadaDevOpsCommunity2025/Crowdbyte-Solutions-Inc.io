@@ -5,8 +5,9 @@ title: ""
 classes: "full-bleed"
 sidebar: false
 
-# ——— Settings ———
-albums_root: "/assets/img/gallery/"
+# --- SETTINGS ---
+album_name: "DevOps for Gen AI Ottawa"
+album_path: "/assets/img/gallery/DevOps for Gen AI Ottawa/"   # exact path, case-sensitive
 videos_album_name: "Videos"
 youtube_ids:
   - nGn7-rb_dU8
@@ -40,7 +41,7 @@ youtube_ids:
 @media (min-width:800px){ .albums-grid{ grid-template-columns:repeat(2, minmax(380px,1fr)); } }
 @media (min-width:1200px){ .albums-grid{ grid-template-columns:repeat(3, minmax(420px,1fr)); } }
 
-/* Helpful notice if no images were found at build time */
+/* Helpful notice */
 .notice{
   max-width:980px; margin:12px auto 0; padding:10px 14px; border-radius:12px;
   background:#fff3cd; color:#7a5a00; border:1px solid #ffe69c; font-size:.95rem;
@@ -71,7 +72,7 @@ youtube_ids:
 }
 /* Show when targeted (hash == #viewer) OR when JS adds .open */
 #viewer.open, #viewer:target { display:block; }
-/* Lock scroll when open (modern browsers that support :has) and when JS adds .viewer-lock */
+/* Lock scroll when open (modern + JS path) */
 html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
@@ -100,7 +101,7 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
 @media (max-width:640px){ .viewer-item{ width:92vw; height:56vh; } }
 .viewer-item img, .viewer-item iframe{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; border:0; background:#000; }
 
-/* Fixed right-side arrows (don’t move with images) */
+/* Fixed right-side arrows */
 .viewer-nav-fixed{
   position:fixed; right:16px; top:50%; transform:translateY(-50%);
   display:flex; flex-direction:column; gap:10px; z-index:2147483000; pointer-events:none;
@@ -121,44 +122,64 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   <h1 id="gallery-heading">Gallery</h1>
 </section>
 
-<!-- ===== Server-side “no images” check ===== -->
-{% assign root = page.albums_root | default: "/assets/img/gallery/" %}
-{% assign all_gallery_files = site.static_files | where_exp: "f", "f.path contains root" %}
+{% comment %}
+  Gather images from the EXACT album path (with spaces).
+{% endcomment %}
 {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
-{% assign any_images = 0 %}
-{% for f in all_gallery_files %}
+{% assign album_files = site.static_files | where_exp: "f", "f.path contains page.album_path" %}
+{% assign images = "" %}
+{% for f in album_files %}
   {% if img_exts contains f.extname %}
-    {% assign any_images = any_images | plus: 1 %}
+    {% assign images = images | append: f.path | append: "||" %}
   {% endif %}
 {% endfor %}
-{% if any_images == 0 %}
+{% assign img_list = images | split: "||" | reject: "" %}
+
+{% if img_list.size == 0 %}
 <div class="notice">
-  <strong>No images detected</strong> under <code>{{ root }}</code> at build time.<br>
-  Path must match exactly (case-sensitive), e.g. <code>assets/img/gallery/DevOps for Gen AI Ottawa/photo.jpg</code>.
-  If using Git LFS, re-add images as normal Git files (Pages doesn’t fetch LFS).
+  <strong>No images detected</strong> in <code>{{ page.album_path }}</code> at build time.<br>
+  Confirm the path and case exactly. Example file: <code>assets/img/gallery/DevOps for Gen AI Ottawa/photo1.jpg</code><br>
+  If you use Git LFS, re-add images as normal Git files (Pages doesn’t fetch LFS objects).
 </div>
 {% endif %}
 
-<!-- ===== Albums grid ===== -->
+<!-- ===== Albums grid (server-rendered) ===== -->
 <section id="gallery-home" class="albums-stage" aria-label="Gallery albums" tabindex="-1">
-  <div id="albumsGrid" class="albums-grid"></div>
+  <div class="albums-grid">
+    {% if img_list.size > 0 %}
+      {% assign cover = img_list[0] %}
+      <article class="album-card" id="albumCard" data-album="{{ page.album_name }}">
+        <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="{{ page.album_name }}">
+        <div class="album-meta">
+          <span class="album-name">{{ page.album_name }}</span>
+          <span class="album-count">{{ img_list.size }}</span>
+        </div>
+      </article>
+    {% endif %}
+
+    {% if page.youtube_ids and page.youtube_ids.size > 0 %}
+      <article class="album-card" id="videosCard" data-album="{{ page.videos_album_name }}">
+        <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="{{ page.videos_album_name }}">
+        <div class="album-meta">
+          <span class="album-name">{{ page.videos_album_name }}</span>
+          <span class="album-count">{{ page.youtube_ids | size }}</span>
+        </div>
+      </article>
+    {% endif %}
+  </div>
 </section>
 
-<!-- Hidden pool (Liquid -> JS) -->
-<div id="mediaPool" style="display:none">
-  {% for f in all_gallery_files %}
-    {% if img_exts contains f.extname %}
-      {% assign rel = f.path | remove: root %}
-      {% assign album = rel | split:'/' | first %}
-      {% if album == rel %}{% assign album = "Photos" %}{% endif %}
-      <!-- IMPORTANT: encode spaces but keep slashes -->
-      <a class="media" data-type="image" data-album="{{ album }}" href="{{ f.path | uri_escape | relative_url }}"></a>
-    {% endif %}
+<!-- ===== Hidden pools (so JS can build the viewer strip) ===== -->
+<div id="poolPhotos" style="display:none">
+  {% for p in img_list %}
+    <a class="media" data-type="image" data-album="{{ page.album_name }}" href="{{ p | uri_escape | relative_url }}"></a>
   {% endfor %}
+</div>
+
+<div id="poolVideos" style="display:none">
   {% if page.youtube_ids and page.youtube_ids.size > 0 %}
-    {% assign vname = page.videos_album_name | default: "Videos" %}
     {% for vid in page.youtube_ids %}
-      <a class="media" data-type="video" data-album="{{ vname }}" href="https://www.youtube-nocookie.com/embed/{{ vid }}"></a>
+      <a class="media" data-type="video" data-album="{{ page.videos_album_name }}" href="https://www.youtube-nocookie.com/embed/{{ vid }}"></a>
     {% endfor %}
   {% endif %}
 </div>
@@ -168,7 +189,7 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <!-- REAL link to #gallery-home so CSS :target closes even if JS fails -->
+      <!-- REAL link to #gallery-home -->
       <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse"></div>
@@ -181,9 +202,11 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
 
 <script>
 (function(){
-  // Elements
-  var pool = document.getElementById('mediaPool');
-  var albumsGrid = document.getElementById('albumsGrid');
+  var elAlbumCard = document.getElementById('albumCard');
+  var elVideosCard = document.getElementById('videosCard');
+  var poolPhotos = document.getElementById('poolPhotos');
+  var poolVideos = document.getElementById('poolVideos');
+
   var viewer = document.getElementById('viewer');
   var viewerTitle = document.getElementById('viewerTitle');
   var viewerStrip = document.getElementById('viewerStrip');
@@ -191,88 +214,50 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   var btnPrev = document.getElementById('navPrev');
   var btnNext = document.getElementById('navNext');
 
-  // Gather media
-  var mediaLinks = Array.prototype.slice.call(pool.querySelectorAll('.media'));
-  var medias = mediaLinks.map(function(a){
-    return { type:a.getAttribute('data-type'), album:a.getAttribute('data-album'), href:a.getAttribute('href') };
-  });
-
-  // Group by album
-  var byAlbum = {};
-  medias.forEach(function(m){
-    if(!byAlbum[m.album]) byAlbum[m.album] = [];
-    byAlbum[m.album].push(m);
-  });
-
-  // Ensure a Videos album exists if youtube_ids present (even if no images)
-  {% if page.youtube_ids and page.youtube_ids.size > 0 %}
-    if (!byAlbum["{{ page.videos_album_name | default: 'Videos' }}"]) {
-      byAlbum["{{ page.videos_album_name | default: 'Videos' }}"] = [];
-      var ids = {{ page.youtube_ids | jsonify }};
-      ids.forEach(function(id){
-        byAlbum["{{ page.videos_album_name | default: 'Videos' }}"].push({ type:'video', album:'{{ page.videos_album_name | default: "Videos" }}', href:'https://www.youtube-nocookie.com/embed/'+id });
-      });
-    }
-  {% endif %}
-
-  // Optional label mapping
-  var albumLabel = { "DevOps for Gen AI Ottawa": "DevOps for Gen AI — Ottawa" };
-  function label(name){ return albumLabel[name] || name; }
-
-  // Build album cards
-  Object.keys(byAlbum).sort().forEach(function(albumName){
-    var items = byAlbum[albumName]; if (!items || !items.length) return;
-
-    // Cover (prefer first image; fallback to video thumb)
-    var cover = '';
-    for (var i=0;i<items.length;i++){ if(items[i].type==='image'){ cover=items[i].href; break; } }
-    if(!cover){
-      for (var j=0;j<items.length;j++){
-        if(items[j].type==='video'){
-          var id = (items[j].href.split('/embed/')[1]||'').split(/[?&]/)[0];
-          if(id) cover = 'https://img.youtube.com/vi/'+id+'/hqdefault.jpg';
-          break;
-        }
-      }
-    }
-
-    var card = document.createElement('article');
-    card.className = 'album-card';
-    card.setAttribute('data-album', albumName);
-    card.innerHTML = '<img class="album-cover" src="'+cover+'" alt="'+label(albumName)+'">'+
-                     '<div class="album-meta"><span class="album-name">'+label(albumName)+'</span>'+
-                     '<span class="album-count">'+items.length+'</span></div>';
-    card.addEventListener('click', function(){ openViewer(albumName); });
-    albumsGrid.appendChild(card);
-  });
-
-  // Viewer helpers
-  var currentIndex = 0, currentItems = [], isOpen = false;
+  // Build arrays from pools
+  function collectPool(pool){
+    if (!pool) return [];
+    var links = Array.prototype.slice.call(pool.querySelectorAll('.media'));
+    return links.map(function(a){
+      return { type:a.getAttribute('data-type'), album:a.getAttribute('data-album'), href:a.getAttribute('href') };
+    });
+  }
+  var photos = collectPool(poolPhotos);
+  var videos = collectPool(poolVideos);
 
   function itemEl(item){
-    var wrap = document.createElement('div'); wrap.className = 'viewer-item';
-    if(item.type==='image'){
-      var img = document.createElement('img'); img.src=item.href; img.alt=''; wrap.appendChild(img);
-    }else{
+    var wrap = document.createElement('div');
+    wrap.className = 'viewer-item';
+    if (item.type === 'image') {
+      var img = document.createElement('img');
+      img.src = item.href; img.alt = '';
+      wrap.appendChild(img);
+    } else {
       var ifr = document.createElement('iframe');
-      ifr.src=item.href; ifr.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-      ifr.referrerPolicy="strict-origin-when-cross-origin"; ifr.allowFullscreen=true;
+      ifr.src = item.href;
+      ifr.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      ifr.referrerPolicy = "strict-origin-when-cross-origin";
+      ifr.allowFullscreen = true;
       wrap.appendChild(ifr);
     }
     return wrap;
   }
 
-  function openViewer(albumName){
-    currentItems = byAlbum[albumName]||[]; if(!currentItems.length) return;
-    viewerTitle.textContent = label(albumName);
+  var currentIndex = 0, currentItems = [], isOpen = false;
+
+  function openViewer(name, items){
+    currentItems = items || [];
+    if (!currentItems.length) return;
+
+    viewerTitle.textContent = name;
     viewerStrip.innerHTML = '';
     currentItems.forEach(function(it){ viewerStrip.appendChild(itemEl(it)); });
-    currentIndex = 0;
 
-    // Show via class and lock scroll; also push #viewer (CSS :target backup)
+    currentIndex = 0;
     viewer.classList.add('open');
     document.documentElement.classList.add('viewer-lock');
     isOpen = true;
+
     if (location.hash !== '#viewer') history.pushState({viewer:true}, '', '#viewer');
 
     setTimeout(function(){
@@ -283,7 +268,7 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   }
 
   function closeViewer(){
-    if(!isOpen && location.hash !== '#viewer'){ // already closed
+    if (!isOpen && location.hash !== '#viewer') {
       viewer.classList.remove('open');
       document.documentElement.classList.remove('viewer-lock');
       return;
@@ -292,10 +277,8 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
     document.documentElement.classList.remove('viewer-lock');
     isOpen = false;
 
-    // Stop videos
     Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
 
-    // Normalize URL to gallery anchor (this also removes :target)
     if (location.hash !== '#gallery-home') history.replaceState(null, '', '#gallery-home');
 
     var grid = document.getElementById('gallery-home');
@@ -306,18 +289,32 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   }
 
   function goTo(n){
-    var items = viewerStrip.querySelectorAll('.viewer-item'); if(!items.length) return;
+    var items = viewerStrip.querySelectorAll('.viewer-item');
+    if (!items.length) return;
     var L = items.length; currentIndex = (n + L) % L;
     items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
   var next = function(){ goTo(currentIndex + 1); };
   var prev = function(){ goTo(currentIndex - 1); };
 
-  // Keep index in sync as user scrolls
-  viewerStrip.addEventListener('scroll', function(){
-    var items = viewerStrip.querySelectorAll('.viewer-item');
-    var left = viewerStrip.getBoundingClientRect().left;
-    var best=0, dist=Infinity;
-    Array.prototype.forEach.call(items, function(el, i){
-      var d = Math.abs(el.getBoundingClientRect().left - left);
-      if (d < dist){ dist = d; best = i;
+  // Wire up album cards
+  if (elAlbumCard) elAlbumCard.addEventListener('click', function(){ openViewer(elAlbumCard.getAttribute('data-album'), photos); });
+  if (elVideosCard) elVideosCard.addEventListener('click', function(){ openViewer(elVideosCard.getAttribute('data-album'), videos); });
+
+  // Close / nav
+  document.getElementById('viewerClose').addEventListener('click', function(){ closeViewer(); });
+  viewer.addEventListener('click', function(e){ if (e.target === viewer) closeViewer(); });
+  document.addEventListener('keydown', function(e){
+    if (!isOpen && location.hash !== '#viewer') return;
+    if (e.key === 'Escape') closeViewer();
+    else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'ArrowLeft') prev();
+  });
+  document.getElementById('navNext').addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
+  document.getElementById('navPrev').addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
+
+  // Close on hash change/back
+  window.addEventListener('popstate', function(){ if (location.hash !== '#viewer') closeViewer(); });
+  window.addEventListener('hashchange', function(){ if (location.hash !== '#viewer') closeViewer(); });
+})();
+</script>
