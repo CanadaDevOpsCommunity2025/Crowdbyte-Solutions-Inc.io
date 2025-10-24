@@ -64,13 +64,14 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) — CSS :target controls visibility ===== */
+/* ===== Viewer (overlay) — CSS :target controls visibility but JS can force it too ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
   display:none; /* hidden by default */
 }
-#viewer:target { display:block; }
+#viewer:target,
+#viewer.open { display:block; }  /* JS 'open' class as a backup */
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
@@ -183,12 +184,12 @@ youtube_ids:
   {% endif %}
 </div>
 
-<!-- ===== Viewer (pure CSS open/close; JS only populates content) ===== -->
+<!-- ===== Viewer ===== -->
 <div id="viewer" aria-label="Album viewer">
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <!-- REAL link to #gallery-home; this ALWAYS closes the viewer -->
+      <!-- REAL link to #gallery-home -->
       <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse"></div>
@@ -207,6 +208,7 @@ youtube_ids:
   var poolPhotos = document.getElementById('poolPhotos');
   var poolVideos = document.getElementById('poolVideos');
 
+  var viewer = document.getElementById('viewer');
   var viewerTitle = document.getElementById('viewerTitle');
   var viewerStrip = document.getElementById('viewerStrip');
   var btnPrev = document.getElementById('navPrev');
@@ -254,47 +256,41 @@ youtube_ids:
     }, 0);
   }
 
-  function openAlbum(kind){
-    if (kind === 'videos' && videos.length){
-      sessionStorage.setItem('cop_gallery_last', 'videos');
-      buildViewer('{{ page.videos_album_name | escape }}', videos);
-    } else if (photos.length){
-      sessionStorage.setItem('cop_gallery_last', 'photos');
-      buildViewer('{{ page.album_name | escape }}', photos);
+  // Force open: build content, add .open class, and set hash
+  function forceOpenViewer(name, items){
+    buildViewer(name, items);
+    viewer.classList.add('open');          // show even if hash doesn’t change
+    if (location.hash !== '#viewer') {
+      location.hash = '#viewer';           // trigger :target path
     }
   }
 
-  // Clicks: remember the last album and let the anchor open #viewer via CSS
+  // Click handlers — robust open
   if (photosCard){
-    photosCard.addEventListener('click', function(){
-      sessionStorage.setItem('cop_gallery_last', 'photos');
-      // Build immediately so content is ready when #viewer becomes :target
-      buildViewer('{{ page.album_name | escape }}', photos);
+    photosCard.addEventListener('click', function(e){
+      e.preventDefault();
+      forceOpenViewer('{{ page.album_name | escape }}', photos);
     });
   }
   if (videosCard){
-    videosCard.addEventListener('click', function(){
-      sessionStorage.setItem('cop_gallery_last', 'videos');
-      buildViewer('{{ page.videos_album_name | escape }}', videos);
+    videosCard.addEventListener('click', function(e){
+      e.preventDefault();
+      forceOpenViewer('{{ page.videos_album_name | escape }}', videos);
     });
   }
 
-  // If page loads directly at #viewer (or Back to #viewer), populate using memory
+  // If page loads directly at #viewer (or Back to it), ensure there’s content
   function ensureViewerHasContent(){
-    if (location.hash !== '#viewer') return;
+    if (location.hash !== '#viewer') {
+      viewer.classList.remove('open');
+      return;
+    }
     if (viewerStrip.children.length > 0) return;
-    var last = sessionStorage.getItem('cop_gallery_last');
-    if (last === 'videos' && videos.length){ buildViewer('{{ page.videos_album_name | escape }}', videos); return; }
-    if (last === 'photos' && photos.length){ buildViewer('{{ page.album_name | escape }}', photos); return; }
-    // Fallback: if only one album exists, open it
-    if (videos.length && !photos.length){ buildViewer('{{ page.videos_album_name | escape }}', videos); return; }
-    if (photos.length && !videos.length){ buildViewer('{{ page.album_name | escape }}', photos); return; }
+    // Prefer photos if present; otherwise videos
+    if (photos.length){ buildViewer('{{ page.album_name | escape }}', photos); viewer.classList.add('open'); return; }
+    if (videos.length){ buildViewer('{{ page.videos_album_name | escape }}', videos); viewer.classList.add('open'); return; }
   }
-
-  // Run on load (handles direct /gallery/#viewer)
   ensureViewerHasContent();
-
-  // If user changes hash to #viewer (e.g., via link), ensure content is present
   window.addEventListener('hashchange', ensureViewerHasContent);
 
   // Right-side arrows
@@ -307,7 +303,6 @@ youtube_ids:
   }
   function next(){ goTo(currentIndex + 1); }
   function prev(){ goTo(currentIndex - 1); }
-
   btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
   btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
 
@@ -324,9 +319,10 @@ youtube_ids:
     currentIndex = best;
   }, {passive:true});
 
-  // Stop videos when leaving #viewer
+  // Stop videos when leaving #viewer and also remove .open
   window.addEventListener('hashchange', function(){
     if (location.hash !== '#viewer') {
+      viewer.classList.remove('open');
       Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
     }
   });
