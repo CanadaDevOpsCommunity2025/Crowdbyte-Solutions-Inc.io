@@ -21,32 +21,28 @@ youtube_ids:
 ---
 
 <style>
-/* === Hide Minimal Mistakes chrome on THIS page (no ancestor qualifier) === */
-.masthead,
-.breadcrumbs,
-.page__meta,
-.page__share,
-.page__footer,
-.site-footer,
-.sidebar,
-.page__related,
-.pagination,
-.pagination--pager { display:none !important; }
+/* ===== Hide Minimal Mistakes chrome on THIS page ===== */
+.page.full-bleed .masthead,
+.page.full-bleed .breadcrumbs,
+.page.full-bleed .page__meta,
+.page.full-bleed .page__share,
+.page.full-bleed .page__footer,
+.page.full-bleed .site-footer,
+.page.full-bleed .sidebar,
+.page.full-bleed .page__related { display:none !important; }
+.page__content, .page__inner-wrap { padding-top:0 !important; }
+.page.full-bleed .initial-content { margin-top:0 !important; }
 
-/* Remove stray spacing some themes add when masthead is hidden */
-.initial-content,
-.page__content,
-.page__inner-wrap { margin-top:0 !important; padding-top:0 !important; }
-
-/* ===== Utilities ===== */
+/* ===== Utilities & Accessibility ===== */
 :focus-visible{ outline:3px solid #7fb0f0; outline-offset:3px; }
-.page__title { display:none !important; }
+.sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
 
 /* ===== Full-bleed reset ===== */
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content { max-width:none !important; padding:0 !important; }
+.page__title { display:none !important; }
 
-/* ===== Title Bar ===== */
+/* ===== Hero (simple title bar) ===== */
 .g-hero{
   width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
   background:linear-gradient(135deg,#2f5597 0%,#2874c7 55%,#7fb0f0 100%);
@@ -94,7 +90,7 @@ html.viewer-lock{ overflow:hidden !important; }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); margin:0; }
 
-/* Close button: label + icon */
+/* Close button: visible label + big hit area */
 .viewer-close{
   position:fixed; top:16px; right:16px;
   z-index:2147483647; min-width:60px; height:46px; border-radius:999px;
@@ -117,7 +113,7 @@ html.viewer-lock{ overflow:hidden !important; }
 @media (max-width:640px){ .viewer-item{ width:92vw; height:58vh; } }
 .viewer-item img, .viewer-item iframe{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; border:0; background:#000; }
 
-/* Fixed right-side arrows (these are viewer arrows, NOT theme pager) */
+/* Right-side arrows */
 .viewer-nav-fixed{
   position:fixed; right:16px; top:50%; transform:translateY(-50%);
   display:flex; flex-direction:column; gap:10px; z-index:2147483000; pointer-events:none;
@@ -340,7 +336,7 @@ html.viewer-lock{ overflow:hidden !important; }
     if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
 
-  // Right-side arrows for viewer (not the theme pager)
+  // Right-side arrows
   btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
   btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
 
