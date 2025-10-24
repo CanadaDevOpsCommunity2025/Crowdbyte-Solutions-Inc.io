@@ -218,9 +218,11 @@ time.cal::before{
   max-width: 1200px; margin: 0 auto;
   padding: 0 clamp(12px, 3vw, 24px);
 }
+/* CENTER the heading & note */
 .sponsors-head{
-  display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
-  margin-bottom: clamp(10px, 1.6vw, 14px);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; margin-bottom: clamp(10px, 1.6vw, 14px);
+  text-align:center;
 }
 .sponsors-title{ margin:0; font-weight:900; font-size: clamp(16px, 2vw, 20px); color:#172b4d; }
 .sponsors-note{ margin:0; font-size:.92rem; color:#51657d; }
@@ -239,17 +241,18 @@ time.cal::before{
   to  { transform: translateX(-50%); }
 }
 
-/* Uniform tiles so all logos appear same visual size */
+/* Uniform tiles: LIGHT background (always) */
 .logo-box{
   flex: 0 0 auto;
   width: clamp(160px, 18vw, 220px);
   height: clamp(60px, 6vw, 80px);
   display:flex; align-items:center; justify-content:center;
-  background:#fff;
+  background:#ffffff;             /* keep light even in dark mode */
   border:1px solid rgba(23,43,77,.10);
   border-radius: 12px;
   box-shadow: 0 8px 22px rgba(23,43,77,.08);
-  padding: clamp(8px, 1.2vw, 12px); /* inner breathing room */
+  padding: 0;                     /* allow full fill */
+  overflow:hidden;                /* crop overflow when using cover */
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 .logo-box:hover{
@@ -258,35 +261,19 @@ time.cal::before{
   border-color: rgba(23,43,77,.18);
 }
 
-/* Logo image never stretches; always contained and centered */
+/* Make the image FILL the tile completely.
+   If you prefer NO cropping, change object-fit to 'contain'. */
 .logo{
   display:block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto; height: auto;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* fills fully; may crop edges for very wide/tall logos */
   filter: saturate(1.03) contrast(1.04);
 }
 
 /* Reduced motion: disable marquee */
 @media (prefers-reduced-motion: reduce){
   .logo-track{ animation:none; }
-}
-
-/* Optional dark scheme polish */
-@media (prefers-color-scheme: dark){
-  .sponsors-band-home{
-    background: linear-gradient(180deg, #0f1726 0%, #0c1422 100%);
-    border-top-color: rgba(255,255,255,.06);
-    border-bottom-color: rgba(255,255,255,.06);
-  }
-  .sponsors-title{ color:#eaf1ff; }
-  .sponsors-note{ color:#a6b6cc; }
-  .logo-box{
-    background:#0f1828;
-    border-color: rgba(255,255,255,.10);
-    box-shadow: 0 10px 24px rgba(0,0,0,.35);
-  }
 }
 </style>
 
