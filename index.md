@@ -203,7 +203,7 @@ time.cal::before{
 }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
 
-/* ===== COMPACT SPONSORS SLIDER (home page, UNIFORM tiles) ===== */
+/* ===== SPONSORS (uniform, professional) ===== */
 .sponsors-band-home{
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -211,77 +211,74 @@ time.cal::before{
   background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
-  padding: clamp(8px, 1.6vw, 12px) 0;   /* compact height */
-  margin-top: clamp(28px, 4vw, 60px);   /* push it lower on the page */
+  padding: clamp(14px, 2vw, 22px) 0;
+  margin-top: clamp(28px, 4vw, 60px);
 }
 .sponsors-inner{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(12px, 3vw, 20px);
+  max-width: 1200px; margin: 0 auto;
+  padding: 0 clamp(12px, 3vw, 24px);
 }
 .sponsors-head{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px; margin-bottom: clamp(6px, 1vw, 10px);
+  display:flex; align-items:flex-end; justify-content:space-between; gap:10px;
+  margin-bottom: clamp(10px, 1.6vw, 14px);
 }
-.sponsors-title{
-  margin:0; font-weight:800; font-size: clamp(14px, 1.8vw, 18px); color:#1f2a44;
-}
-.sponsors-note{ margin:0; font-size:.85rem; color:#475569; }
+.sponsors-title{ margin:0; font-weight:900; font-size: clamp(16px, 2vw, 20px); color:#172b4d; }
+.sponsors-note{ margin:0; font-size:.92rem; color:#51657d; }
 
-.logo-marquee{ position:relative; overflow:hidden; }
-.logo-track{
-  display:flex; align-items:center;
-  gap: clamp(18px, 3vw, 28px); /* or 36px on events page if you had that */
-  will-change: transform;
-  animation: sponsors-marquee-rtl 26s linear infinite;
-}
-.logo-track:hover{ animation-play-state: paused; }
-@keyframes sponsors-marquee-rtl{
-  from{ transform: translateX(0); }
-  to  { transform: translateX(-50%); }
+/* Row of uniform tiles */
+.sponsors-tiles{
+  display:flex; flex-wrap:wrap; gap: clamp(12px, 1.8vw, 18px);
+  justify-content:center;
 }
 
-/* UNIFORM TILES for every logo (same sizing as Events & Resources) */
+/* Uniform tile: same size for all; logo sits inside */
 .logo-box{
-  flex: 0 0 auto;
-  width: clamp(100px, 12vw, 140px);
-  height: clamp(34px, 5vw, 48px);
+  flex: 0 1 auto;
+  width: clamp(160px, 18vw, 220px);
+  height: clamp(56px, 6vw, 72px);
   display:flex; align-items:center; justify-content:center;
-  background: transparent;
-  border-radius: 6px;
-  padding: 2px;
+  background:#fff;
+  border:1px solid rgba(23,43,77,.10);
+  border-radius: 12px;
+  box-shadow: 0 8px 22px rgba(23,43,77,.08);
+  padding: clamp(8px, 1.2vw, 12px);
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.logo-box:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(23,43,77,.12);
+  border-color: rgba(23,43,77,.18);
 }
 
-/* Images fit inside the tile without cropping */
+/* Logo image never stretches; always contained and centered */
 .logo{
   max-width: 100%;
   max-height: 100%;
   width: auto; height: auto;
   object-fit: contain;
-  filter:saturate(.98) contrast(1.05);
-  opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
+  display:block;
+  filter: saturate(1.05) contrast(1.05);
 }
-.logo:hover{ transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
-.logo-track{
-  display:flex; align-items:center;
-  gap: clamp(22px, 3.2vw, 36px);  /* was 18–28/36px */
-  will-change: transform;
-  animation: sponsors-marquee-rtl 26s linear infinite;
-}
-@media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
-@media (max-width:480px){ .sponsors-note{ display:none; } }
 
-/* ====== OVERRIDE: Center sponsors note on its own line ====== */
-.sponsors-head{
-  justify-content: flex-start;   /* title stays left */
-  align-items: center;
-  flex-wrap: wrap;               /* allow note to wrap to next line */
-  gap: 6px 12px;
+/* Small screens */
+@media (max-width:520px){
+  .sponsors-note{ text-align:center; flex:0 0 100%; }
 }
-.sponsors-title{ flex: 0 0 auto; }
-.sponsors-note{
-  flex: 0 0 100%;
-  text-align: center;
+
+/* Optional dark scheme polish */
+@media (prefers-color-scheme: dark){
+  .sponsors-band-home{
+    background: linear-gradient(180deg, #0f1726 0%, #0c1422 100%);
+    border-top-color: rgba(255,255,255,.06);
+    border-bottom-color: rgba(255,255,255,.06);
+  }
+  .sponsors-title{ color:#eaf1ff; }
+  .sponsors-note{ color:#a6b6cc; }
+  .logo-box{
+    background:#0f1828;
+    border-color: rgba(255,255,255,.10);
+    box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  }
 }
 </style>
 
@@ -363,7 +360,7 @@ time.cal::before{
   </div>
 </div>
 
-<!-- ===== COMPACT SPONSORS SLIDER (dynamic, full-bleed, uniform tiles) ===== -->
+<!-- ===== SPONSORS (uniform tiles, no marquee) ===== -->
 <div class="sponsors-band-home" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -372,7 +369,7 @@ time.cal::before{
     </div>
 
     {% comment %}
-      Dynamically gather all images in /assets/img/sponsors/
+      Gather all sponsor images from /assets/img/sponsors/
     {% endcomment %}
     {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/sponsors/'" %}
     {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
@@ -385,25 +382,19 @@ time.cal::before{
     {% assign logos = paths | split:"||" | uniq | sort | reject: "" %}
 
     {% if logos.size > 0 %}
-      <div class="logo-marquee">
-        <div class="logo-track">
-          {%- for p in logos -%}
-            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <div class="logo-box">
-              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
-            </div>
-          {%- endfor -%}
-          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
-          {%- for p in logos -%}
-            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <div class="logo-box">
-              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
-            </div>
-          {%- endfor -%}
-        </div>
+      <div class="sponsors-tiles">
+        {%- for p in logos -%}
+          {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+          <div class="logo-box" title="{{ name | capitalize }}">
+            <img class="logo"
+                 src="{{ p | relative_url }}"
+                 alt="{{ name | capitalize }}"
+                 loading="lazy" decoding="async">
+          </div>
+        {%- endfor -%}
       </div>
     {% else %}
-      <p style="margin:0.25rem 0 0.2rem;"><em>Add sponsor logos to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
+      <p><em>Add sponsor logos to <code>assets/img/sponsors/</code> to populate this section.</em></p>
     {% endif %}
   </div>
 </div>
