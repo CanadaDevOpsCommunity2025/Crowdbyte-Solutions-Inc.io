@@ -64,19 +64,19 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) — JS `.open` ONLY ===== */
+/* ===== Viewer (overlay) — JS `.open` ONLY (hard overrides) ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
-  display:none; /* hidden by default */
+  display:none !important; /* hidden by default, forcefully */
 }
 #viewer.open { display:block !important; }
 
-/* ✅ Defensive override: if hash is #viewer but not .open, force hidden */
+/* Defensive override: if any global :target exists, don't let it win */
 #viewer:target:not(.open){ display:none !important; }
 
 /* Lock scroll when open */
-html.viewer-lock{ overflow:hidden; }
+html.viewer-lock{ overflow:hidden !important; }
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
@@ -190,7 +190,7 @@ html.viewer-lock{ overflow:hidden; }
 </div>
 
 <!-- ===== Viewer ===== -->
-<div id="viewer" aria-label="Album viewer">
+<div id="viewer" aria-label="Album viewer" aria-hidden="true">
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
@@ -261,14 +261,41 @@ html.viewer-lock{ overflow:hidden; }
     }, 0);
   }
 
-  // Open helpers
-  function openViewer(name, items){
-    buildViewer(name, items);
+  function showViewer(){
     document.documentElement.classList.add('viewer-lock');
     viewer.classList.add('open');
+    viewer.style.display = 'block';                    // inline fallback
+    viewer.setAttribute('aria-hidden','false');
   }
 
-  function scrollToGridAndFocus(){
+  // —— CLOSE: bullet-proof ——
+  function closeViewer(){
+    // Hide via class
+    viewer.classList.remove('open');
+    document.documentElement.classList.remove('viewer-lock');
+    viewer.setAttribute('aria-hidden','true');
+
+    // Stop videos
+    Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
+
+    // Clear URL hash so any external :target CSS can't force it open
+    try {
+      if (window.history && history.replaceState) {
+        history.replaceState(null, '', location.pathname + location.search + '#gallery-home');
+      } else {
+        location.hash = 'gallery-home';
+      }
+    } catch(e) {}
+
+    // Forcefully hide as a last resort (beats rogue CSS)
+    viewer.style.display = 'none';
+
+    // Safety timer: if something re-opens it, shut again
+    setTimeout(function(){
+      if (!viewer.classList.contains('open')) viewer.style.display = 'none';
+    }, 30);
+
+    // Return focus to albums
     var grid = document.getElementById('gallery-home');
     if (grid){
       grid.scrollIntoView({behavior:'smooth', block:'start'});
@@ -276,51 +303,30 @@ html.viewer-lock{ overflow:hidden; }
     }
   }
 
-  // —— CLOSE: bullet-proof (also clears any #viewer hash) ——
-  function closeViewer(){
-    // Hide
-    viewer.classList.remove('open');
-    document.documentElement.classList.remove('viewer-lock');
-
-    // Stop videos
-    Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
-
-    // Clear URL hash so external :target CSS can't force it open
-    try {
-      if (window.history && history.replaceState) {
-        // keep path & query but remove hash (or set a safe anchor)
-        var url = location.pathname + location.search + '#gallery-home';
-        history.replaceState(null, '', url);
-      } else {
-        // fallback
-        location.hash = 'gallery-home';
-      }
-    } catch(e) {}
-
-    // Return focus
-    scrollToGridAndFocus();
-  }
-
   // Wire up album cards
   if (photosCard){
     photosCard.addEventListener('click', function(e){
       e.preventDefault();
-      openViewer('{{ page.album_name | escape }}', photos);
+      buildViewer('{{ page.album_name | escape }}', photos);
+      showViewer();
     });
   }
   if (videosCard){
     videosCard.addEventListener('click', function(e){
       e.preventDefault();
-      openViewer('{{ page.videos_album_name | escape }}', videos);
+      buildViewer('{{ page.videos_album_name | escape }}', videos);
+      showViewer();
     });
   }
 
-  // Close button
+  // Close button (click + touch)
   if (btnClose){
-    btnClose.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      closeViewer();
+    ['click','touchend'].forEach(function(evt){
+      btnClose.addEventListener(evt, function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        closeViewer();
+      }, {passive:false});
     });
   }
 
@@ -361,9 +367,8 @@ html.viewer-lock{ overflow:hidden; }
     currentIndex = best;
   }, {passive:true});
 
-  // ✅ If the page loads directly at /gallery/#viewer, normalize it once.
+  // Normalize if page loads with #viewer (old links/bookmarks)
   if (location.hash === '#viewer'){
-    // remove the hash immediately so any residual :target CSS can't fire
     try{
       if (window.history && history.replaceState){
         history.replaceState(null, '', location.pathname + location.search + '#gallery-home');
