@@ -4,10 +4,6 @@ permalink: /gallery/
 title: ""
 classes: "full-bleed"
 sidebar: false
-author_profile: false
-toc: false
-share: false
-related: false
 
 # --- SETTINGS ---
 album_name: "DevOps for Gen AI Ottawa"
@@ -21,28 +17,28 @@ youtube_ids:
 ---
 
 <style>
-/* ===== Hide Minimal Mistakes chrome on THIS page ===== */
-.page.full-bleed .masthead,
-.page.full-bleed .breadcrumbs,
-.page.full-bleed .page__meta,
-.page.full-bleed .page__share,
-.page.full-bleed .page__footer,
-.page.full-bleed .site-footer,
-.page.full-bleed .sidebar,
-.page.full-bleed .page__related { display:none !important; }
-.page__content, .page__inner-wrap { padding-top:0 !important; }
-.page.full-bleed .initial-content { margin-top:0 !important; }
+/* === Keep site toolbar; hide ONLY the pager on this page === */
+.pagination, .pagination--pager{ display:none !important; }
 
-/* ===== Utilities & Accessibility ===== */
-:focus-visible{ outline:3px solid #7fb0f0; outline-offset:3px; }
-.sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+/* When the viewer is open, hide site chrome (toolbar/footer/etc) */
+html.viewer-lock .masthead,
+html.viewer-lock .breadcrumbs,
+html.viewer-lock .page__meta,
+html.viewer-lock .page__share,
+html.viewer-lock .page__footer,
+html.viewer-lock .site-footer,
+html.viewer-lock .sidebar,
+html.viewer-lock .page__related { display:none !important; }
 
-/* ===== Full-bleed reset ===== */
-.page.full-bleed .page__inner-wrap,
-.page.full-bleed .page__content { max-width:none !important; padding:0 !important; }
+/* Utilities */
+:focus-visible { outline:3px solid #7fb0f0; outline-offset:3px; }
 .page__title { display:none !important; }
 
-/* ===== Hero (simple title bar) ===== */
+/* Full-bleed container reset */
+.page.full-bleed .page__inner-wrap,
+.page.full-bleed .page__content { max-width:none !important; padding:0 !important; }
+
+/* ===== Simple page header ===== */
 .g-hero{
   width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
   background:linear-gradient(135deg,#2f5597 0%,#2874c7 55%,#7fb0f0 100%);
@@ -59,7 +55,7 @@ youtube_ids:
 @media (min-width:860px){ .albums-grid{ grid-template-columns:repeat(2, minmax(360px,1fr)); } }
 @media (min-width:1200px){ .albums-grid{ grid-template-columns:repeat(3, minmax(360px,1fr)); } }
 
-/* Album card as button */
+/* Album card as button (keeps toolbar intact) */
 .album-card{
   -webkit-appearance:none; appearance:none; border:0; background:none; padding:0; margin:0;
   position:relative; overflow:hidden; border-radius:16px; width:100%; text-align:left;
@@ -81,7 +77,7 @@ youtube_ids:
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
-  display:none !important; /* hidden by default; no :target used */
+  display:none !important; /* hidden by default; no :target */
 }
 #viewer.open { display:block !important; }
 html.viewer-lock{ overflow:hidden !important; }
@@ -90,7 +86,7 @@ html.viewer-lock{ overflow:hidden !important; }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); margin:0; }
 
-/* Close button: visible label + big hit area */
+/* Close button — visible label */
 .viewer-close{
   position:fixed; top:16px; right:16px;
   z-index:2147483647; min-width:60px; height:46px; border-radius:999px;
@@ -113,7 +109,7 @@ html.viewer-lock{ overflow:hidden !important; }
 @media (max-width:640px){ .viewer-item{ width:92vw; height:58vh; } }
 .viewer-item img, .viewer-item iframe{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; border:0; background:#000; }
 
-/* Right-side arrows */
+/* Viewer arrows (not the theme pager!) */
 .viewer-nav-fixed{
   position:fixed; right:16px; top:50%; transform:translateY(-50%);
   display:flex; flex-direction:column; gap:10px; z-index:2147483000; pointer-events:none;
@@ -125,14 +121,14 @@ html.viewer-lock{ overflow:hidden !important; }
 }
 .nav-btn:hover{ background:rgba(0,0,0,.7); }
 
-/* Notice */
+/* Optional notice style */
 .notice{
   max-width:980px; margin:12px auto 0; padding:10px 14px; border-radius:12px;
   background:#fff3cd; color:#7a5a00; border:1px solid #ffe69c; font-size:.95rem;
 }
 </style>
 
-<!-- ===== Title ===== -->
+<!-- ===== Header ===== -->
 <section class="g-hero" aria-labelledby="gallery-heading">
   <h1 id="gallery-heading">Gallery</h1>
 </section>
@@ -281,16 +277,16 @@ html.viewer-lock{ overflow:hidden !important; }
   function openViewer(name, items, trigger){
     lastTrigger = trigger || null;
     buildViewer(name, items);
-    document.documentElement.classList.add('viewer-lock');
+    document.documentElement.classList.add('viewer-lock'); // hides toolbar/footer via CSS
     viewer.classList.add('open');
     viewer.setAttribute('aria-hidden','false');
-    btnClose && btnClose.focus({preventScroll:true});
+    if (btnClose) btnClose.focus({preventScroll:true});
   }
 
   function closeViewer(){
     viewer.classList.remove('open');
     viewer.setAttribute('aria-hidden','true');
-    document.documentElement.classList.remove('viewer-lock');
+    document.documentElement.classList.remove('viewer-lock'); // shows toolbar/footer again
     // Stop videos
     Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
     // Inline failsafe (beats any rogue CSS)
@@ -336,7 +332,7 @@ html.viewer-lock{ overflow:hidden !important; }
     if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
 
-  // Right-side arrows
+  // Viewer arrows (not theme pager)
   btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
   btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
 
@@ -352,16 +348,5 @@ html.viewer-lock{ overflow:hidden !important; }
     });
     currentIndex = best;
   }, {passive:true});
-
-  // Normalize legacy #viewer hash (old bookmarks)
-  if (location.hash === '#viewer'){
-    try{
-      if (history.replaceState){
-        history.replaceState(null, '', location.pathname + location.search);
-      } else {
-        location.hash = '';
-      }
-    }catch(e){}
-  }
 })();
 </script>
