@@ -290,4 +290,167 @@ html:has(#viewer:target) { overflow: hidden; }
   {% endif %}
 
   // Display labels (optional)
-  var albumLabel = { "DevOps fo
+  var albumLabel = { "DevOps for Gen AI Ottawa": "DevOps for Gen AI — Ottawa" };
+  function getDisplayName(folder){ return albumLabel[folder] || folder; }
+
+  // Build album cards
+  var albumNames = Object.keys(byAlbum).sort();
+  for (var a=0; a<albumNames.length; a++){
+    var albumName = albumNames[a];
+    var items = byAlbum[albumName];
+    if (!items || !items.length) continue;
+
+    // Choose a cover
+    var coverSrc = '';
+    for (var j=0; j<items.length; j++){
+      if (items[j].type === 'image'){ coverSrc = items[j].href; break; }
+    }
+    if (!coverSrc){
+      for (var k=0; k<items.length; k++){
+        if (items[k].type === 'video'){
+          var id = (items[k].href.split('/embed/')[1] || '').split(/[?&]/)[0];
+          if (id) coverSrc = 'https://img.youtube.com/vi/' + id + '/hqdefault.jpg';
+          break;
+        }
+      }
+    }
+
+    var card = document.createElement('article');
+    card.className = 'album-card';
+    card.setAttribute('data-album', albumName);
+    card.innerHTML =
+      '<img class="album-cover" src="' + coverSrc + '" alt="' + getDisplayName(albumName) + '">' +
+      '<div class="album-meta">' +
+        '<span class="album-name">' + getDisplayName(albumName) + '</span>' +
+        '<span class="album-count">' + items.length + '</span>' +
+      '</div>';
+    (function(name){
+      card.addEventListener('click', function(){ openViewer(name); });
+    })(albumName);
+    albumsGrid.appendChild(card);
+  }
+
+  /* ========== Viewer logic ========== */
+  var currentIndex = 0;
+  var currentItems = [];
+  var isOpen = false;
+
+  function buildItemEl(item){
+    var wrap = document.createElement('div');
+    wrap.className = 'viewer-item';
+    if(item.type === 'image'){
+      var img = document.createElement('img');
+      img.src = item.href; img.alt = '';
+      wrap.appendChild(img);
+    } else {
+      var iframe = document.createElement('iframe');
+      iframe.src = item.href;
+      iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      iframe.referrerPolicy = "strict-origin-when-cross-origin";
+      iframe.allowFullscreen = true;
+      wrap.appendChild(iframe);
+    }
+    return wrap;
+  }
+
+  function openViewer(albumName){
+    currentItems = byAlbum[albumName] || [];
+    if (!currentItems.length) return;
+
+    viewerTitle.textContent = getDisplayName(albumName);
+    viewerStrip.innerHTML = '';
+    for (var i=0; i<currentItems.length; i++){
+      viewerStrip.appendChild(buildItemEl(currentItems[i]));
+    }
+
+    currentIndex = 0;
+
+    // Show overlay via class (JS) and push hash for CSS :target + back button
+    viewer.classList.add('open');
+    document.documentElement.classList.add('viewer-lock');
+    isOpen = true;
+
+    setTimeout(function(){
+      var first = viewerStrip.querySelector('.viewer-item');
+      if (first) first.scrollIntoView({behavior:'instant', inline:'center', block:'nearest'});
+      btnClose.focus();
+    }, 0);
+
+    if (location.hash !== '#viewer') {
+      history.pushState({ viewer:true }, '', '#viewer');
+    }
+  }
+
+  function closeViewer(){
+    if (!isOpen) return;
+    viewer.classList.remove('open');
+    document.documentElement.classList.remove('viewer-lock');
+    isOpen = false;
+
+    // Stop videos
+    var ifr = viewerStrip.querySelectorAll('iframe');
+    for (var i=0; i<ifr.length; i++){ ifr[i].src = ifr[i].src; }
+
+    // Normalize URL to gallery anchor
+    if (location.hash !== '#gallery-home') {
+      history.replaceState(null, '', '#gallery-home');
+    }
+
+    var grid = document.getElementById('gallery-home');
+    if (grid) {
+      grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(function(){ grid.focus({ preventScroll: true }); }, 150);
+    }
+  }
+
+  function goTo(index){
+    var items = viewerStrip.querySelectorAll('.viewer-item');
+    if (!items.length) return;
+    var L = items.length;
+    currentIndex = (index + L) % L;
+    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+  function next(){ goTo(currentIndex + 1); }
+  function prev(){ goTo(currentIndex - 1); }
+
+  viewerStrip.addEventListener('scroll', function(){
+    var items = viewerStrip.querySelectorAll('.viewer-item');
+    var contLeft = viewerStrip.getBoundingClientRect().left;
+    var best = 0, bestDist = Infinity;
+    for (var i=0; i<items.length; i++){
+      var d = Math.abs(items[i].getBoundingClientRect().left - contLeft);
+      if (d < bestDist){ bestDist = d; best = i; }
+    }
+    currentIndex = best;
+  }, { passive:true });
+
+  /* ——— Interactions ——— */
+  // ✕ close click — DO NOT preventDefault; let hash change to #gallery-home
+  btnClose.addEventListener('click', function(){ closeViewer(); });
+
+  // Backdrop click
+  viewer.addEventListener('click', function(e){ if (e.target === viewer) closeViewer(); });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e){
+    if (!isOpen && location.hash !== '#viewer') return;
+    if (e.key === 'Escape') closeViewer();
+    else if (e.key === 'ArrowRight') next();
+    else if (e.key === 'ArrowLeft') prev();
+  });
+
+  // Right-side fixed arrows
+  btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
+  btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
+
+  // Back button support
+  window.addEventListener('popstate', function(){
+    if (isOpen || location.hash !== '#viewer') closeViewer();
+  });
+
+  // HASHCHANGE FALLBACK — if hash isn’t #viewer, ensure viewer is closed
+  window.addEventListener('hashchange', function(){
+    if (location.hash !== '#viewer') closeViewer();
+  });
+})();
+</script>
