@@ -198,7 +198,16 @@ youtube_ids:
       {% assign rel = f.path | remove: root %}
       {% assign album = rel | split:'/' | first %}
       {% if album == rel %}{% assign album = "Photos" %}{% endif %}
-      <a class="media" data-type="image" data-album="{{ album }}" href="{{ f.path | relative_url | url_encode | replace:'+','%20' }}"></a>
+
+      {%- comment -%}
+      IMPORTANT FIX:
+      Use `uri_escape` (keeps `/`) and THEN `relative_url`.
+      This safely encodes spaces (e.g. "DevOps for Gen AI Ottawa") without breaking the path.
+      {%- endcomment -%}
+      <a class="media"
+         data-type="image"
+         data-album="{{ album }}"
+         href="{{ f.path | uri_escape | relative_url }}"></a>
     {% endif %}
   {% endfor %}
 
