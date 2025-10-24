@@ -125,7 +125,7 @@ classes: full-bleed
 .ch-btn{ align-self:flex-start; display:inline-block; padding:.5rem .75rem; border-radius:999px; background:#2f5597; color:#fff !important; text-decoration:none; font-weight:800; font-size:.9rem; box-shadow:0 6px 18px rgba(47,85,151,.22) }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
 
-/* ===== SPONSORS (exact uniform size matching TECHSTRONG) ===== */
+/* ===== SPONSORS (uniform TECHSTRONG-sized tiles + seamless loop) ===== */
 .sponsors-band-home{
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -138,7 +138,7 @@ classes: full-bleed
 }
 .sponsors-inner{ max-width:1200px; margin:0 auto; padding:0 clamp(10px, 2.6vw, 20px); }
 
-/* CENTER the heading & note */
+/* CENTER heading & note */
 .sponsors-head{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:6px; margin-bottom: clamp(8px, 1.4vw, 12px);
@@ -147,19 +147,26 @@ classes: full-bleed
 .sponsors-title{ margin:0; font-weight:900; font-size: clamp(15px, 1.8vw, 18px); color:#172b4d; }
 .sponsors-note{ margin:0; font-size: clamp(.86rem, 1.3vw, .95rem); color:#51657d; }
 
-/* Marquee */
+/* Marquee container */
 .logo-marquee{ position:relative; overflow:hidden; }
-.logo-track{ display:flex; align-items:center; gap:12px; will-change: transform; animation: sponsors-marquee-rtl 26s linear infinite; }
-.logo-track:hover{ animation-play-state: paused; }
-@keyframes sponsors-marquee-rtl{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
 
-/* === UNIFORM TILE SIZE (match TECHSTRONG visual size) ===
-   Adjust these two values if you want bigger/smaller tiles later. */
-:root{
-  --tile-w: 170px;   /* TECHSTRONG-like width */
-  --tile-h: 60px;    /* TECHSTRONG-like height */
+/* Track: animation distance/duration set via CSS vars */
+.logo-track{
+  --loop-distance: 50%;                 /* JS will override with exact px */
+  --loop-duration: 26s;                 /* JS will override for perfect pacing */
+  display:flex; align-items:center;
+  gap: 12px;
+  will-change: transform;
+  animation: sponsors-marquee var(--loop-duration) linear infinite;
+}
+.logo-track:hover{ animation-play-state: paused; }
+@keyframes sponsors-marquee{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(calc(-1 * var(--loop-distance))); }
 }
 
+/* Uniform tiles (same footprint for each) */
+:root{ --tile-w: 170px; --tile-h: 60px; }
 .logo-box{
   flex: 0 0 auto;
   width: var(--tile-w);
@@ -169,24 +176,24 @@ classes: full-bleed
   border:1px solid rgba(23,43,77,.10);
   border-radius:10px;
   box-shadow:0 6px 18px rgba(23,43,77,.08);
-  padding: 6px;                 /* a bit of breathing room */
+  padding: 6px;
   overflow:hidden;
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 .logo-box:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(23,43,77,.12); border-color: rgba(23,43,77,.18); }
 
-/* Logos scale to fit the exact tile, never crop, never distort */
+/* Logos fit without cropping or distortion */
 .logo{
   display:block;
   max-width: 100%;
   max-height: 100%;
   width: auto; height: auto;
-  object-fit: contain;     /* ensures consistent visual box */
+  object-fit: contain;
   image-rendering: auto;
   filter: saturate(1.02) contrast(1.03);
 }
 
-/* Reduced motion: disable marquee */
+/* Reduced motion: stop animation */
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 </style>
 
@@ -268,7 +275,7 @@ classes: full-bleed
   </div>
 </div>
 
-<!-- ===== SPONSORS (uniform TECHSTRONG-sized tiles + flowing marquee) ===== -->
+<!-- ===== SPONSORS (uniform tiles + seamless loop from last back to first) ===== -->
 <div class="sponsors-band-home" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -291,14 +298,14 @@ classes: full-bleed
 
     {% if logos.size > 0 %}
       <div class="logo-marquee">
-        <div class="logo-track">
+        <div class="logo-track" id="logoTrack">
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
             <div class="logo-box" title="{{ name | capitalize }}">
               <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}" loading="lazy" decoding="async">
             </div>
           {%- endfor -%}
-          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
+          {%- comment -%} duplicate for seamless wrap; animation moves by exactly one set width {%- endcomment -%}
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
             <div class="logo-box" title="{{ name | capitalize }}">
@@ -365,6 +372,7 @@ classes: full-bleed
 
 <script>
 (function(){
+  /* Chapters overlay behavior */
   const overlay = document.getElementById('chaptersOverlay');
   const openBtn = document.getElementById('openChapters');
   const closeBtn = document.getElementById('closeChapters');
@@ -394,5 +402,32 @@ classes: full-bleed
   if (overlay) overlay.addEventListener('click', (e)=>{ if(e.target===overlay) closeOverlay(); });
   document.addEventListener('keydown', (e)=>{ if(e.key==='Escape' && overlay.getAttribute('aria-hidden')==='false') closeOverlay(); });
   if (search) addEventListener('input', filter);
+
+  /* ===== Sponsors: dynamic seamless marquee =====
+     We duplicate logos in Liquid. Here we measure ONE SET width and set:
+     --loop-distance to that exact px; --loop-duration so speed ≈ 60px/s.
+     This makes it flow through all sponsors and wrap seamlessly from last -> first. */
+  const track = document.getElementById('logoTrack');
+  if (track) {
+    // half of children = one logical set (because we render a duplicate set)
+    const children = Array.from(track.children);
+    const half = Math.floor(children.length / 2);
+    if (half > 0) {
+      // measure width of the first set precisely (including gaps)
+      let distance = 0;
+      for (let i = 0; i < half; i++) {
+        const el = children[i];
+        const style = window.getComputedStyle(el);
+        const marginLeft = parseFloat(style.marginLeft) || 0;
+        const marginRight = parseFloat(style.marginRight) || 0;
+        distance += el.getBoundingClientRect().width + marginLeft + marginRight;
+      }
+      // Set CSS variables on the track
+      track.style.setProperty('--loop-distance', distance + 'px');
+      const pxPerSec = 60; // tune this for faster/slower crawl
+      const duration = Math.max(18, Math.round(distance / pxPerSec));
+      track.style.setProperty('--loop-duration', duration + 's');
+    }
+  }
 })();
 </script>
