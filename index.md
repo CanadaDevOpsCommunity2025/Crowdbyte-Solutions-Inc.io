@@ -424,7 +424,7 @@ classes: full-bleed
       }
       // Set CSS variables on the track
       track.style.setProperty('--loop-distance', distance + 'px');
-      const pxPerSec = 60; // tune this for faster/slower crawl
+      const pxPerSec = 90; // tune this for faster/slower crawl
       const duration = Math.max(18, Math.round(distance / pxPerSec));
       track.style.setProperty('--loop-duration', duration + 's');
     }
