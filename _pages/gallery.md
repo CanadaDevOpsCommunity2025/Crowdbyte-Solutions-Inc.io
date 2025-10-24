@@ -148,7 +148,7 @@ html.viewer-lock{ overflow:hidden; }
   <div class="albums-grid">
     {% if img_list.size > 0 %}
       {% assign cover = img_list[0] %}
-      <a href="#viewer" class="album-card" id="photosCard"
+      <a href="#" class="album-card" id="photosCard"
          data-album="{{ page.album_name }}" data-kind="photos">
         <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="{{ page.album_name }}">
         <div class="album-meta">
@@ -159,7 +159,7 @@ html.viewer-lock{ overflow:hidden; }
     {% endif %}
 
     {% if page.youtube_ids and page.youtube_ids.size > 0 %}
-      <a href="#viewer" class="album-card" id="videosCard"
+      <a href="#" class="album-card" id="videosCard"
          data-album="{{ page.videos_album_name }}" data-kind="videos">
         <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="{{ page.videos_album_name }}">
         <div class="album-meta">
