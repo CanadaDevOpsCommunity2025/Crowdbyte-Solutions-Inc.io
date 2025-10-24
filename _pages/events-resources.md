@@ -82,95 +82,102 @@ classes: "full-bleed"
 .inline-links a {
   display:block;
   text-decoration: none;
-  color:#2874c7;        /* keep your blue */
+  color:#2874c7;
   font-weight:600;
-  font-style: italic;   /* italics */
-  font-size: 0.80rem;   /* slightly smaller */
+  font-style: italic;
+  font-size: 0.80rem;
   line-height: 1.2;
 }
 @media (max-width: 880px){
   .inline-links a { font-size: 0.9rem; }
 }
-/* Space between link lines */
 .inline-links a + a { margin-top: 8px; }
 @media (min-width: 881px){
   .inline-links a + a { margin-top: 10px; }
 }
-
 .inline-links a:visited { color:#2874c7; }
 .inline-links a:hover,
 .inline-links a:focus { text-decoration: underline; }
 .inline-links a:active { opacity: .9; }
 
-/* ===== COMPACT SPONSORS SLIDER (full-bleed, dynamic, UNIFORM SIZE) ===== */
-.sponsors-band {
+/* ===== SPONSORS (uniform TECHSTRONG-sized tiles + seamless loop) ===== */
+.sponsors-band{
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
-  padding: clamp(8px, 1.6vw, 12px) 0;  /* compact height */
-  margin-top: clamp(24px, 4vw, 56px);  /* sits a bit lower */
+  padding: clamp(12px, 1.8vw, 18px) 0;
+  margin-top: clamp(24px, 3.2vw, 48px);
 }
-
-.sponsors-inner {
+.sponsors-inner{
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 clamp(12px, 3vw, 20px);
+  padding: 0 clamp(10px, 2.6vw, 20px);
 }
-.sponsors-head {
-  display:flex; align-items:center; justify-content:space-between;
-  gap:10px; margin-bottom: clamp(6px, 1vw, 10px);
-}
-.sponsors-title {
-  margin:0; font-weight:800; font-size: clamp(14px, 1.8vw, 18px); color:#1f2a44;
-}
-.sponsors-note { margin:0; font-size:.85rem; color:#475569; }
 
-.logo-marquee { position:relative; overflow:hidden; }
+/* Center heading & note */
+.sponsors-head{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:6px; margin-bottom: clamp(8px, 1.4vw, 12px);
+  text-align:center;
+}
+.sponsors-title{ margin:0; font-weight:900; font-size: clamp(15px, 1.8vw, 18px); color:#172b4d; }
+.sponsors-note{ margin:0; font-size: clamp(.86rem, 1.3vw, .95rem); color:#51657d; }
+
+/* Marquee */
+.logo-marquee{ position:relative; overflow:hidden; }
+
+/* Track: animation distance/duration set via CSS vars */
 .logo-track{
+  --loop-distance: 50%;
+  --loop-duration: 26s;
   display:flex; align-items:center;
-  gap: clamp(18px, 3vw, 28px);
+  gap: 12px;
   will-change: transform;
-  animation: sponsors-marquee-rtl 26s linear infinite;
+  animation: sponsors-marquee var(--loop-duration) linear infinite;
 }
-.logo-track:hover { animation-play-state: paused; }
-@keyframes sponsors-marquee-rtl {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); } /* duplicated content makes seamless loop */
+.logo-track:hover{ animation-play-state: paused; }
+@keyframes sponsors-marquee{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(calc(-1 * var(--loop-distance))); }
 }
 
-/* UNIFORM TILES for every logo */
+/* Uniform tiles (same footprint for each; matches home page) */
+:root{ --tile-w: 170px; --tile-h: 60px; }
 .logo-box{
   flex: 0 0 auto;
-  width: clamp(100px, 12vw, 140px);
-  height: clamp(34px, 5vw, 48px);
+  width: var(--tile-w);
+  height: var(--tile-h);
   display:flex; align-items:center; justify-content:center;
-  background: transparent;
-  border-radius: 6px;
-  padding: 2px;
+  background:#ffffff;
+  border:1px solid rgba(23,43,77,.10);
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(23,43,77,.08);
+  padding: 6px;
+  overflow:hidden;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.logo-box:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(23,43,77,.12);
+  border-color: rgba(23,43,77,.18);
 }
 
-/* Fit images inside the tile without cropping */
+/* Logos fit without cropping or distortion */
 .logo{
+  display:block;
   max-width: 100%;
   max-height: 100%;
   width: auto; height: auto;
   object-fit: contain;
-  filter:saturate(.98) contrast(1.05);
-  opacity:.95; transition:transform .2s ease, opacity .2s ease, filter .2s ease;
+  image-rendering: auto;
+  filter: saturate(1.02) contrast(1.03);
 }
-.logo:hover{ transform: translateY(-1px) scale(1.03); opacity:1; filter:none; }
 
-@media (prefers-reduced-motion: reduce) { .logo-track { animation:none; } }
-@media (max-width:480px){ .sponsors-note { display:none; } }
-
-/* ===== OVERRIDE: Center sponsors note safely ===== */
-/* Minimal, robust approach: make the header block-level so note centers */
-.sponsors-head { display:block; }
-.sponsors-title { margin:0 0 4px 0; text-align:left; }
-.sponsors-note { text-align:center; }
+/* Reduced motion: stop animation */
+@media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 </style>
 
 <!-- HERO -->
@@ -225,7 +232,7 @@ classes: "full-bleed"
   </div>
 </div>
 
-<!-- ===== COMPACT SPONSORS SLIDER (dynamic, uniform tiles) ===== -->
+<!-- ===== SPONSORS (uniform tiles + seamless loop from last back to first) ===== -->
 <div class="sponsors-band" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -249,24 +256,53 @@ classes: "full-bleed"
 
     {% if logos.size > 0 %}
       <div class="logo-marquee">
-        <div class="logo-track">
+        <div class="logo-track" id="logoTrack-events">
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <div class="logo-box">
-              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            <div class="logo-box" title="{{ name | capitalize }}">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}" loading="lazy" decoding="async">
             </div>
           {%- endfor -%}
           {%- comment -%} duplicate for seamless loop {%- endcomment -%}
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-            <div class="logo-box">
-              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}">
+            <div class="logo-box" title="{{ name | capitalize }}">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}" loading="lazy" decoding="async">
             </div>
           {%- endfor -%}
         </div>
       </div>
     {% else %}
-      <p style="margin:0.25rem 0 0.2rem;"><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
+      <p style="text-align:center;"><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
     {% endif %}
   </div>
 </div>
+
+<script>
+(function(){
+  /* ===== Sponsors: dynamic seamless marquee for this page =====
+     Measure ONE SET width and set:
+     --loop-distance to exact px; --loop-duration so speed ≈ 140 px/s. */
+  const track = document.getElementById('logoTrack-events');
+  if (track) {
+    const children = Array.from(track.children);
+    const half = Math.floor(children.length / 2); // one logical set
+    if (half > 0) {
+      let distance = 0;
+      for (let i = 0; i < half; i++) {
+        const el = children[i];
+        const style = window.getComputedStyle(el);
+        const ml = parseFloat(style.marginLeft) || 0;
+        const mr = parseFloat(style.marginRight) || 0;
+        distance += el.getBoundingClientRect().width + ml + mr;
+      }
+      track.style.setProperty('--loop-distance', distance + 'px');
+
+      /* SPEED: higher = faster (matching home page faster setting) */
+      const pxPerSec = 140; // try 120–180 for brisk; raise for faster
+      const duration = Math.max(10, Math.round(distance / pxPerSec));
+      track.style.setProperty('--loop-duration', duration + 's');
+    }
+  }
+})();
+</script>
