@@ -53,6 +53,37 @@ classes: full-bleed
 .hero-band{ background:#2a3e6e; color:#fff; text-align:center; padding:2.5rem 1rem; }
 .hero-band h1{ margin:0; font-size:clamp(1.8rem,3.5vw,2.4rem); font-weight:800; }
 
+/* ===== BIG, CLEAR GITHUB CTA BUTTON ===== */
+.hero-band-inner{
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.cta-github{
+  --gh: 28px; /* logo size (auto-scales on small screens below) */
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 18px;
+  border-radius:12px;
+  font-weight:800; font-size:18px;
+  text-decoration:none;
+  background:linear-gradient(180deg,#111,#000);
+  color:#fff;
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 10px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05);
+  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+.cta-github:hover{ transform:translateY(-1px); box-shadow:0 12px 28px rgba(0,0,0,.32); }
+.cta-github:active{ transform:translateY(0); }
+.cta-github:focus-visible{ outline:3px solid #7fb0f0; outline-offset:3px; }
+.cta-github .gh{ width:var(--gh); height:var(--gh); display:inline-block; flex:0 0 auto; }
+@media (max-width:520px){
+  .cta-github{ font-size:16px; padding:12px 16px; --gh:24px; }
+}
+
 /* Cards */
 .card{
   background:#f3f6fb; border-radius:12px; padding:14px 14px 10px;
@@ -240,36 +271,6 @@ time.cal::before{
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 @media (max-width:480px){ .sponsors-note{ display:none; } }
 
-/* ====== NEW: Hero inline layout + icon-only GitHub button (white) ====== */
-.hero-band-inner{
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;                 /* snug spacing between H1 and icon */
-  flex-wrap: wrap;           /* stacks nicely on small screens */
-}
-/* Force white icon regardless of theme link colors */
-.hero-band .btn-hero--icon,
-.hero-band .btn-hero--icon:link,
-.hero-band .btn-hero--icon:visited{
-  color:#fff !important;
-  border-color: rgba(255,255,255,.9) !important;
-}
-.btn-hero--icon{
-  display:inline-flex; align-items:center; justify-content:center;
-  width:36px; height:36px;   /* small button; change to 32px if you want tinier */
-  border-radius:8px;
-  background:transparent;
-  border:1px solid rgba(255,255,255,.7);
-  color:#fff !important;     /* SVG inherits this color */
-  box-shadow:none; text-decoration:none;
-}
-.btn-hero--icon:hover{ background:rgba(255,255,255,.1); }
-.btn-hero--icon:focus{ outline:2px solid #99b3e6; outline-offset:2px; }
-.btn-hero--icon svg{ width:18px; height:18px; display:block; }
-
 /* ====== OVERRIDE: Center sponsors note on its own line ====== */
 .sponsors-head{
   justify-content: flex-start;   /* title stays left */
@@ -277,12 +278,10 @@ time.cal::before{
   flex-wrap: wrap;               /* allow note to wrap to next line */
   gap: 6px 12px;
 }
-.sponsors-title{
-  flex: 0 0 auto;                /* keep title inline left */
-}
+.sponsors-title{ flex: 0 0 auto; }
 .sponsors-note{
-  flex: 0 0 100%;                /* full row under the title */
-  text-align: center;            /* centered text */
+  flex: 0 0 100%;
+  text-align: center;
 }
 </style>
 
@@ -291,21 +290,24 @@ time.cal::before{
 <div class="hero-band">
   <div class="hero-band-inner">
     <h1 style="margin:0">Join our Github Community</h1>
-    <a class="btn-hero--icon"
+
+    <!-- BIG, CLEAR CTA BUTTON -->
+    <a class="cta-github"
        href="https://github.com/CanadaDevOpsCommunity2025"
        target="_blank" rel="noopener noreferrer"
-       aria-label="Open the CanadaDevOpsCommunity2025 GitHub organization">
-      <!-- GitHub mark forced to white -->
-      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-        <path fill="#fff" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
-        0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-        -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07
-        -.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08
-        -.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82A7.68 7.68 0 0 1 8 3.87c.68.003 1.37.09
-        2.01.26 1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.27.82
-        2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01
-        2.19 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+       aria-label="Open our GitHub organization in a new tab">
+      <!-- GitHub mark (SVG) -->
+      <svg class="gh" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54
+        2.29 6.53 5.47 7.59.4.07.55-.17.55-.38
+        0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52
+        0-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95
+        0-.87.31-1.59.82-2.15-.08-.2-.36-1.01.08-2.11 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09
+        2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.91.08 2.11.51.56.82 1.27.82 2.15
+        0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.19
+        0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
       </svg>
+      <span>Join us on GitHub</span>
     </a>
   </div>
 </div>
