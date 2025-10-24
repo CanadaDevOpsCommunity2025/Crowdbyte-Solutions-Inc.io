@@ -21,7 +21,7 @@ classes: full-bleed
   padding-left: clamp(16px, 3vw, 32px);
   padding-right: clamp(16px, 3vw, 32px);
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); /* fluid by device */
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 18px;
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -40,14 +40,10 @@ classes: full-bleed
   margin:.5rem auto 1.25rem;
   padding-left: clamp(16px, 3vw, 32px);
   padding-right: clamp(16px, 3vw, 32px);
-  max-width: none; /* don't constrain */
+  max-width: none;
 }
 /* Center the page title */
-.page__title {
-  text-align: center !important;
-  margin-left: auto;
-  margin-right: auto;
-}
+.page__title { text-align: center !important; margin-left:auto; margin-right:auto; }
 
 /* Hero look */
 .hero-band{ background:#2a3e6e; color:#fff; text-align:center; padding:2.5rem 1rem; }
@@ -64,14 +60,11 @@ classes: full-bleed
   flex-wrap: wrap;
 }
 .cta-github{
-  --gh: 28px; /* logo size (auto-scales on small screens below) */
+  --gh: 28px;
   display:inline-flex; align-items:center; gap:10px;
-  padding:14px 18px;
-  border-radius:12px;
-  font-weight:800; font-size:18px;
-  text-decoration:none;
-  background:linear-gradient(180deg,#111,#000);
-  color:#fff;
+  padding:14px 18px; border-radius:12px;
+  font-weight:800; font-size:18px; text-decoration:none;
+  background:linear-gradient(180deg,#111,#000); color:#fff;
   border:1px solid rgba(255,255,255,.18);
   box-shadow:0 10px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05);
   transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
@@ -94,116 +87,45 @@ classes: full-bleed
 .card ul{ margin:0 0 0 1.1rem; }
 
 /* Badges / section titles */
-.badge{
-  display:inline-block; background:#2a3e6e; color:#fff; padding:2px 8px;
-  border-radius:999px; font-size:.8rem; margin-right:6px;
-}
+.badge{ display:inline-block; background:#2a3e6e; color:#fff; padding:2px 8px; border-radius:999px; font-size:.8rem; margin-right:6px; }
 .section-title{ font-size:1.05rem; margin-top:.5rem; font-weight:700; }
 
 /* Footer note */
 .footer-note{ text-align:center; font-size:.9rem; color:#666; margin:1.5rem 0 .75rem; }
 
-/* Make "Crowdbyte  DevOps + AI" look like plain blue text (no pill) */
-.subhead .badge {
-  background: transparent !important;
-  color: #3b6bbd !important;
-  padding: 0 !important;
-  border-radius: 0 !important;
-  font-weight: 800;
-  text-decoration: none;
-}
+/* Plain blue text for badges in subhead */
+.subhead .badge { background:transparent !important; color:#3b6bbd !important; padding:0 !important; border-radius:0 !important; font-weight:800; text-decoration:none; }
 
-/* Optional: make the section headers use the same blue as the screenshot */
-.page .page__inner-wrap .page__content .card h3 {
-  color: #3b6bbd;
-  font-weight: 800;
-}
+/* Section header color */
+.page .page__inner-wrap .page__content .card h3 { color:#3b6bbd; font-weight:800; }
 
 /* Calendar emoji before marked dates */
-.cal::before,
-time.cal::before{
-  content: "📅 ";
-  letter-spacing: 0;
-  vertical-align: baseline;
-}
+.cal::before, time.cal::before{ content:"📅 "; }
 
-/* Simple, smaller button (used by Chapters + GitHub Repo) */
-.btn-small{
-  display:inline-block;
-  padding:.38rem .7rem;
-  border:1px solid #2a3e6e;
-  border-radius:8px;
-  background:#fff;
-  color:#2a3e6e !important;
-  font-weight:700;
-  font-size:.9rem;
-  text-decoration:none;
-  box-shadow:none;
-}
-.btn-small:hover{
-  background:#f5f8ff;
-  border-color:#3b6bbd;
-  color:#3b6bbd !important;
-}
-.btn-small:focus{
-  outline:2px solid #99b3e6;
-  outline-offset:2px;
-}
-/* Even smaller variant */
-.btn-small.btn-tiny{
-  padding:.28rem .55rem;
-  font-size:.82rem;
-  border-radius:6px;
-}
+/* Small buttons */
+.btn-small{ display:inline-block; padding:.38rem .7rem; border:1px solid #2a3e6e; border-radius:8px; background:#fff; color:#2a3e6e !important; font-weight:700; font-size:.9rem; text-decoration:none; box-shadow:none; }
+.btn-small:hover{ background:#f5f8ff; border-color:#3b6bbd; color:#3b6bbd !important; }
+.btn-small:focus{ outline:2px solid #99b3e6; outline-offset:2px; }
+.btn-small.btn-tiny{ padding:.28rem .55rem; font-size:.82rem; border-radius:6px; }
 
 /* ===== FULL-SCREEN CHAPTERS OVERLAY ===== */
-#chaptersOverlay{
-  position:fixed; inset:0; background:rgba(8,13,26,.65);
-  display:none; z-index:9999;
-}
+#chaptersOverlay{ position:fixed; inset:0; background:rgba(8,13,26,.65); display:none; z-index:9999; }
 #chaptersOverlay[aria-hidden="false"]{ display:block; }
-.ch-panel{
-  position:relative; margin:4vh auto; max-width:1200px;
-  background:#ffffff; border-radius:18px; overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.35);
-}
-.ch-top{
-  background:linear-gradient(135deg,#2f5597 0%,#2874c7 60%,#7fb0f0 100%);
-  color:#fff; padding:18px 18px;
-  display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap;
-}
+.ch-panel{ position:relative; margin:4vh auto; max-width:1200px; background:#ffffff; border-radius:18px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.35); }
+.ch-top{ background:linear-gradient(135deg,#2f5597 0%,#2874c7 60%,#7fb0f0 100%); color:#fff; padding:18px 18px; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
 .ch-top h2{ margin:0; font-weight:800; font-size:clamp(1.1rem,2.2vw,1.4rem); }
 .ch-actions{ display:flex; gap:10px; align-items:center; }
-.ch-search{
-  padding:.55rem .7rem; border-radius:10px; border:none;
-  min-width:220px; font-size:.95rem;
-}
-.ch-close{
-  background:rgba(255,255,255,.14); color:#fff; border:none; border-radius:10px;
-  padding:.5rem .75rem; font-weight:800; cursor:pointer;
-}
+.ch-search{ padding:.55rem .7rem; border-radius:10px; border:none; min-width:220px; font-size:.95rem; }
+.ch-close{ background:rgba(255,255,255,.14); color:#fff; border:none; border-radius:10px; padding:.5rem .75rem; font-weight:800; cursor:pointer; }
 .ch-close:hover{ background:rgba(255,255,255,.25); }
-
-/* grid of chapter cards */
-.ch-grid{
-  display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap:16px; padding:16px;
-}
-.ch-card{
-  background:#f6f8fb; border:1px solid #e6ecf8; border-radius:14px;
-  padding:12px; display:flex; flex-direction:column; gap:10px;
-  box-shadow:0 8px 30px rgba(2,24,71,.06);
-}
+.ch-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px; padding:16px; }
+.ch-card{ background:#f6f8fb; border:1px solid #e6ecf8; border-radius:14px; padding:12px; display:flex; flex-direction:column; gap:10px; box-shadow:0 8px 30px rgba(2,24,71,.06); }
 .ch-city{ margin:0; color:#1f2a44; font-weight:800; font-size:1rem; }
 .ch-blurb{ margin:0; color:#334155; font-size:.92rem; line-height:1.3; }
-.ch-btn{
-  align-self:flex-start; display:inline-block; padding:.5rem .75rem;
-  border-radius:999px; background:#2f5597; color:#fff !important; text-decoration:none;
-  font-weight:800; font-size:.9rem; box-shadow:0 6px 18px rgba(47,85,151,.22)
-}
+.ch-btn{ align-self:flex-start; display:inline-block; padding:.5rem .75rem; border-radius:999px; background:#2f5597; color:#fff !important; text-decoration:none; font-weight:800; font-size:.9rem; box-shadow:0 6px 18px rgba(47,85,151,.22) }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
 
-/* ===== SPONSORS (smaller, professional, flowing marquee) ===== */
+/* ===== SPONSORS (exact uniform size matching TECHSTRONG) ===== */
 .sponsors-band-home{
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -214,12 +136,9 @@ time.cal::before{
   padding: clamp(12px, 1.8vw, 18px) 0;
   margin-top: clamp(24px, 3.2vw, 48px);
 }
-.sponsors-inner{
-  max-width: 1200px; margin: 0 auto;
-  padding: 0 clamp(10px, 2.6vw, 20px);
-}
+.sponsors-inner{ max-width:1200px; margin:0 auto; padding:0 clamp(10px, 2.6vw, 20px); }
 
-/* Center heading & note */
+/* CENTER the heading & note */
 .sponsors-head{
   display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:6px; margin-bottom: clamp(8px, 1.4vw, 12px);
@@ -230,53 +149,45 @@ time.cal::before{
 
 /* Marquee */
 .logo-marquee{ position:relative; overflow:hidden; }
-.logo-track{
-  display:flex; align-items:center;
-  gap: clamp(12px, 1.8vw, 18px);
-  will-change: transform;
-  animation: sponsors-marquee-rtl 26s linear infinite;
-}
+.logo-track{ display:flex; align-items:center; gap:12px; will-change: transform; animation: sponsors-marquee-rtl 26s linear infinite; }
 .logo-track:hover{ animation-play-state: paused; }
-@keyframes sponsors-marquee-rtl{
-  from{ transform: translateX(0); }
-  to  { transform: translateX(-50%); }
+@keyframes sponsors-marquee-rtl{ from{ transform: translateX(0); } to{ transform: translateX(-50%); } }
+
+/* === UNIFORM TILE SIZE (match TECHSTRONG visual size) ===
+   Adjust these two values if you want bigger/smaller tiles later. */
+:root{
+  --tile-w: 170px;   /* TECHSTRONG-like width */
+  --tile-h: 60px;    /* TECHSTRONG-like height */
 }
 
-/* Uniform tiles — smaller size, no overflow */
 .logo-box{
   flex: 0 0 auto;
-  width: clamp(120px, 14vw, 170px);
-  height: clamp(44px, 5vw, 60px);
+  width: var(--tile-w);
+  height: var(--tile-h);
   display:flex; align-items:center; justify-content:center;
   background:#ffffff;
   border:1px solid rgba(23,43,77,.10);
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(23,43,77,.08);
-  padding: clamp(6px, 1vw, 10px);
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(23,43,77,.08);
+  padding: 6px;                 /* a bit of breathing room */
   overflow:hidden;
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
-.logo-box:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(23,43,77,.12);
-  border-color: rgba(23,43,77,.18);
-}
+.logo-box:hover{ transform: translateY(-1px); box-shadow: 0 10px 24px rgba(23,43,77,.12); border-color: rgba(23,43,77,.18); }
 
-/* Logo image — contained, never cropped or stretched */
+/* Logos scale to fit the exact tile, never crop, never distort */
 .logo{
   display:block;
   max-width: 100%;
   max-height: 100%;
   width: auto; height: auto;
-  object-fit: contain;
+  object-fit: contain;     /* ensures consistent visual box */
   image-rendering: auto;
   filter: saturate(1.02) contrast(1.03);
 }
 
 /* Reduced motion: disable marquee */
-@media (prefers-reduced-motion: reduce){
-  .logo-track{ animation:none; }
-}
+@media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 </style>
 
 
@@ -357,7 +268,7 @@ time.cal::before{
   </div>
 </div>
 
-<!-- ===== SPONSORS (smaller, professional, flowing marquee) ===== -->
+<!-- ===== SPONSORS (uniform TECHSTRONG-sized tiles + flowing marquee) ===== -->
 <div class="sponsors-band-home" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -384,20 +295,14 @@ time.cal::before{
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
             <div class="logo-box" title="{{ name | capitalize }}">
-              <img class="logo"
-                   src="{{ p | relative_url }}"
-                   alt="{{ name | capitalize }}"
-                   loading="lazy" decoding="async">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}" loading="lazy" decoding="async">
             </div>
           {%- endfor -%}
           {%- comment -%} duplicate for seamless loop {%- endcomment -%}
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
             <div class="logo-box" title="{{ name | capitalize }}">
-              <img class="logo"
-                   src="{{ p | relative_url }}"
-                   alt="{{ name | capitalize }}"
-                   loading="lazy" decoding="async">
+              <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}" loading="lazy" decoding="async">
             </div>
           {%- endfor -%}
         </div>
