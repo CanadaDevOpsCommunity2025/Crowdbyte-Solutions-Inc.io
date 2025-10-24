@@ -64,20 +64,24 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) — CSS :target controls visibility but JS can force it too ===== */
+/* ===== Viewer (overlay) — CSS :target and JS .open ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
   display:none; /* hidden by default */
 }
 #viewer:target,
-#viewer.open { display:block; }  /* JS 'open' class as a backup */
+#viewer.open { display:block; }
+
+/* Lock scroll when open (CSS path & JS path) */
+html.viewer-lock,
+html:has(#viewer:target){ overflow:hidden; }
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* ✕ close (REAL LINK) */
+/* ✕ close */
 .viewer-close{
   position:fixed; top:16px; right:16px;
   z-index:2147483647; width:46px; height:46px; border-radius:999px;
@@ -189,7 +193,7 @@ youtube_ids:
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <!-- REAL link to #gallery-home -->
+      <!-- REAL link; JS also forces close to avoid theme interceptors -->
       <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse"></div>
@@ -213,6 +217,7 @@ youtube_ids:
   var viewerStrip = document.getElementById('viewerStrip');
   var btnPrev = document.getElementById('navPrev');
   var btnNext = document.getElementById('navNext');
+  var btnClose = document.getElementById('viewerClose');
 
   function collectPool(pool){
     if (!pool) return [];
@@ -256,42 +261,79 @@ youtube_ids:
     }, 0);
   }
 
-  // Force open: build content, add .open class, and set hash
-  function forceOpenViewer(name, items){
+  // Open helpers
+  function openViewer(name, items){
     buildViewer(name, items);
-    viewer.classList.add('open');          // show even if hash doesn’t change
+    document.documentElement.classList.add('viewer-lock');
+    viewer.classList.add('open');            // JS path visible
     if (location.hash !== '#viewer') {
-      location.hash = '#viewer';           // trigger :target path
+      location.hash = '#viewer';             // CSS :target path visible
     }
   }
 
-  // Click handlers — robust open
+  // —— CLOSE: bullet-proof ——
+  function closeViewer(){
+    // Hide both paths
+    viewer.classList.remove('open');
+    document.documentElement.classList.remove('viewer-lock');
+
+    // Stop videos
+    Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
+
+    // Ensure the hash leaves #viewer (don’t rely on theme anchors)
+    if (location.hash === '#viewer') {
+      // Use replace so back button doesn’t re-open the viewer
+      if (history && history.replaceState) {
+        history.replaceState(null, '', '#gallery-home');
+      } else {
+        location.hash = '#gallery-home';
+      }
+    }
+
+    // Return focus to albums
+    var grid = document.getElementById('gallery-home');
+    if (grid){
+      grid.scrollIntoView({behavior:'smooth', block:'start'});
+      setTimeout(function(){ grid.focus({preventScroll:true}); }, 120);
+    }
+  }
+
+  // Wire up album cards
   if (photosCard){
     photosCard.addEventListener('click', function(e){
       e.preventDefault();
-      forceOpenViewer('{{ page.album_name | escape }}', photos);
+      openViewer('{{ page.album_name | escape }}', photos);
     });
   }
   if (videosCard){
     videosCard.addEventListener('click', function(e){
       e.preventDefault();
-      forceOpenViewer('{{ page.videos_album_name | escape }}', videos);
+      openViewer('{{ page.videos_album_name | escape }}', videos);
     });
   }
 
-  // If page loads directly at #viewer (or Back to it), ensure there’s content
-  function ensureViewerHasContent(){
-    if (location.hash !== '#viewer') {
-      viewer.classList.remove('open');
-      return;
-    }
-    if (viewerStrip.children.length > 0) return;
-    // Prefer photos if present; otherwise videos
-    if (photos.length){ buildViewer('{{ page.album_name | escape }}', photos); viewer.classList.add('open'); return; }
-    if (videos.length){ buildViewer('{{ page.videos_album_name | escape }}', videos); viewer.classList.add('open'); return; }
-  }
-  ensureViewerHasContent();
-  window.addEventListener('hashchange', ensureViewerHasContent);
+  // Close button — DO NOT trust default; we take control
+  btnClose.addEventListener('click', function(e){
+    e.preventDefault();
+    e.stopPropagation();
+    closeViewer();
+  });
+
+  // Close when clicking backdrop
+  viewer.addEventListener('click', function(e){
+    if (e.target === viewer) closeViewer();
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', function(e){
+    if (!viewer.classList.contains('open') && location.hash !== '#viewer') return;
+    if (e.key === 'Escape') closeViewer();
+  });
+
+  // Hash changes (e.g., Back button or other links)
+  window.addEventListener('hashchange', function(){
+    if (location.hash !== '#viewer') closeViewer();
+  });
 
   // Right-side arrows
   var currentIndex = 0;
@@ -319,12 +361,17 @@ youtube_ids:
     currentIndex = best;
   }, {passive:true});
 
-  // Stop videos when leaving #viewer and also remove .open
-  window.addEventListener('hashchange', function(){
-    if (location.hash !== '#viewer') {
-      viewer.classList.remove('open');
-      Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
+  // If the page loads directly at #viewer, open with photos (or videos fallback)
+  function ensureViewerOnDirectHash(){
+    if (location.hash !== '#viewer') return;
+    if (viewerStrip.children.length === 0){
+      if (photos.length) openViewer('{{ page.album_name | escape }}', photos);
+      else if (videos.length) openViewer('{{ page.videos_album_name | escape }}', videos);
+    } else {
+      document.documentElement.classList.add('viewer-lock');
+      viewer.classList.add('open');
     }
-  });
+  }
+  ensureViewerOnDirectHash();
 })();
 </script>
