@@ -51,7 +51,7 @@ youtube_ids:
 .album-card{
   position:relative; overflow:hidden; border-radius:16px;
   background:#fff; border:1px solid rgba(0,0,0,.06);
-  box-shadow:0 12px 36px rgba(2,24,71,.07); cursor:pointer;
+  box-shadow:0 12px 36px rgba(2,24,71,.07); cursor:pointer; text-decoration:none;
 }
 .album-cover{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; transition:transform .25s; }
 .album-card:hover .album-cover{ transform:scale(1.03); }
@@ -64,13 +64,12 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) — PURE CSS CLOSE VIA :target ===== */
+/* ===== Viewer (overlay) — CSS :target controls visibility ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
   display:none; /* hidden by default */
 }
-/* Show only when the URL hash is #viewer */
 #viewer:target { display:block; }
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
@@ -146,7 +145,8 @@ youtube_ids:
   <div class="albums-grid">
     {% if img_list.size > 0 %}
       {% assign cover = img_list[0] %}
-      <a href="#viewer" class="album-card" id="albumCard" data-album="{{ page.album_name }}">
+      <a href="#viewer" class="album-card" id="photosCard"
+         data-album="{{ page.album_name }}" data-kind="photos">
         <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="{{ page.album_name }}">
         <div class="album-meta">
           <span class="album-name">{{ page.album_name }}</span>
@@ -156,7 +156,8 @@ youtube_ids:
     {% endif %}
 
     {% if page.youtube_ids and page.youtube_ids.size > 0 %}
-      <a href="#viewer" class="album-card" id="videosCard" data-album="{{ page.videos_album_name }}">
+      <a href="#viewer" class="album-card" id="videosCard"
+         data-album="{{ page.videos_album_name }}" data-kind="videos">
         <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="{{ page.videos_album_name }}">
         <div class="album-meta">
           <span class="album-name">{{ page.videos_album_name }}</span>
@@ -200,8 +201,9 @@ youtube_ids:
 
 <script>
 (function(){
-  var elAlbumCard = document.getElementById('albumCard');
-  var elVideosCard = document.getElementById('videosCard');
+  var photosCard = document.getElementById('photosCard');
+  var videosCard = document.getElementById('videosCard');
+
   var poolPhotos = document.getElementById('poolPhotos');
   var poolVideos = document.getElementById('poolVideos');
 
@@ -217,6 +219,7 @@ youtube_ids:
       return { type:a.getAttribute('data-type'), album:a.getAttribute('data-album'), href:a.getAttribute('href') };
     });
   }
+
   var photos = collectPool(poolPhotos);
   var videos = collectPool(poolVideos);
 
@@ -238,41 +241,90 @@ youtube_ids:
     return wrap;
   }
 
-  var currentIndex = 0, currentItems = [];
-
-  function openViewer(name, items){
-    currentItems = items || [];
-    if (!currentItems.length) return;
-
+  function buildViewer(name, items){
+    if (!items || !items.length) return;
     viewerTitle.textContent = name;
     viewerStrip.innerHTML = '';
-    currentItems.forEach(function(it){ viewerStrip.appendChild(itemEl(it)); });
+    items.forEach(function(it){ viewerStrip.appendChild(itemEl(it)); });
 
-    currentIndex = 0;
+    // Snap to first item
     setTimeout(function(){
       var first = viewerStrip.querySelector('.viewer-item');
       if (first) first.scrollIntoView({behavior:'instant', inline:'center', block:'nearest'});
     }, 0);
   }
 
+  function openAlbum(kind){
+    if (kind === 'videos' && videos.length){
+      sessionStorage.setItem('cop_gallery_last', 'videos');
+      buildViewer('{{ page.videos_album_name | escape }}', videos);
+    } else if (photos.length){
+      sessionStorage.setItem('cop_gallery_last', 'photos');
+      buildViewer('{{ page.album_name | escape }}', photos);
+    }
+  }
+
+  // Clicks: remember the last album and let the anchor open #viewer via CSS
+  if (photosCard){
+    photosCard.addEventListener('click', function(){
+      sessionStorage.setItem('cop_gallery_last', 'photos');
+      // Build immediately so content is ready when #viewer becomes :target
+      buildViewer('{{ page.album_name | escape }}', photos);
+    });
+  }
+  if (videosCard){
+    videosCard.addEventListener('click', function(){
+      sessionStorage.setItem('cop_gallery_last', 'videos');
+      buildViewer('{{ page.videos_album_name | escape }}', videos);
+    });
+  }
+
+  // If page loads directly at #viewer (or Back to #viewer), populate using memory
+  function ensureViewerHasContent(){
+    if (location.hash !== '#viewer') return;
+    if (viewerStrip.children.length > 0) return;
+    var last = sessionStorage.getItem('cop_gallery_last');
+    if (last === 'videos' && videos.length){ buildViewer('{{ page.videos_album_name | escape }}', videos); return; }
+    if (last === 'photos' && photos.length){ buildViewer('{{ page.album_name | escape }}', photos); return; }
+    // Fallback: if only one album exists, open it
+    if (videos.length && !photos.length){ buildViewer('{{ page.videos_album_name | escape }}', videos); return; }
+    if (photos.length && !videos.length){ buildViewer('{{ page.album_name | escape }}', photos); return; }
+  }
+
+  // Run on load (handles direct /gallery/#viewer)
+  ensureViewerHasContent();
+
+  // If user changes hash to #viewer (e.g., via link), ensure content is present
+  window.addEventListener('hashchange', ensureViewerHasContent);
+
+  // Right-side arrows
+  var currentIndex = 0;
   function goTo(n){
     var items = viewerStrip.querySelectorAll('.viewer-item');
     if (!items.length) return;
     var L = items.length; currentIndex = (n + L) % L;
     items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
   }
-  var next = function(){ goTo(currentIndex + 1); };
-  var prev = function(){ goTo(currentIndex - 1); };
+  function next(){ goTo(currentIndex + 1); }
+  function prev(){ goTo(currentIndex - 1); }
 
-  // Wire up album cards (they already link to #viewer to open via CSS)
-  if (elAlbumCard) elAlbumCard.addEventListener('click', function(){ openViewer(elAlbumCard.getAttribute('data-album'), photos); });
-  if (elVideosCard) elVideosCard.addEventListener('click', function(){ openViewer(elVideosCard.getAttribute('data-album'), videos); });
-
-  // Right-side arrows
   btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
   btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
 
-  // If user closes (hash changes away from #viewer), stop any playing videos
+  // Keep index in sync as user scrolls
+  viewerStrip.addEventListener('scroll', function(){
+    var items = viewerStrip.querySelectorAll('.viewer-item');
+    if (!items.length) return;
+    var contLeft = viewerStrip.getBoundingClientRect().left;
+    var best=0, dist=Infinity;
+    Array.prototype.forEach.call(items, function(el, i){
+      var d = Math.abs(el.getBoundingClientRect().left - contLeft);
+      if (d < dist){ dist = d; best = i; }
+    });
+    currentIndex = best;
+  }, {passive:true});
+
+  // Stop videos when leaving #viewer
   window.addEventListener('hashchange', function(){
     if (location.hash !== '#viewer') {
       Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
