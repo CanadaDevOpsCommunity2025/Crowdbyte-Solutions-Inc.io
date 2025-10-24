@@ -17,6 +17,10 @@ youtube_ids:
 ---
 
 <style>
+/* Utility */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+:focus-visible{outline:3px solid #7fb0f0; outline-offset:3px;}
+
 /* Full-bleed container reset */
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content { max-width:none !important; padding:0 !important; }
@@ -47,11 +51,12 @@ youtube_ids:
   background:#fff3cd; color:#7a5a00; border:1px solid #ffe69c; font-size:.95rem;
 }
 
-/* Album cards */
+/* Album “buttons” */
 .album-card{
-  position:relative; overflow:hidden; border-radius:16px;
+  -webkit-appearance:none; appearance:none; border:0; background:none; padding:0; margin:0;
+  position:relative; overflow:hidden; border-radius:16px; width:100%; text-align:left;
   background:#fff; border:1px solid rgba(0,0,0,.06);
-  box-shadow:0 12px 36px rgba(2,24,71,.07); cursor:pointer; text-decoration:none;
+  box-shadow:0 12px 36px rgba(2,24,71,.07); cursor:pointer; text-decoration:none; display:block;
 }
 .album-cover{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; transition:transform .25s; }
 .album-card:hover .album-cover{ transform:scale(1.03); }
@@ -64,16 +69,13 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) — JS `.open` ONLY (hard overrides) ===== */
+/* ===== Viewer (overlay) — JS `.open` ONLY ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
-  display:none !important; /* hidden by default, forcefully */
+  display:none !important; /* hidden by default; no :target used anywhere */
 }
 #viewer.open { display:block !important; }
-
-/* Defensive override: if any global :target exists, don't let it win */
-#viewer:target:not(.open){ display:none !important; }
 
 /* Lock scroll when open */
 html.viewer-lock{ overflow:hidden !important; }
@@ -82,14 +84,15 @@ html.viewer-lock{ overflow:hidden !important; }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* ✕ close */
+/* Close button: visible label + big hit area */
 .viewer-close{
   position:fixed; top:16px; right:16px;
-  z-index:2147483647; width:46px; height:46px; border-radius:999px;
-  background:rgba(0,0,0,.65); color:#fff; border:1px solid rgba(255,255,255,.45);
-  display:grid; place-items:center; text-decoration:none; font-weight:900; font-size:22px; line-height:1; cursor:pointer;
+  z-index:2147483647; min-width:56px; height:46px; border-radius:999px;
+  background:rgba(0,0,0,.75); color:#fff; border:1px solid rgba(255,255,255,.45);
+  display:inline-flex; align-items:center; gap:10px; padding:0 14px; font-weight:800; cursor:pointer;
 }
-.viewer-close:hover{ background:rgba(0,0,0,.8); }
+.viewer-close:hover{ background:rgba(0,0,0,.88); }
+.viewer-close .x{ font-size:22px; line-height:1; display:inline-block; }
 
 /* Horizontal filmstrip */
 .viewer-strip{
@@ -139,7 +142,7 @@ html.viewer-lock{ overflow:hidden !important; }
 {% assign img_list = images | split: "||" | reject: "" %}
 
 {% if img_list.size == 0 %}
-<div class="notice">
+<div class="notice" role="status" aria-live="polite">
   <strong>No images detected</strong> in <code>{{ page.album_path }}</code> at build time.<br>
   Confirm the path and case exactly. Example: <code>assets/img/gallery/DevOps for Gen AI Ottawa/photo1.jpg</code><br>
   If using Git LFS, re-add images as normal Git files (Pages doesn’t fetch LFS objects).
@@ -151,25 +154,27 @@ html.viewer-lock{ overflow:hidden !important; }
   <div class="albums-grid">
     {% if img_list.size > 0 %}
       {% assign cover = img_list[0] %}
-      <a href="#" class="album-card" id="photosCard"
-         data-album="{{ page.album_name }}" data-kind="photos">
-        <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="{{ page.album_name }}">
-        <div class="album-meta">
+      <button type="button" class="album-card" id="photosCard"
+         data-album="{{ page.album_name }}" data-kind="photos"
+         aria-label="Open album {{ page.album_name }} ({{ img_list.size }} items)">
+        <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="">
+        <div class="album-meta" aria-hidden="true">
           <span class="album-name">{{ page.album_name }}</span>
           <span class="album-count">{{ img_list.size }}</span>
         </div>
-      </a>
+      </button>
     {% endif %}
 
     {% if page.youtube_ids and page.youtube_ids.size > 0 %}
-      <a href="#" class="album-card" id="videosCard"
-         data-album="{{ page.videos_album_name }}" data-kind="videos">
-        <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="{{ page.videos_album_name }}">
-        <div class="album-meta">
+      <button type="button" class="album-card" id="videosCard"
+         data-album="{{ page.videos_album_name }}" data-kind="videos"
+         aria-label="Open album {{ page.videos_album_name }} ({{ page.youtube_ids | size }} videos)">
+        <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="">
+        <div class="album-meta" aria-hidden="true">
           <span class="album-name">{{ page.videos_album_name }}</span>
           <span class="album-count">{{ page.youtube_ids | size }}</span>
         </div>
-      </a>
+      </button>
     {% endif %}
   </div>
 </section>
@@ -189,18 +194,21 @@ html.viewer-lock{ overflow:hidden !important; }
   {% endif %}
 </div>
 
-<!-- ===== Viewer ===== -->
-<div id="viewer" aria-label="Album viewer" aria-hidden="true">
+<!-- ===== Viewer / Dialog ===== -->
+<div id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerHeading" aria-hidden="true">
   <div class="viewer-inner">
     <div class="viewer-bar">
-      <div class="viewer-title" id="viewerTitle">Album</div>
-      <button id="viewerClose" class="viewer-close" type="button" aria-label="Close viewer and return to Gallery">✕</button>
+      <h2 id="viewerHeading" class="viewer-title">Album</h2>
+      <button id="viewerClose" class="viewer-close" type="button">
+        <span class="x" aria-hidden="true">×</span>
+        <span>Close</span>
+      </button>
     </div>
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse"></div>
   </div>
   <div class="viewer-nav-fixed" aria-hidden="false">
-    <button class="nav-btn" id="navPrev" aria-label="Previous">‹</button>
-    <button class="nav-btn" id="navNext" aria-label="Next">›</button>
+    <button class="nav-btn" id="navPrev" aria-label="Previous item">‹</button>
+    <button class="nav-btn" id="navNext" aria-label="Next item">›</button>
   </div>
 </div>
 
@@ -213,11 +221,13 @@ html.viewer-lock{ overflow:hidden !important; }
   var poolVideos = document.getElementById('poolVideos');
 
   var viewer = document.getElementById('viewer');
-  var viewerTitle = document.getElementById('viewerTitle');
+  var viewerHeading = document.getElementById('viewerHeading');
   var viewerStrip = document.getElementById('viewerStrip');
   var btnPrev = document.getElementById('navPrev');
   var btnNext = document.getElementById('navNext');
   var btnClose = document.getElementById('viewerClose');
+
+  var lastTrigger = null; // restore focus on close
 
   function collectPool(pool){
     if (!pool) return [];
@@ -250,10 +260,9 @@ html.viewer-lock{ overflow:hidden !important; }
 
   function buildViewer(name, items){
     if (!items || !items.length) return;
-    viewerTitle.textContent = name;
+    viewerHeading.textContent = name;
     viewerStrip.innerHTML = '';
     items.forEach(function(it){ viewerStrip.appendChild(itemEl(it)); });
-
     // Snap to first item
     setTimeout(function(){
       var first = viewerStrip.querySelector('.viewer-item');
@@ -261,65 +270,71 @@ html.viewer-lock{ overflow:hidden !important; }
     }, 0);
   }
 
-  function showViewer(){
-    document.documentElement.classList.add('viewer-lock');
-    viewer.classList.add('open');
-    viewer.style.display = 'block';                    // inline fallback
-    viewer.setAttribute('aria-hidden','false');
+  function getFocusable(container){
+    return Array.prototype.slice.call(container.querySelectorAll(
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    )).filter(function(el){ return el.offsetParent !== null || el === document.activeElement; });
   }
 
-  // —— CLOSE: bullet-proof ——
+  function openViewer(name, items, trigger){
+    lastTrigger = trigger || null;
+    buildViewer(name, items);
+    document.documentElement.classList.add('viewer-lock');
+    viewer.classList.add('open');
+    viewer.setAttribute('aria-hidden','false');
+    // focus the Close button for SR/keyboard users
+    btnClose && btnClose.focus({preventScroll:true});
+  }
+
   function closeViewer(){
-    // Hide via class
+    // Hide
     viewer.classList.remove('open');
-    document.documentElement.classList.remove('viewer-lock');
     viewer.setAttribute('aria-hidden','true');
+    document.documentElement.classList.remove('viewer-lock');
 
     // Stop videos
     Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
 
-    // Clear URL hash so any external :target CSS can't force it open
-    try {
-      if (window.history && history.replaceState) {
-        history.replaceState(null, '', location.pathname + location.search + '#gallery-home');
-      } else {
-        location.hash = 'gallery-home';
-      }
-    } catch(e) {}
-
-    // Forcefully hide as a last resort (beats rogue CSS)
+    // Failsafe: inline hide
     viewer.style.display = 'none';
+    setTimeout(function(){ viewer.style.display = ''; }, 0);
 
-    // Safety timer: if something re-opens it, shut again
-    setTimeout(function(){
-      if (!viewer.classList.contains('open')) viewer.style.display = 'none';
-    }, 30);
-
-    // Return focus to albums
-    var grid = document.getElementById('gallery-home');
-    if (grid){
-      grid.scrollIntoView({behavior:'smooth', block:'start'});
-      setTimeout(function(){ grid.focus({preventScroll:true}); }, 120);
+    // Restore focus to trigger
+    if (lastTrigger && typeof lastTrigger.focus === 'function') {
+      lastTrigger.focus({preventScroll:true});
+    } else {
+      var grid = document.getElementById('gallery-home');
+      if (grid){ grid.focus({preventScroll:true}); }
     }
   }
 
-  // Wire up album cards
+  // Focus trap inside dialog
+  function trapFocus(e){
+    if (!viewer.classList.contains('open')) return;
+    if (e.key !== 'Tab') return;
+    var focusables = getFocusable(viewer);
+    if (focusables.length === 0) return;
+    var first = focusables[0], last = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === first){
+      e.preventDefault(); last.focus();
+    } else if (!e.shiftKey && document.activeElement === last){
+      e.preventDefault(); first.focus();
+    }
+  }
+
+  // Wire up album buttons
   if (photosCard){
     photosCard.addEventListener('click', function(e){
-      e.preventDefault();
-      buildViewer('{{ page.album_name | escape }}', photos);
-      showViewer();
+      openViewer('{{ page.album_name | escape }}', photos, e.currentTarget);
     });
   }
   if (videosCard){
     videosCard.addEventListener('click', function(e){
-      e.preventDefault();
-      buildViewer('{{ page.videos_album_name | escape }}', videos);
-      showViewer();
+      openViewer('{{ page.videos_album_name | escape }}', videos, e.currentTarget);
     });
   }
 
-  // Close button (click + touch)
+  // Close button
   if (btnClose){
     ['click','touchend'].forEach(function(evt){
       btnClose.addEventListener(evt, function(e){
@@ -330,7 +345,7 @@ html.viewer-lock{ overflow:hidden !important; }
     });
   }
 
-  // Close when clicking backdrop
+  // Backdrop click closes (only if click was exactly on the backdrop)
   viewer.addEventListener('click', function(e){
     if (e.target === viewer) closeViewer();
   });
@@ -338,8 +353,9 @@ html.viewer-lock{ overflow:hidden !important; }
   // Keyboard
   document.addEventListener('keydown', function(e){
     if (!viewer.classList.contains('open')) return;
-    if (e.key === 'Escape') closeViewer();
+    if (e.key === 'Escape') { e.preventDefault(); closeViewer(); }
   });
+  document.addEventListener('keydown', trapFocus);
 
   // Right-side arrows
   var currentIndex = 0;
@@ -367,10 +383,10 @@ html.viewer-lock{ overflow:hidden !important; }
     currentIndex = best;
   }, {passive:true});
 
-  // Normalize if page loads with #viewer (old links/bookmarks)
+  // Normalize any legacy links that might land on /gallery/#viewer
   if (location.hash === '#viewer'){
     try{
-      if (window.history && history.replaceState){
+      if (history.replaceState){
         history.replaceState(null, '', location.pathname + location.search + '#gallery-home');
       } else {
         location.hash = 'gallery-home';
