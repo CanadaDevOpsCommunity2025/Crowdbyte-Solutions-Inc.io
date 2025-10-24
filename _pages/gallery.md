@@ -64,18 +64,16 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) — CSS :target and JS .open ===== */
+/* ===== Viewer (overlay) — JS `.open` ONLY ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
   display:none; /* hidden by default */
 }
-#viewer:target,
 #viewer.open { display:block; }
 
-/* Lock scroll when open (CSS path & JS path) */
-html.viewer-lock,
-html:has(#viewer:target){ overflow:hidden; }
+/* Lock scroll when open */
+html.viewer-lock{ overflow:hidden; }
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
@@ -193,8 +191,8 @@ html:has(#viewer:target){ overflow:hidden; }
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <!-- REAL link; JS also forces close to avoid theme interceptors -->
-      <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
+      <!-- Close is a real button; JS handles everything -->
+      <button id="viewerClose" class="viewer-close" type="button" aria-label="Close viewer and return to Gallery">✕</button>
     </div>
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse"></div>
   </div>
@@ -265,30 +263,17 @@ html:has(#viewer:target){ overflow:hidden; }
   function openViewer(name, items){
     buildViewer(name, items);
     document.documentElement.classList.add('viewer-lock');
-    viewer.classList.add('open');            // JS path visible
-    if (location.hash !== '#viewer') {
-      location.hash = '#viewer';             // CSS :target path visible
-    }
+    viewer.classList.add('open');
   }
 
   // —— CLOSE: bullet-proof ——
   function closeViewer(){
-    // Hide both paths
+    // Hide
     viewer.classList.remove('open');
     document.documentElement.classList.remove('viewer-lock');
 
     // Stop videos
     Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
-
-    // Ensure the hash leaves #viewer (don’t rely on theme anchors)
-    if (location.hash === '#viewer') {
-      // Use replace so back button doesn’t re-open the viewer
-      if (history && history.replaceState) {
-        history.replaceState(null, '', '#gallery-home');
-      } else {
-        location.hash = '#gallery-home';
-      }
-    }
 
     // Return focus to albums
     var grid = document.getElementById('gallery-home');
@@ -312,7 +297,7 @@ html:has(#viewer:target){ overflow:hidden; }
     });
   }
 
-  // Close button — DO NOT trust default; we take control
+  // Close button
   btnClose.addEventListener('click', function(e){
     e.preventDefault();
     e.stopPropagation();
@@ -326,13 +311,8 @@ html:has(#viewer:target){ overflow:hidden; }
 
   // Keyboard
   document.addEventListener('keydown', function(e){
-    if (!viewer.classList.contains('open') && location.hash !== '#viewer') return;
+    if (!viewer.classList.contains('open')) return;
     if (e.key === 'Escape') closeViewer();
-  });
-
-  // Hash changes (e.g., Back button or other links)
-  window.addEventListener('hashchange', function(){
-    if (location.hash !== '#viewer') closeViewer();
   });
 
   // Right-side arrows
@@ -360,18 +340,5 @@ html:has(#viewer:target){ overflow:hidden; }
     });
     currentIndex = best;
   }, {passive:true});
-
-  // If the page loads directly at #viewer, open with photos (or videos fallback)
-  function ensureViewerOnDirectHash(){
-    if (location.hash !== '#viewer') return;
-    if (viewerStrip.children.length === 0){
-      if (photos.length) openViewer('{{ page.album_name | escape }}', photos);
-      else if (videos.length) openViewer('{{ page.videos_album_name | escape }}', videos);
-    } else {
-      document.documentElement.classList.add('viewer-lock');
-      viewer.classList.add('open');
-    }
-  }
-  ensureViewerOnDirectHash();
 })();
 </script>
