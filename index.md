@@ -203,7 +203,7 @@ time.cal::before{
 }
 .ch-btn:hover{ background:#2874c7; text-decoration:none; }
 
-/* ===== SPONSORS (uniform, professional) ===== */
+/* ===== SPONSORS (uniform tiles + flowing marquee) ===== */
 .sponsors-band-home{
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -225,23 +225,31 @@ time.cal::before{
 .sponsors-title{ margin:0; font-weight:900; font-size: clamp(16px, 2vw, 20px); color:#172b4d; }
 .sponsors-note{ margin:0; font-size:.92rem; color:#51657d; }
 
-/* Row of uniform tiles */
-.sponsors-tiles{
-  display:flex; flex-wrap:wrap; gap: clamp(12px, 1.8vw, 18px);
-  justify-content:center;
+/* Marquee container */
+.logo-marquee{ position:relative; overflow:hidden; }
+.logo-track{
+  display:flex; align-items:center;
+  gap: clamp(18px, 2.4vw, 28px);
+  will-change: transform;
+  animation: sponsors-marquee-rtl 26s linear infinite;
+}
+.logo-track:hover{ animation-play-state: paused; }
+@keyframes sponsors-marquee-rtl{
+  from{ transform: translateX(0); }
+  to  { transform: translateX(-50%); }
 }
 
-/* Uniform tile: same size for all; logo sits inside */
+/* Uniform tiles so all logos appear same visual size */
 .logo-box{
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   width: clamp(160px, 18vw, 220px);
-  height: clamp(56px, 6vw, 72px);
+  height: clamp(60px, 6vw, 80px);
   display:flex; align-items:center; justify-content:center;
   background:#fff;
   border:1px solid rgba(23,43,77,.10);
   border-radius: 12px;
   box-shadow: 0 8px 22px rgba(23,43,77,.08);
-  padding: clamp(8px, 1.2vw, 12px);
+  padding: clamp(8px, 1.2vw, 12px); /* inner breathing room */
   transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
 }
 .logo-box:hover{
@@ -252,17 +260,17 @@ time.cal::before{
 
 /* Logo image never stretches; always contained and centered */
 .logo{
+  display:block;
   max-width: 100%;
   max-height: 100%;
   width: auto; height: auto;
   object-fit: contain;
-  display:block;
-  filter: saturate(1.05) contrast(1.05);
+  filter: saturate(1.03) contrast(1.04);
 }
 
-/* Small screens */
-@media (max-width:520px){
-  .sponsors-note{ text-align:center; flex:0 0 100%; }
+/* Reduced motion: disable marquee */
+@media (prefers-reduced-motion: reduce){
+  .logo-track{ animation:none; }
 }
 
 /* Optional dark scheme polish */
@@ -360,7 +368,7 @@ time.cal::before{
   </div>
 </div>
 
-<!-- ===== SPONSORS (uniform tiles, no marquee) ===== -->
+<!-- ===== SPONSORS (uniform tiles + flowing marquee) ===== -->
 <div class="sponsors-band-home" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -382,16 +390,28 @@ time.cal::before{
     {% assign logos = paths | split:"||" | uniq | sort | reject: "" %}
 
     {% if logos.size > 0 %}
-      <div class="sponsors-tiles">
-        {%- for p in logos -%}
-          {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
-          <div class="logo-box" title="{{ name | capitalize }}">
-            <img class="logo"
-                 src="{{ p | relative_url }}"
-                 alt="{{ name | capitalize }}"
-                 loading="lazy" decoding="async">
-          </div>
-        {%- endfor -%}
+      <div class="logo-marquee">
+        <div class="logo-track">
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <div class="logo-box" title="{{ name | capitalize }}">
+              <img class="logo"
+                   src="{{ p | relative_url }}"
+                   alt="{{ name | capitalize }}"
+                   loading="lazy" decoding="async">
+            </div>
+          {%- endfor -%}
+          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
+          {%- for p in logos -%}
+            {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
+            <div class="logo-box" title="{{ name | capitalize }}">
+              <img class="logo"
+                   src="{{ p | relative_url }}"
+                   alt="{{ name | capitalize }}"
+                   loading="lazy" decoding="async">
+            </div>
+          {%- endfor -%}
+        </div>
       </div>
     {% else %}
       <p><em>Add sponsor logos to <code>assets/img/sponsors/</code> to populate this section.</em></p>
