@@ -64,22 +64,20 @@ youtube_ids:
 .album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
 .album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
 
-/* ===== Viewer (overlay) ===== */
+/* ===== Viewer (overlay) — PURE CSS CLOSE VIA :target ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
   display:none; /* hidden by default */
 }
-/* Show when targeted (hash == #viewer) OR when JS adds .open */
-#viewer.open, #viewer:target { display:block; }
-/* Lock scroll when open (modern + JS path) */
-html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
+/* Show only when the URL hash is #viewer */
+#viewer:target { display:block; }
 
 .viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
 .viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
 
-/* ✕ close */
+/* ✕ close (REAL LINK) */
 .viewer-close{
   position:fixed; top:16px; right:16px;
   z-index:2147483647; width:46px; height:46px; border-radius:999px;
@@ -138,8 +136,8 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
 {% if img_list.size == 0 %}
 <div class="notice">
   <strong>No images detected</strong> in <code>{{ page.album_path }}</code> at build time.<br>
-  Confirm the path and case exactly. Example file: <code>assets/img/gallery/DevOps for Gen AI Ottawa/photo1.jpg</code><br>
-  If you use Git LFS, re-add images as normal Git files (Pages doesn’t fetch LFS objects).
+  Confirm the path and case exactly. Example: <code>assets/img/gallery/DevOps for Gen AI Ottawa/photo1.jpg</code><br>
+  If using Git LFS, re-add images as normal Git files (Pages doesn’t fetch LFS objects).
 </div>
 {% endif %}
 
@@ -148,28 +146,28 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   <div class="albums-grid">
     {% if img_list.size > 0 %}
       {% assign cover = img_list[0] %}
-      <article class="album-card" id="albumCard" data-album="{{ page.album_name }}">
+      <a href="#viewer" class="album-card" id="albumCard" data-album="{{ page.album_name }}">
         <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="{{ page.album_name }}">
         <div class="album-meta">
           <span class="album-name">{{ page.album_name }}</span>
           <span class="album-count">{{ img_list.size }}</span>
         </div>
-      </article>
+      </a>
     {% endif %}
 
     {% if page.youtube_ids and page.youtube_ids.size > 0 %}
-      <article class="album-card" id="videosCard" data-album="{{ page.videos_album_name }}">
+      <a href="#viewer" class="album-card" id="videosCard" data-album="{{ page.videos_album_name }}">
         <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="{{ page.videos_album_name }}">
         <div class="album-meta">
           <span class="album-name">{{ page.videos_album_name }}</span>
           <span class="album-count">{{ page.youtube_ids | size }}</span>
         </div>
-      </article>
+      </a>
     {% endif %}
   </div>
 </section>
 
-<!-- ===== Hidden pools (so JS can build the viewer strip) ===== -->
+<!-- ===== Hidden pools (for building viewer) ===== -->
 <div id="poolPhotos" style="display:none">
   {% for p in img_list %}
     <a class="media" data-type="image" data-album="{{ page.album_name }}" href="{{ p | uri_escape | relative_url }}"></a>
@@ -184,12 +182,12 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   {% endif %}
 </div>
 
-<!-- ===== Viewer ===== -->
+<!-- ===== Viewer (pure CSS open/close; JS only populates content) ===== -->
 <div id="viewer" aria-label="Album viewer">
   <div class="viewer-inner">
     <div class="viewer-bar">
       <div class="viewer-title" id="viewerTitle">Album</div>
-      <!-- REAL link to #gallery-home -->
+      <!-- REAL link to #gallery-home; this ALWAYS closes the viewer -->
       <a id="viewerClose" class="viewer-close" href="#gallery-home" aria-label="Close viewer and return to Gallery">✕</a>
     </div>
     <div class="viewer-strip" id="viewerStrip" tabindex="0" aria-label="Scroll left or right to browse"></div>
@@ -207,14 +205,11 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   var poolPhotos = document.getElementById('poolPhotos');
   var poolVideos = document.getElementById('poolVideos');
 
-  var viewer = document.getElementById('viewer');
   var viewerTitle = document.getElementById('viewerTitle');
   var viewerStrip = document.getElementById('viewerStrip');
-  var btnClose = document.getElementById('viewerClose');
   var btnPrev = document.getElementById('navPrev');
   var btnNext = document.getElementById('navNext');
 
-  // Build arrays from pools
   function collectPool(pool){
     if (!pool) return [];
     var links = Array.prototype.slice.call(pool.querySelectorAll('.media'));
@@ -243,7 +238,7 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
     return wrap;
   }
 
-  var currentIndex = 0, currentItems = [], isOpen = false;
+  var currentIndex = 0, currentItems = [];
 
   function openViewer(name, items){
     currentItems = items || [];
@@ -254,38 +249,10 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
     currentItems.forEach(function(it){ viewerStrip.appendChild(itemEl(it)); });
 
     currentIndex = 0;
-    viewer.classList.add('open');
-    document.documentElement.classList.add('viewer-lock');
-    isOpen = true;
-
-    if (location.hash !== '#viewer') history.pushState({viewer:true}, '', '#viewer');
-
     setTimeout(function(){
       var first = viewerStrip.querySelector('.viewer-item');
       if (first) first.scrollIntoView({behavior:'instant', inline:'center', block:'nearest'});
-      btnClose.focus();
     }, 0);
-  }
-
-  function closeViewer(){
-    if (!isOpen && location.hash !== '#viewer') {
-      viewer.classList.remove('open');
-      document.documentElement.classList.remove('viewer-lock');
-      return;
-    }
-    viewer.classList.remove('open');
-    document.documentElement.classList.remove('viewer-lock');
-    isOpen = false;
-
-    Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
-
-    if (location.hash !== '#gallery-home') history.replaceState(null, '', '#gallery-home');
-
-    var grid = document.getElementById('gallery-home');
-    if (grid){
-      grid.scrollIntoView({behavior:'smooth', block:'start'});
-      setTimeout(function(){ grid.focus({preventScroll:true}); }, 120);
-    }
   }
 
   function goTo(n){
@@ -297,24 +264,19 @@ html.viewer-lock, html:has(#viewer:target){ overflow:hidden; }
   var next = function(){ goTo(currentIndex + 1); };
   var prev = function(){ goTo(currentIndex - 1); };
 
-  // Wire up album cards
+  // Wire up album cards (they already link to #viewer to open via CSS)
   if (elAlbumCard) elAlbumCard.addEventListener('click', function(){ openViewer(elAlbumCard.getAttribute('data-album'), photos); });
   if (elVideosCard) elVideosCard.addEventListener('click', function(){ openViewer(elVideosCard.getAttribute('data-album'), videos); });
 
-  // Close / nav
-  document.getElementById('viewerClose').addEventListener('click', function(){ closeViewer(); });
-  viewer.addEventListener('click', function(e){ if (e.target === viewer) closeViewer(); });
-  document.addEventListener('keydown', function(e){
-    if (!isOpen && location.hash !== '#viewer') return;
-    if (e.key === 'Escape') closeViewer();
-    else if (e.key === 'ArrowRight') next();
-    else if (e.key === 'ArrowLeft') prev();
-  });
-  document.getElementById('navNext').addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
-  document.getElementById('navPrev').addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
+  // Right-side arrows
+  btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
+  btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
 
-  // Close on hash change/back
-  window.addEventListener('popstate', function(){ if (location.hash !== '#viewer') closeViewer(); });
-  window.addEventListener('hashchange', function(){ if (location.hash !== '#viewer') closeViewer(); });
+  // If user closes (hash changes away from #viewer), stop any playing videos
+  window.addEventListener('hashchange', function(){
+    if (location.hash !== '#viewer') {
+      Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
+    }
+  });
 })();
 </script>
