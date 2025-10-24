@@ -17,94 +17,143 @@ youtube_ids:
 ---
 
 <style>
-/* Utility */
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-:focus-visible{outline:3px solid #7fb0f0; outline-offset:3px;}
+/* ===== Utilities & Accessibility ===== */
+:root{
+  --bg1:#0b1c33;
+  --bg2:#1a3a67;
+  --bg3:#7fb0f0;
+  --card:#ffffff;
+  --ink:#0c1a2b;
+  --ink-soft:#45607e;
+  --brand:#2f66c7;
+  --ring:#7fb0f0;
+}
+@media (prefers-color-scheme: dark) {
+  :root{
+    --card:#0f1726;
+    --ink:#eaf1ff;
+    --ink-soft:#a2b7d1;
+    --brand:#7fb0f0;
+  }
+}
+:focus-visible{ outline:3px solid var(--ring); outline-offset:3px; }
+.sr-only{ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0; }
+[hidden]{ display:none !important; }
 
-/* Full-bleed container reset */
+/* Motion-respectful */
+@media (prefers-reduced-motion: reduce) {
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+}
+
+/* ===== Full-bleed reset ===== */
 .page.full-bleed .page__inner-wrap,
 .page.full-bleed .page__content { max-width:none !important; padding:0 !important; }
-
-/* Hide theme title to avoid duplicate H1 */
 .page__title { display:none !important; }
 
-/* ===== Blue header ===== */
+/* ===== Hero ===== */
 .g-hero{
   width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
-  background:linear-gradient(135deg,#2f5597 0%,#2874c7 50%,#7fb0f0 100%);
-  color:#fff; text-align:center; padding:34px 16px 24px;
+  background:radial-gradient(1200px 600px at 20% -10%, rgba(127,176,240,.35), transparent 60%),
+             linear-gradient(135deg, var(--bg1) 0%, var(--bg2) 55%, #244a81 100%);
+  color:#fff; text-align:center; padding:48px 16px 28px; position:relative; overflow:hidden;
 }
-.g-hero h1{ margin:0; font-weight:900; font-size:clamp(24px,3.6vw,40px); }
+.g-hero h1{ margin:0; font-weight:900; letter-spacing:.2px; font-size:clamp(26px,3.8vw,44px); }
+.g-hero p{ margin:10px auto 0; max-width:900px; opacity:.95; font-size:clamp(14px,1.6vw,18px); }
 
 /* ===== Albums grid ===== */
-.albums-stage{ display:flex; justify-content:center; padding:24px clamp(12px,3vw,36px) 40px; }
+.albums-stage{ display:flex; justify-content:center; padding:28px clamp(14px,3vw,42px) 48px; background:linear-gradient(180deg,rgba(255,255,255,.0),rgba(255,255,255,.0));}
 .albums-grid{
-  width:100%; max-width:1280px; margin:0 auto;
-  display:grid; gap:20px; grid-template-columns:repeat(1, minmax(320px, 1fr));
+  width:100%; max-width:1200px; margin:0 auto;
+  display:grid; gap:22px; grid-template-columns:repeat(1, minmax(300px, 1fr));
 }
-@media (min-width:800px){ .albums-grid{ grid-template-columns:repeat(2, minmax(380px,1fr)); } }
-@media (min-width:1200px){ .albums-grid{ grid-template-columns:repeat(3, minmax(420px,1fr)); } }
+@media (min-width:860px){ .albums-grid{ grid-template-columns:repeat(2, minmax(360px,1fr)); } }
+@media (min-width:1200px){ .albums-grid{ grid-template-columns:repeat(3, minmax(360px,1fr)); } }
 
-/* Helpful notice */
+/* Album card (button) */
+.album-card{
+  -webkit-appearance:none; appearance:none; border:0; background:none; padding:0; margin:0;
+  position:relative; overflow:hidden; border-radius:18px; width:100%; text-align:left;
+  background:var(--card); border:1px solid rgba(0,0,0,.06);
+  box-shadow:0 14px 40px rgba(12,26,43,.10);
+  cursor:pointer; display:block; transform:translateZ(0);
+}
+.album-cover{
+  width:100%; aspect-ratio:16/10; object-fit:cover; display:block;
+  transition:transform .35s ease;
+}
+.album-card:hover .album-cover{ transform:scale(1.03); }
+.album-meta{
+  position:absolute; left:12px; right:12px; bottom:12px;
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  background:linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(6,18,38,.55) 60%, rgba(6,18,38,.85) 100%);
+  color:#eaf1ff; border-radius:12px; padding:12px 14px; backdrop-filter:blur(2px);
+}
+.album-name{ font-weight:900; font-size:clamp(16px,2.2vw,22px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
+.album-count{ font-weight:800; font-size:clamp(12px,1.6vw,14px); opacity:.92; }
+
+/* Card footer with CTA */
+.card-footer{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  padding:12px 14px 14px; color:var(--ink-soft);
+  font-size:14px;
+}
+.badge{
+  display:inline-flex; align-items:center; gap:8px; font-weight:700;
+  background:rgba(47,102,199,.08); color:#2f66c7; border:1px solid rgba(47,102,199,.25);
+  padding:6px 10px; border-radius:999px; line-height:1;
+}
+.btn{
+  -webkit-appearance:none; appearance:none; border:0; cursor:pointer;
+  display:inline-flex; align-items:center; gap:8px; border-radius:10px;
+  padding:10px 14px; font-weight:800; text-decoration:none;
+  background:linear-gradient(180deg,#eaf1ff, #d5e5ff); color:#123;
+  border:1px solid rgba(47,102,199,.25); box-shadow:0 6px 16px rgba(18,38,66,.15);
+}
+.btn:hover{ filter:brightness(.98); }
+.btn:active{ transform:translateY(1px); }
+
+/* ===== Helper notice ===== */
 .notice{
   max-width:980px; margin:12px auto 0; padding:10px 14px; border-radius:12px;
   background:#fff3cd; color:#7a5a00; border:1px solid #ffe69c; font-size:.95rem;
 }
 
-/* Album “buttons” */
-.album-card{
-  -webkit-appearance:none; appearance:none; border:0; background:none; padding:0; margin:0;
-  position:relative; overflow:hidden; border-radius:16px; width:100%; text-align:left;
-  background:#fff; border:1px solid rgba(0,0,0,.06);
-  box-shadow:0 12px 36px rgba(2,24,71,.07); cursor:pointer; text-decoration:none; display:block;
-}
-.album-cover{ width:100%; aspect-ratio:16/10; object-fit:cover; display:block; transition:transform .25s; }
-.album-card:hover .album-cover{ transform:scale(1.03); }
-.album-meta{
-  position:absolute; left:10px; right:10px; bottom:10px;
-  display:flex; align-items:center; justify-content:space-between; gap:8px;
-  background:linear-gradient(180deg,rgba(0,0,0,0) 0%, rgba(6,18,38,.50) 50%, rgba(6,18,38,.80) 100%);
-  color:#eaf1ff; border-radius:12px; padding:12px 14px; backdrop-filter:blur(2px);
-}
-.album-name{ font-weight:900; font-size:clamp(16px,2.2vw,24px); text-shadow:0 2px 10px rgba(0,0,0,.4); }
-.album-count{ font-weight:800; font-size:clamp(12px,1.4vw,14px); opacity:.9; }
-
-/* ===== Viewer (overlay) — JS `.open` ONLY ===== */
+/* ===== Viewer (dialog) — JS `.open` ONLY ===== */
 #viewer{
   position:fixed; inset:0; z-index:9999;
   background:rgba(6,12,24,.6); backdrop-filter:blur(6px);
-  display:none !important; /* hidden by default; no :target used anywhere */
+  display:none !important;
 }
 #viewer.open { display:block !important; }
-
-/* Lock scroll when open */
 html.viewer-lock{ overflow:hidden !important; }
 
-.viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:10px; padding:clamp(10px,3vw,22px); }
+.viewer-inner{ position:absolute; inset:0; display:flex; flex-direction:column; gap:12px; padding:clamp(12px,3vw,22px); }
 .viewer-bar{ display:flex; align-items:center; justify-content:space-between; color:#eaf1ff; }
-.viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); }
+.viewer-title{ font-weight:900; font-size:clamp(16px,1.8vw,20px); margin:0; }
 
-/* Close button: visible label + big hit area */
+.viewer-hint{ font-size:12px; opacity:.85; margin-top:4px; }
+
+/* Close button with label */
 .viewer-close{
   position:fixed; top:16px; right:16px;
-  z-index:2147483647; min-width:56px; height:46px; border-radius:999px;
-  background:rgba(0,0,0,.75); color:#fff; border:1px solid rgba(255,255,255,.45);
+  z-index:2147483647; min-width:60px; height:46px; border-radius:999px;
+  background:rgba(0,0,0,.78); color:#fff; border:1px solid rgba(255,255,255,.35);
   display:inline-flex; align-items:center; gap:10px; padding:0 14px; font-weight:800; cursor:pointer;
 }
-.viewer-close:hover{ background:rgba(0,0,0,.88); }
-.viewer-close .x{ font-size:22px; line-height:1; display:inline-block; }
+.viewer-close:hover{ background:rgba(0,0,0,.9); }
+.viewer-close .x{ font-size:22px; line-height:1; }
 
-/* Horizontal filmstrip */
+/* Filmstrip */
 .viewer-strip{
   position:relative; flex:1 1 auto; overflow-x:auto; overflow-y:hidden;
-  scroll-snap-type:x mandatory; display:flex; gap:10px; padding:6px 0;
+  scroll-snap-type:x mandatory; display:flex; gap:12px; padding:6px 0;
 }
 .viewer-item{
   flex:0 0 auto; scroll-snap-align:center; display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.15);
-  width:min(72vw,780px); height:min(62vh,520px); box-shadow:0 18px 50px rgba(0,0,0,.45);
+  width:min(76vw,920px); height:min(66vh,620px); box-shadow:0 18px 50px rgba(0,0,0,.45);
 }
-@media (max-width:640px){ .viewer-item{ width:92vw; height:56vh; } }
+@media (max-width:640px){ .viewer-item{ width:92vw; height:58vh; } }
 .viewer-item img, .viewer-item iframe{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; border:0; background:#000; }
 
 /* Fixed right-side arrows */
@@ -119,13 +168,22 @@ html.viewer-lock{ overflow:hidden !important; }
 }
 .nav-btn:hover{ background:rgba(0,0,0,.7); }
 
-/* Hide theme pager */
-.pagination, .pagination--pager{ display:none !important; }
+/* Skeleton shimmer for covers (progressive feeling) */
+.skel{
+  position:relative; overflow:hidden; background:linear-gradient(90deg,#e9eef5 0%,#f4f7fb 40%,#e9eef5 80%); 
+}
+.skel::after{
+  content:""; position:absolute; inset:0; transform:translateX(-100%);
+  background:linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,.6) 50%, rgba(255,255,255,0) 100%);
+  animation:sh 1.35s infinite;
+}
+@keyframes sh{ 100%{ transform:translateX(100%); } }
 </style>
 
-<!-- ===== Header ===== -->
+<!-- ===== Hero ===== -->
 <section class="g-hero" aria-labelledby="gallery-heading">
   <h1 id="gallery-heading">Gallery</h1>
+  <p>Highlights from our community—photos and session videos. Click an album to browse. Press <strong>Esc</strong> to close the viewer; use <strong>← / →</strong> to navigate.</p>
 </section>
 
 {% comment %}
@@ -149,18 +207,22 @@ html.viewer-lock{ overflow:hidden !important; }
 </div>
 {% endif %}
 
-<!-- ===== Albums grid (server-rendered) ===== -->
+<!-- ===== Albums grid ===== -->
 <section id="gallery-home" class="albums-stage" aria-label="Gallery albums" tabindex="-1">
   <div class="albums-grid">
     {% if img_list.size > 0 %}
       {% assign cover = img_list[0] %}
       <button type="button" class="album-card" id="photosCard"
          data-album="{{ page.album_name }}" data-kind="photos"
-         aria-label="Open album {{ page.album_name }} ({{ img_list.size }} items)">
-        <img class="album-cover" src="{{ cover | uri_escape | relative_url }}" alt="">
+         aria-label="Open album {{ page.album_name }} ({{ img_list.size }} photos)">
+        <img class="album-cover skel" src="{{ cover | uri_escape | relative_url }}" alt="" loading="lazy" onload="this.classList.remove('skel')">
         <div class="album-meta" aria-hidden="true">
           <span class="album-name">{{ page.album_name }}</span>
-          <span class="album-count">{{ img_list.size }}</span>
+          <span class="album-count">{{ img_list.size }} photos</span>
+        </div>
+        <div class="card-footer">
+          <span class="badge">📸 Photos</span>
+          <span class="btn">Open Photos</span>
         </div>
       </button>
     {% endif %}
@@ -169,10 +231,14 @@ html.viewer-lock{ overflow:hidden !important; }
       <button type="button" class="album-card" id="videosCard"
          data-album="{{ page.videos_album_name }}" data-kind="videos"
          aria-label="Open album {{ page.videos_album_name }} ({{ page.youtube_ids | size }} videos)">
-        <img class="album-cover" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="">
+        <img class="album-cover skel" src="https://img.youtube.com/vi/{{ page.youtube_ids[0] }}/hqdefault.jpg" alt="" loading="lazy" onload="this.classList.remove('skel')">
         <div class="album-meta" aria-hidden="true">
           <span class="album-name">{{ page.videos_album_name }}</span>
-          <span class="album-count">{{ page.youtube_ids | size }}</span>
+          <span class="album-count">{{ page.youtube_ids | size }} videos</span>
+        </div>
+        <div class="card-footer">
+          <span class="badge">🎬 Videos</span>
+          <span class="btn">Open Videos</span>
         </div>
       </button>
     {% endif %}
@@ -198,7 +264,10 @@ html.viewer-lock{ overflow:hidden !important; }
 <div id="viewer" role="dialog" aria-modal="true" aria-labelledby="viewerHeading" aria-hidden="true">
   <div class="viewer-inner">
     <div class="viewer-bar">
-      <h2 id="viewerHeading" class="viewer-title">Album</h2>
+      <div>
+        <h2 id="viewerHeading" class="viewer-title">Album</h2>
+        <div class="viewer-hint" aria-hidden="true">Tip: Use ← / → to navigate, Esc to close</div>
+      </div>
       <button id="viewerClose" class="viewer-close" type="button">
         <span class="x" aria-hidden="true">×</span>
         <span>Close</span>
@@ -228,6 +297,7 @@ html.viewer-lock{ overflow:hidden !important; }
   var btnClose = document.getElementById('viewerClose');
 
   var lastTrigger = null; // restore focus on close
+  var currentIndex = 0;
 
   function collectPool(pool){
     if (!pool) return [];
@@ -245,6 +315,7 @@ html.viewer-lock{ overflow:hidden !important; }
     wrap.className = 'viewer-item';
     if (item.type === 'image') {
       var img = document.createElement('img');
+      img.loading = 'lazy';
       img.src = item.href; img.alt = '';
       wrap.appendChild(img);
     } else {
@@ -263,17 +334,11 @@ html.viewer-lock{ overflow:hidden !important; }
     viewerHeading.textContent = name;
     viewerStrip.innerHTML = '';
     items.forEach(function(it){ viewerStrip.appendChild(itemEl(it)); });
-    // Snap to first item
     setTimeout(function(){
       var first = viewerStrip.querySelector('.viewer-item');
       if (first) first.scrollIntoView({behavior:'instant', inline:'center', block:'nearest'});
+      currentIndex = 0;
     }, 0);
-  }
-
-  function getFocusable(container){
-    return Array.prototype.slice.call(container.querySelectorAll(
-      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-    )).filter(function(el){ return el.offsetParent !== null || el === document.activeElement; });
   }
 
   function openViewer(name, items, trigger){
@@ -282,47 +347,53 @@ html.viewer-lock{ overflow:hidden !important; }
     document.documentElement.classList.add('viewer-lock');
     viewer.classList.add('open');
     viewer.setAttribute('aria-hidden','false');
-    // focus the Close button for SR/keyboard users
     btnClose && btnClose.focus({preventScroll:true});
   }
 
   function closeViewer(){
-    // Hide
     viewer.classList.remove('open');
     viewer.setAttribute('aria-hidden','true');
     document.documentElement.classList.remove('viewer-lock');
-
     // Stop videos
     Array.prototype.forEach.call(viewerStrip.querySelectorAll('iframe'), function(f){ f.src = f.src; });
-
-    // Failsafe: inline hide
+    // Inline failsafe
     viewer.style.display = 'none';
     setTimeout(function(){ viewer.style.display = ''; }, 0);
-
-    // Restore focus to trigger
-    if (lastTrigger && typeof lastTrigger.focus === 'function') {
-      lastTrigger.focus({preventScroll:true});
-    } else {
+    // Restore focus
+    if (lastTrigger && typeof lastTrigger.focus === 'function') lastTrigger.focus({preventScroll:true});
+    else {
       var grid = document.getElementById('gallery-home');
-      if (grid){ grid.focus({preventScroll:true}); }
+      if (grid) grid.focus({preventScroll:true});
     }
   }
 
-  // Focus trap inside dialog
+  // Navigation
+  function goTo(n){
+    var items = viewerStrip.querySelectorAll('.viewer-item');
+    if (!items.length) return;
+    var L = items.length; currentIndex = (n + L) % L;
+    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+  }
+  function next(){ goTo(currentIndex + 1); }
+  function prev(){ goTo(currentIndex - 1); }
+
+  // Focus trap
+  function getFocusable(container){
+    return Array.prototype.slice.call(container.querySelectorAll(
+      'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+    ));
+  }
   function trapFocus(e){
     if (!viewer.classList.contains('open')) return;
     if (e.key !== 'Tab') return;
-    var focusables = getFocusable(viewer);
-    if (focusables.length === 0) return;
+    var focusables = getFocusable(viewer).filter(function(el){ return el.offsetParent !== null; });
+    if (!focusables.length) return;
     var first = focusables[0], last = focusables[focusables.length - 1];
-    if (e.shiftKey && document.activeElement === first){
-      e.preventDefault(); last.focus();
-    } else if (!e.shiftKey && document.activeElement === last){
-      e.preventDefault(); first.focus();
-    }
+    if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
   }
 
-  // Wire up album buttons
+  // Wire up albums
   if (photosCard){
     photosCard.addEventListener('click', function(e){
       openViewer('{{ page.album_name | escape }}', photos, e.currentTarget);
@@ -334,43 +405,26 @@ html.viewer-lock{ overflow:hidden !important; }
     });
   }
 
-  // Close button
+  // Close handlers
   if (btnClose){
     ['click','touchend'].forEach(function(evt){
-      btnClose.addEventListener(evt, function(e){
-        e.preventDefault();
-        e.stopPropagation();
-        closeViewer();
-      }, {passive:false});
+      btnClose.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); closeViewer(); }, {passive:false});
     });
   }
-
-  // Backdrop click closes (only if click was exactly on the backdrop)
-  viewer.addEventListener('click', function(e){
-    if (e.target === viewer) closeViewer();
-  });
-
-  // Keyboard
+  viewer.addEventListener('click', function(e){ if (e.target === viewer) closeViewer(); });
   document.addEventListener('keydown', function(e){
     if (!viewer.classList.contains('open')) return;
     if (e.key === 'Escape') { e.preventDefault(); closeViewer(); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
   });
   document.addEventListener('keydown', trapFocus);
 
   // Right-side arrows
-  var currentIndex = 0;
-  function goTo(n){
-    var items = viewerStrip.querySelectorAll('.viewer-item');
-    if (!items.length) return;
-    var L = items.length; currentIndex = (n + L) % L;
-    items[currentIndex].scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
-  }
-  function next(){ goTo(currentIndex + 1); }
-  function prev(){ goTo(currentIndex - 1); }
   btnNext.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); next(); });
   btnPrev.addEventListener('click', function(e){ e.preventDefault(); e.stopPropagation(); prev(); });
 
-  // Keep index in sync as user scrolls
+  // Sync index as user scrolls
   viewerStrip.addEventListener('scroll', function(){
     var items = viewerStrip.querySelectorAll('.viewer-item');
     if (!items.length) return;
@@ -383,7 +437,7 @@ html.viewer-lock{ overflow:hidden !important; }
     currentIndex = best;
   }, {passive:true});
 
-  // Normalize any legacy links that might land on /gallery/#viewer
+  // Normalize any legacy #viewer hash (old bookmarks)
   if (location.hash === '#viewer'){
     try{
       if (history.replaceState){
