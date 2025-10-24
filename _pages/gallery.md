@@ -55,7 +55,7 @@ html.viewer-lock .page__related { display:none !important; }
 @media (min-width:860px){ .albums-grid{ grid-template-columns:repeat(2, minmax(360px,1fr)); } }
 @media (min-width:1200px){ .albums-grid{ grid-template-columns:repeat(3, minmax(360px,1fr)); } }
 
-/* Album card as button (keeps toolbar intact) */
+/* Album card as button */
 .album-card{
   -webkit-appearance:none; appearance:none; border:0; background:none; padding:0; margin:0;
   position:relative; overflow:hidden; border-radius:16px; width:100%; text-align:left;
@@ -101,13 +101,33 @@ html.viewer-lock{ overflow:hidden !important; }
   position:relative; flex:1 1 auto; overflow-x:auto; overflow-y:hidden;
   scroll-snap-type:x mandatory; display:flex; gap:10px; padding:6px 0;
 }
+
+/* Items */
 .viewer-item{
   flex:0 0 auto; scroll-snap-align:center; display:grid; place-items:center;
   background:#000; border-radius:14px; overflow:hidden; border:1px solid rgba(255,255,255,.15);
   width:min(76vw,920px); height:min(66vh,620px); box-shadow:0 18px 50px rgba(0,0,0,.45);
 }
 @media (max-width:640px){ .viewer-item{ width:92vw; height:58vh; } }
-.viewer-item img, .viewer-item iframe{ max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; display:block; border:0; background:#000; }
+
+/* Photos: keep contain */
+.viewer-item img{
+  max-width:100%; max-height:100%;
+  width:auto; height:auto;
+  object-fit:contain; display:block; border:0; background:#000;
+}
+
+/* Videos: fill the entire viewer area */
+.viewer-item.is-video{
+  width:96vw; height:84vh;
+}
+@media (max-width:640px){
+  .viewer-item.is-video{ width:100vw; height:86vh; }
+}
+.viewer-item iframe{
+  width:100%; height:100%;
+  display:block; border:0; background:#000;
+}
 
 /* Viewer arrows (not the theme pager!) */
 .viewer-nav-fixed{
@@ -252,6 +272,9 @@ html.viewer-lock{ overflow:hidden !important; }
       img.src = item.href; img.alt = '';
       wrap.appendChild(img);
     } else {
+      // mark as video so CSS can size it full-screen inside the viewer
+      wrap.classList.add('is-video');
+
       var ifr = document.createElement('iframe');
       ifr.src = item.href;
       ifr.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
