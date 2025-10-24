@@ -49,7 +49,7 @@ classes: full-bleed
 .hero-band{ background:#2a3e6e; color:#fff; text-align:center; padding:2.5rem 1rem; }
 .hero-band h1{ margin:0; font-size:clamp(1.8rem,3.5vw,2.4rem); font-weight:800; }
 
-/* ===== BIG, CLEAR GITHUB CTA BUTTON ===== */
+/* ===== BIG, CLEAR GITHUB CTA BUTTON (Professional Blue) ===== */
 .hero-band-inner{
   max-width: 1200px;
   margin: 0 auto;
@@ -64,12 +64,16 @@ classes: full-bleed
   display:inline-flex; align-items:center; gap:10px;
   padding:14px 18px; border-radius:12px;
   font-weight:800; font-size:18px; text-decoration:none;
-  background:linear-gradient(180deg,#111,#000); color:#fff;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 10px 24px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05);
-  transition:transform .12s ease, box-shadow .12s ease, background .12s ease;
+
+  /* NEW blue background */
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  color:#fff !important;
+
+  border:1px solid rgba(255,255,255,.15);
+  box-shadow:0 10px 24px rgba(29,78,216,.28), inset 0 1px 0 rgba(255,255,255,.06);
+  transition:transform .12s ease, box-shadow .12s ease, filter .12s ease;
 }
-.cta-github:hover{ transform:translateY(-1px); box-shadow:0 12px 28px rgba(0,0,0,.32); }
+.cta-github:hover{ transform:translateY(-1px); filter:brightness(1.03); box-shadow:0 12px 28px rgba(29,78,216,.36); }
 .cta-github:active{ transform:translateY(0); }
 .cta-github:focus-visible{ outline:3px solid #7fb0f0; outline-offset:3px; }
 .cta-github .gh{ width:var(--gh); height:var(--gh); display:inline-block; flex:0 0 auto; }
@@ -404,16 +408,13 @@ classes: full-bleed
   if (search) addEventListener('input', filter);
 
   /* ===== Sponsors: dynamic seamless marquee =====
-     We duplicate logos in Liquid. Here we measure ONE SET width and set:
-     --loop-distance to that exact px; --loop-duration so speed ≈ 60px/s.
-     This makes it flow through all sponsors and wrap seamlessly from last -> first. */
+     We duplicate logos in Liquid. Measure ONE SET width and set:
+     --loop-distance to exact px; --loop-duration so speed ≈ 140 px/s. */
   const track = document.getElementById('logoTrack');
   if (track) {
-    // half of children = one logical set (because we render a duplicate set)
     const children = Array.from(track.children);
     const half = Math.floor(children.length / 2);
     if (half > 0) {
-      // measure width of the first set precisely (including gaps)
       let distance = 0;
       for (let i = 0; i < half; i++) {
         const el = children[i];
@@ -422,10 +423,11 @@ classes: full-bleed
         const marginRight = parseFloat(style.marginRight) || 0;
         distance += el.getBoundingClientRect().width + marginLeft + marginRight;
       }
-      // Set CSS variables on the track
       track.style.setProperty('--loop-distance', distance + 'px');
-      const pxPerSec = 90; // tune this for faster/slower crawl
-      const duration = Math.max(18, Math.round(distance / pxPerSec));
+
+      /* SPEED: higher = faster (matches your requested brisk pace) */
+      const pxPerSec = 140;
+      const duration = Math.max(10, Math.round(distance / pxPerSec));
       track.style.setProperty('--loop-duration', duration + 's');
     }
   }
