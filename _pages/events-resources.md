@@ -17,166 +17,127 @@ classes: "full-bleed"
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-.full-bleed-row {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-}
+.full-bleed-row { width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
+
 /* Center the page title */
-.page__title {
-  text-align: center !important;
-  margin-left: auto;
-  margin-right: auto;
-}
+.page__title { text-align:center !important; margin-left:auto; margin-right:auto; }
 
 /* ===== Hero band ===== */
-.cb-hero {
-  background:#2f5597;
-  color:#fff;
-  padding: 28px 24px;
-  text-align:center;
+.cb-hero{
+  background:#2f5597; color:#fff; padding:28px 24px; text-align:center;
 }
-.cb-hero h1{
-  margin:0;
-  font-weight:800;
-  font-size: clamp(24px, 3.6vw, 40px);
-  line-height:1.2;
-}
+.cb-hero h1{ margin:0; font-weight:800; font-size:clamp(24px,3.6vw,40px); line-height:1.2; }
 
 /* ===== Body ===== */
-.cb-wrap { padding: 20px 24px; }
+.cb-wrap { padding: 20px clamp(16px,3vw,24px); }
 
-.cb-title {
-  text-align:center;
-  font-weight:800;
-  margin: 10px 0 10px;
-  font-size: clamp(18px, 2.2vw, 24px);
+/* Title + intro */
+.cb-title{
+  text-align:center; font-weight:800; margin:10px 0; font-size: clamp(18px, 2.2vw, 24px);
 }
-.cb-title .hl { color:#2874c7; text-decoration: underline; }
+.cb-title .hl{ color:#2874c7; text-decoration: underline; }
+.cb-intro{ text-align:center; margin:6px 0 18px; }
+.cb-intro strong{ display:block; }
 
-.cb-intro { text-align:center; margin: 6px 0 14px; }
-.cb-intro strong { display:block; }
-
-/* Two-column grid */
-.er-grid {
+/* ===== Three-column layout ===== */
+.er-grid3{
   display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
   max-width: 1200px;
   margin: 0 auto;
 }
-@media (max-width: 880px){ .er-grid { grid-template-columns: 1fr; } }
+@media (max-width: 980px){ .er-grid3{ grid-template-columns: 1fr 1fr; } }
+@media (max-width: 680px){ .er-grid3{ grid-template-columns: 1fr; } }
 
-.block { line-height:1.25; }
-.block + .block { margin-top: 24px; }
+/* Column header (title + pill button) */
+.col-head{
+  display:flex; align-items:center; justify-content:flex-start; gap:10px;
+  margin-bottom: 8px;
+}
+.col-title{
+  display:inline-block;
+  background:#2f74d0; color:#fff; font-weight:800;
+  padding:6px 10px; border-radius:8px; font-size:14px; letter-spacing:.2px;
+}
+.pill-btn{
+  margin-left: 6px;
+  display:inline-block; font-weight:800; font-size:14px;
+  color:#fff !important; text-decoration:none;
+  background:#7fb0f0; border:1px solid rgba(0,0,0,.1);
+  padding:6px 10px; border-radius:8px;
+}
+.pill-btn:hover{ filter:brightness(1.05); }
 
-.block .caps {
-  font-weight: 800;
-  text-transform: none;
-  letter-spacing: .02em;
-  margin-bottom: 4px;
+/* Cards */
+.tile-card{
+  background:#e9eff7; border:1px solid #d2dbe8; border-radius:4px;
+  padding: 10px 12px;
 }
+.tile-card + .tile-card{ margin-top: 12px; }
+.tile-card h4{ margin:0 0 6px; color:#1f3c6d; font-weight:800; font-size: 15px; }
+.tile-card p{ margin:.25rem 0; }
+.tile-card .muted{ color:#2b4f8b; font-weight:700; }
 
-/* Link list styles */
-.inline-links { margin-top: 6px; }
-.inline-links a {
-  display:block;
-  text-decoration: none;
-  color:#2874c7;
-  font-weight:600;
-  font-style: italic;
-  font-size: 0.80rem;
-  line-height: 1.2;
+/* Inline links list */
+.inline-links a{
+  display:block; color:#2874c7; text-decoration:none; font-weight:600; font-style:italic;
+  font-size:.92rem; line-height:1.25;
 }
-@media (max-width: 880px){
-  .inline-links a { font-size: 0.9rem; }
-}
-.inline-links a + a { margin-top: 8px; }
-@media (min-width: 881px){
-  .inline-links a + a { margin-top: 10px; }
-}
-.inline-links a:visited { color:#2874c7; }
-.inline-links a:hover,
-.inline-links a:focus { text-decoration: underline; }
-.inline-links a:active { opacity: .9; }
+.inline-links a + a{ margin-top:.25rem; }
+.inline-links a:hover, .inline-links a:focus{ text-decoration:underline; }
 
-/* ===== SPONSORS (uniform TECHSTRONG-sized tiles + seamless loop) ===== */
+/* ===== Pretty “Agenda” button ===== */
+.btn-row{ margin-top:6px; }
+.btn-agenda{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  font-weight:800; font-size:14px;
+  text-decoration:none;
+  color:#fff !important;
+  background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+  border:1px solid rgba(255,255,255,.2);
+  box-shadow: 0 6px 16px rgba(29,78,216,.25), inset 0 1px 0 rgba(255,255,255,.06);
+  transition: transform .1s ease, box-shadow .1s ease, filter .1s ease;
+}
+.btn-agenda:hover{ transform: translateY(-1px); filter:brightness(1.03); box-shadow:0 8px 18px rgba(29,78,216,.35); }
+.btn-agenda:active{ transform: translateY(0); }
+.btn-agenda:focus-visible{ outline:3px solid #93c5fd; outline-offset:2px; }
+.btn-agenda .ico{ width:16px; height:16px; display:block; }
+
+/* ===== SPONSORS (uniform tiles + seamless loop) ===== */
 .sponsors-band{
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw);
   background: linear-gradient(180deg, #f7f9ff 0%, #eef4ff 100%);
   border-top: 1px solid rgba(0,0,0,.06);
   border-bottom: 1px solid rgba(0,0,0,.06);
   padding: clamp(12px, 1.8vw, 18px) 0;
   margin-top: clamp(24px, 3.2vw, 48px);
 }
-.sponsors-inner{
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 clamp(10px, 2.6vw, 20px);
-}
-
-/* Center heading & note */
-.sponsors-head{
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:6px; margin-bottom: clamp(8px, 1.4vw, 12px);
-  text-align:center;
-}
+.sponsors-inner{ max-width:1200px; margin:0 auto; padding:0 clamp(10px, 2.6vw, 20px); }
+.sponsors-head{ display:flex; flex-direction:column; align-items:center; gap:6px; margin-bottom:10px; text-align:center; }
 .sponsors-title{ margin:0; font-weight:900; font-size: clamp(15px, 1.8vw, 18px); color:#172b4d; }
 .sponsors-note{ margin:0; font-size: clamp(.86rem, 1.3vw, .95rem); color:#51657d; }
-
-/* Marquee */
 .logo-marquee{ position:relative; overflow:hidden; }
-
-/* Track: animation distance/duration set via CSS vars */
 .logo-track{
-  --loop-distance: 50%;
-  --loop-duration: 26s;
-  display:flex; align-items:center;
-  gap: 12px;
-  will-change: transform;
+  --loop-distance: 50%; --loop-duration: 26s;
+  display:flex; align-items:center; gap:12px; will-change:transform;
   animation: sponsors-marquee var(--loop-duration) linear infinite;
 }
 .logo-track:hover{ animation-play-state: paused; }
-@keyframes sponsors-marquee{
-  from{ transform: translateX(0); }
-  to  { transform: translateX(calc(-1 * var(--loop-distance))); }
-}
+@keyframes sponsors-marquee{ from{transform:translateX(0)} to{transform:translateX(calc(-1 * var(--loop-distance)))} }
 
-/* Uniform tiles (same footprint for each; matches home page) */
 :root{ --tile-w: 170px; --tile-h: 60px; }
 .logo-box{
-  flex: 0 0 auto;
-  width: var(--tile-w);
-  height: var(--tile-h);
+  flex:0 0 auto; width:var(--tile-w); height:var(--tile-h);
   display:flex; align-items:center; justify-content:center;
-  background:#ffffff;
-  border:1px solid rgba(23,43,77,.10);
-  border-radius:10px;
-  box-shadow:0 6px 18px rgba(23,43,77,.08);
-  padding: 6px;
-  overflow:hidden;
-  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  background:#fff; border:1px solid rgba(23,43,77,.10); border-radius:10px;
+  box-shadow:0 6px 18px rgba(23,43,77,.08); padding:6px; overflow:hidden;
 }
-.logo-box:hover{
-  transform: translateY(-1px);
-  box-shadow: 0 10px 24px rgba(23,43,77,.12);
-  border-color: rgba(23,43,77,.18);
-}
+.logo{ display:block; max-width:100%; max-height:100%; width:auto; height:auto; object-fit:contain; }
 
-/* Logos fit without cropping or distortion */
-.logo{
-  display:block;
-  max-width: 100%;
-  max-height: 100%;
-  width: auto; height: auto;
-  object-fit: contain;
-  image-rendering: auto;
-  filter: saturate(1.02) contrast(1.03);
-}
-
-/* Reduced motion: stop animation */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce){ .logo-track{ animation:none; } }
 </style>
 
@@ -190,49 +151,122 @@ classes: "full-bleed"
   <h2 class="cb-title">
     <span class="hl">Crowdbyte&nbsp;&nbsp;<em><strong>DevOps + AI</strong></em>&nbsp;&nbsp;Community of Practice</span>
   </h2>
-
   <p class="cb-intro">
-    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in
-    <strong>Canada.</strong>
+    We’re an energetic, network of technologists, builders, and innovators shaping the future of DevOps and AI in <strong>Canada.</strong>
   </p>
 
-  <div class="er-grid">
-    <!-- LEFT COLUMN -->
-    <div>
-      <div class="block">
-        <div class="caps">DevOps for GenAI,</div>
-        <div class="caps">Hackathon Series Global</div>
-        <div class="inline-links">
-          <a href="{{ site.baseurl }}/contact/">Become a Sponsor</a>
-          <a href="https://www.eventbrite.ca/e/devops-for-genai-hackathon-tickets-1407877793379" target="_blank" rel="noopener">Register on Eventbrite</a>
-        </div>
+  <!-- ===== 3 COLUMN LAYOUT ===== -->
+  <div class="er-grid3">
+
+    <!-- ==== Column: Events ==== -->
+    <section>
+      <div class="col-head">
+        <span class="col-title">Events</span>
+        <!-- UPDATED: direct Eventbrite link -->
+        <a class="pill-btn"
+           href="https://www.eventbrite.ca/e/devops-for-genai-hackathon-tickets-1407877793379"
+           target="_blank" rel="noopener"
+           aria-label="Register now on Eventbrite">
+          Register now
+        </a>
       </div>
 
-      <div class="block">
-        <div class="caps">DevOps for GenAI,</div>
-        <div class="caps">Hackathon Series Global</div>
+      <div class="tile-card">
+        <h4>DevOps for GenAI,<br/>Hackathon Series Global</h4>
         <div class="inline-links">
+          <a href="{{ site.baseurl }}/contact/">Become a Sponsor</a>
           <a href="{{ site.baseurl }}/contact/">Propose a Location</a>
         </div>
       </div>
-    </div>
 
-    <!-- RIGHT COLUMN -->
-    <div>
-      <div class="block">
-        <div class="caps">DevOps Summit, Canada</div>
-        <div class="caps">AI Summit, Canada</div>
+      <div class="tile-card">
+        <h4>AI Summit, Canada<br/>DevOps Summit, Canada</h4>
         <div class="inline-links">
           <a href="{{ site.baseurl }}/contact/">Become a Sponsor</a>
           <a href="#">Submit Speaker Proposal</a>
-          <a href="#">Get Tickets</a>
         </div>
       </div>
-    </div>
-  </div>
-</div>
+    </section>
 
-<!-- ===== SPONSORS (uniform tiles + seamless loop from last back to first) ===== -->
+    <!-- ==== Column: Workshops ==== -->
+    <section>
+      <div class="col-head">
+        <span class="col-title">Workshops</span>
+        <!-- UPDATED: Coming Soon text, link to Contact Us page -->
+        <a class="pill-btn"
+           href="{{ site.baseurl }}/contact/"
+           aria-label="Coming soon — provide your email to share interest via Contact Us">
+          Coming Soon — Share Interest
+        </a>
+      </div>
+
+      <div class="tile-card">
+        <h4>Operationalizing AI — One Day Workshop for Leaders</h4>
+        <div class="btn-row">
+          <a class="btn-agenda" href="#" aria-label="Open agenda for Operationalizing AI workshop">
+            <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M11 1h1v2h2v1H2V3h2V1h1v2h6V1zM2 6h12v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6zm2 2v2h3V8H4zm4 0v2h4V8H8zm0 3v2h4v-2H8zM4 11v2h3v-2H4z"/></svg>
+            Agenda
+          </a>
+        </div>
+      </div>
+
+      <div class="tile-card">
+        <h4>AI Bootcamp — Two Day Workshop for Leaders and Executives</h4>
+        <div class="btn-row">
+          <a class="btn-agenda" href="#" aria-label="Open agenda for AI Bootcamp">
+            <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M11 1h1v2h2v1H2V3h2V1h1v2h6V1zM2 6h12v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6zm2 2v2h3V8H4zm4 0v2h4V8H8zm0 3v2h4v-2H8zM4 11v2h3v-2H4z"/></svg>
+            Agenda
+          </a>
+        </div>
+      </div>
+
+      <div class="tile-card">
+        <h4>AI Transformation Day — One day fulfilled learning event</h4>
+        <div class="btn-row">
+          <a class="btn-agenda" href="#" aria-label="Open agenda for AI Transformation Day">
+            <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M11 1h1v2h2v1H2V3h2V1h1v2h6V1zM2 6h12v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6zm2 2v2h3V8H4zm4 0v2h4V8H8zm0 3v2h4v-2H8zM4 11v2h3v-2H4z"/></svg>
+            Agenda
+          </a>
+        </div>
+      </div>
+
+      <div class="tile-card">
+        <h4>AI Security Bootcamp — Half day Security workshop for Leaders</h4>
+        <div class="btn-row">
+          <a class="btn-agenda" href="#" aria-label="Open agenda for AI Security Bootcamp">
+            <svg class="ico" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M11 1h1v2h2v1H2V3h2V1h1v2h6V1zM2 6h12v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6zm2 2v2h3V8H4zm4 0v2h4V8H8zm0 3v2h4v-2H8zM4 11v2h3v-2H4z"/></svg>
+            Agenda
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==== Column: Services ==== -->
+    <section>
+      <div class="col-head">
+        <span class="col-title">Services</span>
+        <a class="pill-btn" href="{{ site.baseurl }}/submit-contribution/">Request now</a>
+      </div>
+
+      <div class="tile-card">
+        <h4>Custom Hackathons</h4>
+      </div>
+
+      <div class="tile-card">
+        <h4>Networking Services</h4>
+        <p>Developer Days &amp; Meetups<br/>Roundtables and Webinars<br/>Custom Events</p>
+      </div>
+
+      <div class="tile-card">
+        <h4>Support Services</h4>
+        <p>Blog Package, reports &amp; surveys<br/>Project Management Services</p>
+      </div>
+    </section>
+
+  </div><!-- /er-grid3 -->
+</div><!-- /cb-wrap -->
+
+<!-- ===== SPONSORS (uniform tiles + seamless loop) ===== -->
 <div class="sponsors-band" aria-label="Sponsors">
   <div class="sponsors-inner">
     <div class="sponsors-head">
@@ -240,10 +274,6 @@ classes: "full-bleed"
       <p class="sponsors-note">Thank you to our partners powering the community</p>
     </div>
 
-    {% comment %}
-      Dynamically collect all images in /assets/img/sponsors/
-      (PNG/SVG/JPG/WEBP/GIF) and duplicate once for a seamless loop.
-    {% endcomment %}
     {% assign all = site.static_files | where_exp: "f", "f.path contains '/assets/img/sponsors/'" %}
     {% assign img_exts = ".png,.svg,.jpg,.jpeg,.webp,.gif,.PNG,.SVG,.JPG,.JPEG,.WEBP,.GIF" %}
     {% assign paths = "" %}
@@ -263,7 +293,6 @@ classes: "full-bleed"
               <img class="logo" src="{{ p | relative_url }}" alt="{{ name | capitalize }}" loading="lazy" decoding="async">
             </div>
           {%- endfor -%}
-          {%- comment -%} duplicate for seamless loop {%- endcomment -%}
           {%- for p in logos -%}
             {% assign name = p | split:'/' | last | split:'.' | first | replace:'-',' ' | replace:'_',' ' %}
             <div class="logo-box" title="{{ name | capitalize }}">
@@ -273,20 +302,18 @@ classes: "full-bleed"
         </div>
       </div>
     {% else %}
-      <p style="text-align:center;"><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this slider.</em></p>
+      <p style="text-align:center;"><em>Add sponsor logo files to <code>assets/img/sponsors/</code> to populate this section.</em></p>
     {% endif %}
   </div>
 </div>
 
 <script>
 (function(){
-  /* ===== Sponsors: dynamic seamless marquee for this page =====
-     Measure ONE SET width and set:
-     --loop-distance to exact px; --loop-duration so speed ≈ 140 px/s. */
+  /* Sponsors: dynamic seamless marquee (brisk) */
   const track = document.getElementById('logoTrack-events');
   if (track) {
     const children = Array.from(track.children);
-    const half = Math.floor(children.length / 2); // one logical set
+    const half = Math.floor(children.length / 2);
     if (half > 0) {
       let distance = 0;
       for (let i = 0; i < half; i++) {
@@ -297,9 +324,7 @@ classes: "full-bleed"
         distance += el.getBoundingClientRect().width + ml + mr;
       }
       track.style.setProperty('--loop-distance', distance + 'px');
-
-      /* SPEED: higher = faster (matching home page faster setting) */
-      const pxPerSec = 140; // try 120–180 for brisk; raise for faster
+      const pxPerSec = 140;
       const duration = Math.max(10, Math.round(distance / pxPerSec));
       track.style.setProperty('--loop-duration', duration + 's');
     }
